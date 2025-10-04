@@ -2,7 +2,7 @@ services:
   user-service:
     container_name: user-service
     build:
-      context: ./user-service
+      context: ./services/user-service
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
