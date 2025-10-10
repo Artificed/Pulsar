@@ -2,14 +2,14 @@ package tpa.network.userservice.domain.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import tpa.network.userservice.domain.model.shared.Id;
 
 @Data
 @AllArgsConstructor
 public class User {
 
-    @Id
-    private UserId id;
+    @org.springframework.data.annotation.Id
+    private Id id;
 
     private Username username;
     private Email email;
@@ -17,7 +17,7 @@ public class User {
 
     public static User create(String username, String email, String password) {
         return new User(
-                UserId.generate(),
+                Id.generate(),
                 Username.fromString(username),
                 Email.fromString(email),
                 Password.fromString(password)
