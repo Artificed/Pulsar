@@ -3,7 +3,7 @@ package tpa.network.userservice.domain.port.in.command;
 import tpa.network.userservice.domain.model.shared.Id;
 
 public interface UpdateUserCommand {
-    Id execute(Request request);
+    Id execute(UpdateUserRequest request);
 
-    record Request() { }
+    record UpdateUserRequest(String userId, String username) { }
 }
