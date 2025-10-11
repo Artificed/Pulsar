@@ -28,6 +28,6 @@ public class UpdateUserCommandHandler implements UpdateUserCommand {
 
         user.setUsername(newUsername);
 
-        return commandRepository.update(request.userId(), request.username());
+        return commandRepository.save(user).getId();
     }
 }
