@@ -22,7 +22,7 @@ bin/
 *.iws
 *.iml
 *.ipr
-out/
+/services/*/out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
@@ -51,7 +51,6 @@ coverage
 
 # next.js
 .next/
-out/
 
 # production
 build/
@@ -75,5 +74,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-/.idea
