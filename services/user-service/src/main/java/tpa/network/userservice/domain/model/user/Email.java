@@ -1,6 +1,7 @@
 package tpa.network.userservice.domain.model.user;
 
 import lombok.Value;
+import tpa.network.userservice.domain.exception.InvalidEmailFormatException;
 
 import java.util.regex.Pattern;
 
@@ -20,11 +21,11 @@ public class Email {
 
     private static void validate(String value) {
         if (value == null || value.isEmpty()) {
-            throw new IllegalArgumentException("Email value cannot be null or empty!");
+            throw new InvalidEmailFormatException("Email cannot be null or empty!");
         }
 
         if (!EMAIL_PATTERN.matcher(value).matches()) {
-            throw new IllegalArgumentException("Invalid email format: " + value);
+            throw new InvalidEmailFormatException("Invalid email format: " + value);
         }
     }
 }

@@ -17,7 +17,7 @@ public class DeleteUserCommandHandler implements DeleteUserCommand {
     @Override
     public Id execute(DeleteUserRequest request) {
         if (queryRepository.findById(request.userId()).isEmpty()) {
-            throw new UserNotFoundException("User Not Found");
+            throw new UserNotFoundException();
         }
 
         return commandRepository.deleteById(request.userId());

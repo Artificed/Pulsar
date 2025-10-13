@@ -20,7 +20,7 @@ public class UpdateUserCommandHandler implements UpdateUserCommand {
         var userResult = queryRepository.findById(request.userId());
 
         if (userResult.isEmpty()) {
-            throw new UserNotFoundException("User Not Found");
+            throw new UserNotFoundException();
         }
 
         var user = userResult.get();

@@ -19,7 +19,7 @@ public class CreateUserCommandHandler implements CreateUserCommand {
     @Override
     public Id execute(CreateUserRequest request) {
         if (queryRepository.findByEmail(request.email()).isPresent()) {
-            throw new EmailTakenException("Email is already taken");
+            throw new EmailTakenException();
         }
 
         User user = User.create(
