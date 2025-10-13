@@ -11,8 +11,8 @@ import tpa.network.userservice.infrastructure.adapter.out.persistence.mongodb.re
 @Repository
 @RequiredArgsConstructor
 public class UserCommandRepositoryAdapter implements UserCommandRepositoryPort {
-    private UserRepository repository;
-    private UserPersistenceMapper mapper;
+    private final UserRepository repository;
+    private final UserPersistenceMapper mapper;
 
     @Override
     public User save(User user) {

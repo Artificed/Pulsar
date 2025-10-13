@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class UserQueryRepositoryAdapter implements UserQueryRepositoryPort {
-    private UserRepository repository;
-    private UserPersistenceMapper mapper;
+    private final UserRepository repository;
+    private final UserPersistenceMapper mapper;
 
     @Override
     public List<User> findAll() {

@@ -1,5 +1,6 @@
 package tpa.network.userservice.infrastructure.adapter.out.persistence.mapper;
 
+import org.springframework.stereotype.Component;
 import tpa.network.userservice.domain.model.shared.Id;
 import tpa.network.userservice.domain.model.user.Email;
 import tpa.network.userservice.domain.model.user.Password;
@@ -7,6 +8,7 @@ import tpa.network.userservice.domain.model.user.User;
 import tpa.network.userservice.domain.model.user.Username;
 import tpa.network.userservice.infrastructure.adapter.out.persistence.mongodb.document.UserDocument;
 
+@Component
 public class UserPersistenceMapper {
 
     public UserDocument toDocument(User user) {
