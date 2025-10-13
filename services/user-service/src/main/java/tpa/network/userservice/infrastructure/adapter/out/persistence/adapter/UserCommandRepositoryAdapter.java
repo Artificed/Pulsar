@@ -1,12 +1,14 @@
 package tpa.network.userservice.infrastructure.adapter.out.persistence.adapter;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import tpa.network.userservice.domain.model.shared.Id;
 import tpa.network.userservice.domain.model.user.User;
 import tpa.network.userservice.domain.port.out.command.UserCommandRepositoryPort;
 import tpa.network.userservice.infrastructure.adapter.out.persistence.mapper.UserPersistenceMapper;
 import tpa.network.userservice.infrastructure.adapter.out.persistence.mongodb.repository.UserRepository;
 
+@Repository
 @RequiredArgsConstructor
 public class UserCommandRepositoryAdapter implements UserCommandRepositoryPort {
     private UserRepository repository;
