@@ -9,6 +9,16 @@ services:
     depends_on:
       - mongodb
 
+  event-service:
+    container_name: event-service
+    build:
+      context: ./services/event-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+
   recommendation-service:
     container_name: recommendation-service
     build:
