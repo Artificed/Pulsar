@@ -43,7 +43,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: test123
-      MONGO_INITDB_DATABASE: pulsar_db
     volumes:
       - mongodb_data:/data/db
 
