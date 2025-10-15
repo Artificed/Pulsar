@@ -14,7 +14,7 @@ public class Price {
 
     private static void validate(double value) {
         if (value < 0) {
-            throw new InvalidPriceException("Price cannot be negative!");
+            throw new InvalidPriceException();
         }
     }
 }

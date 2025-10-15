@@ -14,7 +14,7 @@ public class Capacity {
 
     private static void validate(int value) {
         if (value <= 0) {
-            throw new InvalidCapacityException("Capacity must be greater than 0!");
+            throw new InvalidCapacityException();
         }
     }
 }
