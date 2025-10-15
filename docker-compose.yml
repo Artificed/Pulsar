@@ -19,6 +19,16 @@ services:
     depends_on:
       - mongodb
 
+  interaction-service:
+    container_name: interaction-service
+    build:
+      context: ./services/interaction-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongodb
+
   recommendation-service:
     container_name: recommendation-service
     build:
