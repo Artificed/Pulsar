@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package tpa.network.user;
+
+import "user.proto";
+
+service UserService {
+    rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
+    rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc DeleteUser(DeleteUserRequst) returns (DeleteUserResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+}
+
+message GetAllUsersRequest {}
+
+message GetAllUsersResponse {
+    repeated User users = 1;
+}
+
+message GetUserByIdRequest {
+    string id = 1;
+}
+
+message GetUserByIdResponse {
+    optional User user = 1;
+}
+
+message CreateUserRequest {
+    string username = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message CreateUserResponse {
+    string id = 1;
+}
+
+message DeleteUserRequest {
+    string id = 1;
+}
+
+message DeleteUserResponse {
+    string id = 1;
+}
+
+message UpdateUserRequest {
+    string id = 1;
+    string username = 2;
+}
+
+message UpdateUserResponse {
+    string id = 1;
+}
