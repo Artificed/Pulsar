@@ -15,10 +15,17 @@ public class UserCommandRepositoryAdapter implements UserCommandRepositoryPort {
     private final UserPersistenceMapper mapper;
 
     @Override
-    public User save(User user) {
+    public User insert(User user) {
         var userDocument = mapper.toDocument(user);
-        var savedDocument = repository.save(userDocument);
-        return mapper.toUser(savedDocument);
+        var insertedUser = repository.save(userDocument);
+        return mapper.toUser(insertedUser);
+    }
+
+    @Override
+    public User update(User user) {
+        var userDocument = mapper.toDocument(user);
+        var updatedUser = repository.updateUser(userDocument);
+        return mapper.toUser(updatedUser);
     }
 
     @Override

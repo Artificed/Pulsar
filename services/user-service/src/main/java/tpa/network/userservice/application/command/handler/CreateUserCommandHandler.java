@@ -28,7 +28,7 @@ public class CreateUserCommandHandler implements CreateUserCommand {
                 request.password()
         );
 
-        User savedUser = commandRepository.save(user);
+        User savedUser = commandRepository.insert(user);
         return savedUser.getId();
     }
 }
