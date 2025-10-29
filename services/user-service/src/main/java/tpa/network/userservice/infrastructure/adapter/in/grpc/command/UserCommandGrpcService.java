@@ -2,15 +2,15 @@ package tpa.network.userservice.infrastructure.adapter.in.grpc.command;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.grpc.server.service.GrpcService;
 import tpa.network.userservice.*;
 import tpa.network.userservice.domain.port.in.command.CreateUserCommand;
 import tpa.network.userservice.domain.port.in.command.DeleteUserCommand;
 import tpa.network.userservice.domain.port.in.command.UpdateUserCommand;
 
-@Service
+@GrpcService
 @RequiredArgsConstructor
-public class UserGrpcCommandService extends UserServiceGrpc.UserServiceImplBase {
+public class UserCommandGrpcService extends UserCommandServiceGrpc.UserCommandServiceImplBase {
 
     private final CreateUserCommand createUserCommand;
     private final DeleteUserCommand deleteUserCommand;

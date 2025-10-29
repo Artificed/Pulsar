@@ -12,9 +12,12 @@ message User {
   string password_hash = 4;
 }
 
-service UserService {
+service UserQueryService {
   rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
   rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+}
+
+service UserCommandService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);

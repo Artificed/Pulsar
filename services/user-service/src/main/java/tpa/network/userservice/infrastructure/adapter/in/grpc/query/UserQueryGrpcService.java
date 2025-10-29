@@ -2,15 +2,15 @@ package tpa.network.userservice.infrastructure.adapter.in.grpc.query;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.grpc.server.service.GrpcService;
 import tpa.network.userservice.*;
 import tpa.network.userservice.domain.port.in.query.GetAllUsersQuery;
 import tpa.network.userservice.domain.port.in.query.GetUserByIdQuery;
 import tpa.network.userservice.infrastructure.adapter.in.grpc.mapper.UserGrpcMapper;
 
-@Service
+@GrpcService
 @RequiredArgsConstructor
-public class UserGrpcQueryService extends UserServiceGrpc.UserServiceImplBase {
+public class UserQueryGrpcService extends UserQueryServiceGrpc.UserQueryServiceImplBase {
 
     private final GetAllUsersQuery getAllUsersQuery;
     private final GetUserByIdQuery getUserByIdQuery;
