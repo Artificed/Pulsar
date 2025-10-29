@@ -2,7 +2,7 @@ package tpa.network.userservice.infrastructure.adapter.in.grpc.command;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.grpc.server.service.GrpcService;
+import net.devh.boot.grpc.server.service.GrpcService;
 import tpa.network.userservice.*;
 import tpa.network.userservice.domain.port.in.command.CreateUserCommand;
 import tpa.network.userservice.domain.port.in.command.DeleteUserCommand;
