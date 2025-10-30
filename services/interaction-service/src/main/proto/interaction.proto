@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_outer_classname = "InteractionProto";
+
+package tpa.network.interactionservice;
+
+message Interaction {
+  string id = 1;
+  string user_id = 2;
+  string event_id = 3;
+  bool viewed = 4;
+  bool booked = 5;
+}
+
+service InteractionQueryService {
+  rpc GetAllInteractions(GetAllInteractionsRequest) returns (GetAllInteractionsResponse);
+  rpc GetInteractionById(GetInteractionByIdRequest) returns (GetInteractionByIdResponse);
+  rpc GetInteractionsByUserId(GetInteractionsByUserIdRequest) returns (GetInteractionsByUserIdResponse);
+  rpc GetInteractionsByEventId(GetInteractionsByEventIdRequest) returns (GetInteractionsByEventIdResponse);
+}
+
+service InteractionCommandService {
+  rpc CreateInteraction(CreateInteractionRequest) returns (CreateInteractionResponse);
+  rpc UpdateInteraction(UpdateInteractionRequest) returns (UpdateInteractionResponse);
+  rpc DeleteInteraction(DeleteInteractionRequest) returns (DeleteInteractionResponse);
+}
+
+message GetAllInteractionsRequest {}
+
+message GetAllInteractionsResponse {
+  repeated Interaction interactions = 1;
+}
+
+message GetInteractionByIdRequest {
+  string id = 1;
+}
+
+message GetInteractionByIdResponse {
+  optional Interaction interaction = 1;
+}
+
+message GetInteractionsByUserIdRequest {
+  string user_id = 1;
+}
+
+message GetInteractionsByUserIdResponse {
+  repeated Interaction interactions = 1;
+}
+
+message GetInteractionsByEventIdRequest {
+  string event_id = 1;
+}
+
+message GetInteractionsByEventIdResponse {
+  repeated Interaction interactions = 1;
+}
+
+message CreateInteractionRequest {
+  string user_id = 1;
+  string event_id = 2;
+  bool viewed = 3;
+  bool booked = 4;
+}
+
+message CreateInteractionResponse {
+  string id = 1;
+}
+
+message UpdateInteractionRequest {
+  string id = 1;
+  bool viewed = 2;
+  bool booked = 3;
+}
+
+message UpdateInteractionResponse {
+  string id = 1;
+}
+
+message DeleteInteractionRequest {
+  string id = 1;
+}
+
+message DeleteInteractionResponse {
+  string id = 1;
+}

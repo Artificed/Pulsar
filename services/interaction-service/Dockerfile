@@ -10,6 +10,6 @@ FROM openjdk:25-slim AS production
 WORKDIR /app
 
 COPY --from=build /app/build/libs/*.jar app.jar
-EXPOSE 8082
+EXPOSE 9090
 
 ENTRYPOINT [ "java", "-jar", "app.jar" ]

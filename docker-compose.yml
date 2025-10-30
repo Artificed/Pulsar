@@ -27,7 +27,7 @@ services:
       context: ./services/interaction-service
       dockerfile: Dockerfile
     ports:
-      - "8082:8082"
+      - "8082:9090"
     restart: "unless-stopped"
     depends_on:
       - mongodb
