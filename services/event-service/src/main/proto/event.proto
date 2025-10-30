@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_outer_classname = "UserProto";
+option java_outer_classname = "EventProto";
 
 package tpa.network.eventservice;
 
@@ -22,9 +22,12 @@ message Event {
   int32 seats_available = 10;
 }
 
-service EventService {
+service EventQueryService {
   rpc GetAllEvents (GetAllEventsRequest) returns (GetAllEventsResponse);
   rpc GetEventById (GetEventByIdRequest) returns (GetEventByIdResponse);
+}
+
+service EventCommandService {
   rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);
   rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse);
 }

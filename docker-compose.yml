@@ -16,7 +16,7 @@ services:
       context: ./services/event-service
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "8081:9090"
     restart: "unless-stopped"
     depends_on:
       - mongodb

@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.6'
+    id 'org.springframework.boot' version '3.5.7'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'com.google.protobuf' version '0.9.4'
 }
@@ -10,55 +10,57 @@ version = '0.0.1-SNAPSHOT'
 description = 'event-service'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+ext {
+    set('springGrpcVersion', "0.12.0")
+}
 
-    implementation 'io.grpc:grpc-netty-shaded:1.68.1'
-    implementation 'io.grpc:grpc-protobuf:1.68.1'
-    implementation 'io.grpc:grpc-stub:1.68.1'
-    implementation 'io.grpc:grpc-services:1.68.1'
-    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+dependencies {
+    implementation 'net.devh:grpc-server-spring-boot-starter:3.0.0.RELEASE'
+    implementation 'net.devh:grpc-client-spring-boot-starter:3.0.0.RELEASE'
+
+    implementation 'io.grpc:grpc-services'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.grpc:spring-grpc-dependencies:${springGrpcVersion}"
+    }
 }
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.25.3"
+        artifact = 'com.google.protobuf:protoc'
     }
     plugins {
         grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.64.0"
+            artifact = 'io.grpc:protoc-gen-grpc-java'
         }
     }
     generateProtoTasks {
-        all().each { task ->
-            task.plugins {
-                grpc {
-                    option '@generated=omit'
-                }
+        all()*.plugins {
+            grpc {
+                option '@generated=omit'
             }
         }
     }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
