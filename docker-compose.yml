@@ -5,7 +5,8 @@ services:
       context: ./services/user-service
       dockerfile: Dockerfile
     ports:
-      - "8080:9090"
+      - "8080:8080"
+      - "9090:9090"
     restart: "unless-stopped"
     depends_on:
       - mongodb
