@@ -1,4 +1,4 @@
 package tpa.network.eventservice.infrastructure.adapter.in.rest.command.dto;
 
-public class DeleteEventResponse {
+public record DeleteEventResponse(String id) {
 }

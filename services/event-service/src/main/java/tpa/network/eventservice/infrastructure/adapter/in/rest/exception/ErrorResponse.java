@@ -1,4 +1,4 @@
 package tpa.network.eventservice.infrastructure.adapter.in.rest.exception;
 
-public class ErrorResponse {
+public record ErrorResponse(int status, String message) {
 }
