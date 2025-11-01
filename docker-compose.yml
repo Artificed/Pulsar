@@ -35,6 +35,18 @@ services:
     depends_on:
       - mongodb
 
+  booking-service:
+    container_name: booking-service
+    build:
+      context: ./services/booking-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+      - "9093:9090"
+    restart: "unless-stopped"
+    depends_on:
+      - mongodb
+
   recommendation-service:
     container_name: recommendation-service
     build:
