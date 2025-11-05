@@ -1,4 +1,13 @@
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: "unless-stopped"
+
   user-service:
     container_name: user-service
     build:
@@ -10,7 +19,6 @@ services:
     restart: "unless-stopped"
     depends_on:
       - mongodb
-
   event-service:
     container_name: event-service
     build:
