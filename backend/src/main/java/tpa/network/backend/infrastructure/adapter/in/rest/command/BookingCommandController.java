@@ -9,7 +9,7 @@ import tpa.network.backend.domain.port.in.command.UpdateBookingCommand;
 import tpa.network.backend.infrastructure.adapter.in.rest.command.dto.*;
 
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/bookings")
 @RequiredArgsConstructor
 public class BookingCommandController {
 

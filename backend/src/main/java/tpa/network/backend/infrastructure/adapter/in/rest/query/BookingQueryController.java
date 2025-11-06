@@ -10,7 +10,7 @@ import tpa.network.backend.infrastructure.adapter.in.rest.query.dto.BookingRespo
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/bookings")
 @RequiredArgsConstructor
 public class BookingQueryController {
 
