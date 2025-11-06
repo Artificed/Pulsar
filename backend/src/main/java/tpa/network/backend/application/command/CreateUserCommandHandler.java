@@ -3,7 +3,6 @@ package tpa.network.backend.application.command;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tpa.network.backend.domain.exception.EmailTakenException;
-import tpa.network.backend.domain.exception.UserNotFoundException;
 import tpa.network.backend.domain.model.shared.Id;
 import tpa.network.backend.domain.model.user.User;
 import tpa.network.backend.domain.port.in.command.CreateUserCommand;
