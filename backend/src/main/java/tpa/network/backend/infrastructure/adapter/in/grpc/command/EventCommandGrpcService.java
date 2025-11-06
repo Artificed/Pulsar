@@ -41,7 +41,7 @@ public class EventCommandGrpcService extends EventCommandServiceGrpc.EventComman
         var id = createEventCommand.execute(dto);
 
         var response = CreateEventResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);
@@ -57,7 +57,7 @@ public class EventCommandGrpcService extends EventCommandServiceGrpc.EventComman
         var id = deleteEventCommand.execute(dto);
 
         var response = DeleteEventResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);

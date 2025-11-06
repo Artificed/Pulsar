@@ -25,7 +25,7 @@ public final class BookingCommandGrpcService extends BookingCommandServiceGrpc.B
         var id = createBookingCommand.execute(dto);
 
         var response = CreateBookingResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);
@@ -41,7 +41,7 @@ public final class BookingCommandGrpcService extends BookingCommandServiceGrpc.B
         var id = updateBookingCommand.execute(dto);
 
         var response = UpdateBookingResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);
@@ -57,7 +57,7 @@ public final class BookingCommandGrpcService extends BookingCommandServiceGrpc.B
         var id = deleteBookingCommand.execute(dto);
 
         var response = DeleteBookingResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);

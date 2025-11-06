@@ -25,7 +25,7 @@ public class UserCommandGrpcService extends UserCommandServiceGrpc.UserCommandSe
         var id = createUserCommand.execute(dto);
 
         var response = CreateUserResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);
@@ -41,7 +41,7 @@ public class UserCommandGrpcService extends UserCommandServiceGrpc.UserCommandSe
         var id = deleteUserCommand.execute(dto);
 
         var response = DeleteUserResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);
@@ -57,7 +57,7 @@ public class UserCommandGrpcService extends UserCommandServiceGrpc.UserCommandSe
         var id = updateUserCommand.execute(dto);
 
         var response = UpdateUserResponse.newBuilder()
-                .setId(id.toString())
+                .setId(id.getValue())
                 .build();
 
         responseObserver.onNext(response);
