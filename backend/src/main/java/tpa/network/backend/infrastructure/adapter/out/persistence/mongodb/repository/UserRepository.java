@@ -1,0 +1,26 @@
+package tpa.network.backend.infrastructure.adapter.out.persistence.mongodb.repository;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+import tpa.network.backend.domain.exception.UserNotFoundException;
+import tpa.network.backend.infrastructure.adapter.out.persistence.mongodb.document.UserDocument;
+
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends MongoRepository<UserDocument, String> {
+    Optional<UserDocument> findByEmail(String email);
+
+    default UserDocument updateUser(UserDocument user) {
+        assert user.getId() != null;
+
+        UserDocument existing = findById(user.getId())
+                .orElseThrow(UserNotFoundException::new);
+
+        existing.setUsername(user.getUsername());
+        existing.setEmail(user.getEmail());
+        existing.setPassword(user.getPassword());
+
+        return save(existing);
+    }
+}
