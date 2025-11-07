@@ -19,6 +19,7 @@ services:
     restart: "unless-stopped"
     depends_on:
       - mongodb
+
   event-service:
     container_name: event-service
     build:
