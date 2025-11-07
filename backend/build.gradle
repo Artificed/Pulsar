@@ -21,6 +21,7 @@ repositories {
 
 ext {
     set('springGrpcVersion', "0.12.0")
+    set('springAiVersion', "1.1.0-M4")
 }
 
 dependencies {
@@ -31,8 +32,9 @@ dependencies {
 
     implementation 'net.devh:grpc-server-spring-boot-starter:3.0.0.RELEASE'
     implementation 'net.devh:grpc-client-spring-boot-starter:3.0.0.RELEASE'
-
     implementation 'io.grpc:grpc-services'
+
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -44,6 +46,7 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.grpc:spring-grpc-dependencies:${springGrpcVersion}"
+        mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
     }
 }
 
