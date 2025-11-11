@@ -37,17 +37,15 @@ public class EventCommandController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<DeleteEventResponse> deleteEvent(
-            @RequestBody @Valid DeleteEventRequest deleteEventRequest
+            @PathVariable String id
     ) {
-        var id = deleteEventCommand.execute(
-                new DeleteEventCommand.DeleteEventRequest(
-                        deleteEventRequest.id()
-                )
+        var deletedId = deleteEventCommand.execute(
+                new DeleteEventCommand.DeleteEventRequest(id)
         );
 
-        var response = new DeleteEventResponse(id.getValue());
+        var response = new DeleteEventResponse(deletedId.getValue());
         return ResponseEntity.ok(response);
     }
 }

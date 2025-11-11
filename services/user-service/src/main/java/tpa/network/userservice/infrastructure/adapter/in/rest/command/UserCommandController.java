@@ -49,17 +49,15 @@ public class UserCommandController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<DeleteUserResponse> deleteUser(
-            @RequestBody @Valid DeleteUserRequest deleteUserRequest
+            @PathVariable String id
     ) {
-        var id = deleteUserCommand.execute(
-                new DeleteUserCommand.DeleteUserRequest(
-                        deleteUserRequest.id()
-                )
+        var deletedId = deleteUserCommand.execute(
+                new DeleteUserCommand.DeleteUserRequest(id)
         );
 
-        var response = new DeleteUserResponse(id.getValue());
+        var response = new DeleteUserResponse(deletedId.getValue());
         return ResponseEntity.ok(response);
     }
 }
