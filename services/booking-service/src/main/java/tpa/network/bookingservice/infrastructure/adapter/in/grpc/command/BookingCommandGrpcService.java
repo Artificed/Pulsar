@@ -6,7 +6,6 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import tpa.network.bookingservice.*;
 import tpa.network.bookingservice.domain.port.in.command.CreateBookingCommand;
 import tpa.network.bookingservice.domain.port.in.command.DeleteBookingCommand;
-import tpa.network.bookingservice.domain.port.in.command.UpdateBookingCommand;
 
 @GrpcService
 @RequiredArgsConstructor
@@ -14,7 +13,6 @@ public class BookingCommandGrpcService extends BookingCommandServiceGrpc.Booking
 
     private final CreateBookingCommand createBookingCommand;
     private final DeleteBookingCommand deleteBookingCommand;
-    private final UpdateBookingCommand updateBookingCommand;
 
     @Override
     public void createBooking(CreateBookingRequest request, StreamObserver<CreateBookingResponse> responseObserver) {
@@ -25,22 +23,6 @@ public class BookingCommandGrpcService extends BookingCommandServiceGrpc.Booking
         var id = createBookingCommand.execute(dto);
 
         var response = CreateBookingResponse.newBuilder()
-                .setId(id.getValue())
-                .build();
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void updateBooking(UpdateBookingRequest request, StreamObserver<UpdateBookingResponse> responseObserver) {
-        var dto = new UpdateBookingCommand.UpdateBookingRequest(
-                request.getId(), request.getEventId(), request.getQuantity()
-        );
-
-        var id = updateBookingCommand.execute(dto);
-
-        var response = UpdateBookingResponse.newBuilder()
                 .setId(id.getValue())
                 .build();
 

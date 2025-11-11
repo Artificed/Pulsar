@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tpa.network.bookingservice.domain.port.in.command.CreateBookingCommand;
 import tpa.network.bookingservice.domain.port.in.command.DeleteBookingCommand;
-import tpa.network.bookingservice.domain.port.in.command.UpdateBookingCommand;
 import tpa.network.bookingservice.infrastructure.adapter.in.rest.command.dto.*;
 
 @RestController
@@ -14,7 +13,6 @@ import tpa.network.bookingservice.infrastructure.adapter.in.rest.command.dto.*;
 public class BookingCommandController {
 
     private final CreateBookingCommand createBookingCommand;
-    private final UpdateBookingCommand updateBookingCommand;
     private final DeleteBookingCommand deleteBookingCommand;
 
     @PostMapping
@@ -25,18 +23,6 @@ public class BookingCommandController {
 
         var id = createBookingCommand.execute(dto);
         return ResponseEntity.ok(new CreateBookingResponse(id.getValue()));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<UpdateBookingResponse> updateBooking(
-            @PathVariable String id,
-            @RequestBody UpdateBookingRequest request) {
-        var dto = new UpdateBookingCommand.UpdateBookingRequest(
-                id, request.eventId(), request.quantity()
-        );
-
-        var bookingId = updateBookingCommand.execute(dto);
-        return ResponseEntity.ok(new UpdateBookingResponse(bookingId.getValue()));
     }
 
     @DeleteMapping("/{id}")

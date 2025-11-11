@@ -19,7 +19,6 @@ service BookingQueryService {
 
 service BookingCommandService {
   rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse);
-  rpc UpdateBooking(UpdateBookingRequest) returns (UpdateBookingResponse);
   rpc DeleteBooking(DeleteBookingRequest) returns (DeleteBookingResponse);
 }
 
@@ -44,16 +43,6 @@ message CreateBookingRequest {
 }
 
 message CreateBookingResponse {
-  string id = 1;
-}
-
-message UpdateBookingRequest {
-  string id = 1;
-  string event_id = 2;
-  int32 quantity = 3;
-}
-
-message UpdateBookingResponse {
   string id = 1;
 }
 

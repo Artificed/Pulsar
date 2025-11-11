@@ -5,6 +5,5 @@ import tpa.network.bookingservice.domain.model.shared.Id;
 
 public interface BookingCommandRepositoryPort {
     Booking insert(Booking booking);
-    Booking update(Booking booking);
     Id deleteById(String id);
 }
