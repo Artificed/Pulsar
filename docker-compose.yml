@@ -4,9 +4,17 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_USER_SERVICE_URL: http://localhost:8080
+        NEXT_PUBLIC_EVENT_SERVICE_URL: http://localhost:8081
+        NEXT_PUBLIC_BOOKING_SERVICE_URL: http://localhost:8082
     ports:
       - "3000:3000"
     restart: "unless-stopped"
+    depends_on:
+      - user-service
+      - event-service
+      - booking-service
 
   user-service:
     container_name: user-service
