@@ -1,3 +1,4 @@
+import { QueryProvider } from "@/components/providers/query-provider";
 import "./globals.css";
 
 export default function RootLayout({
@@ -6,9 +7,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
+    <html lang="en">
       <body>
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
