@@ -22,13 +22,6 @@ public class BookingCommandRepositoryAdapter implements BookingCommandRepository
     }
 
     @Override
-    public Booking update(Booking booking) {
-        var bookingDocument = mapper.toDocument(booking);
-        var updatedBooking = repository.updateBooking(bookingDocument);
-        return mapper.toBooking(updatedBooking);
-    }
-
-    @Override
     public Id deleteById(String id) {
         repository.deleteById(id);
         return Id.fromString(id);
