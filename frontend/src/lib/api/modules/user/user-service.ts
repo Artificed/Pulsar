@@ -7,23 +7,23 @@ import { GetAllUsersResponse } from "./dtos/get-all-users";
 import { UpdateUserRequest, UpdateUserResponse } from "./dtos/update-user";
 
 const getAllUsers = async (): Promise<ApiResponse<GetAllUsersResponse>> => {
-  return userClient.get<GetAllUsersResponse>("/user");
+  return userClient.get<GetAllUsersResponse>("/users");
 }
 
 const findUserById = async (id: string): Promise<ApiResponse<FindUserByIdResponse>> => {
-  return userClient.get<FindUserByIdResponse>(`/user/${id}`);
+  return userClient.get<FindUserByIdResponse>(`/users/${id}`);
 }
 
 const createUser = async (payload: CreateUserRequest): Promise<ApiResponse<CreateUserResponse>> => {
-  return userClient.post<CreateUserResponse, CreateUserRequest>("/user", payload);
+  return userClient.post<CreateUserResponse, CreateUserRequest>("/users", payload);
 }
 
 const deleteUser = async (payload: DeleteUserRequest): Promise<ApiResponse<DeleteUserResponse>> => {
-  return userClient.delete<DeleteUserResponse>(`/user/${payload.id}`);
+  return userClient.delete<DeleteUserResponse>(`/users/${payload.id}`);
 }
 
 const updateUser = async (payload: UpdateUserRequest): Promise<ApiResponse<UpdateUserResponse>> => {
-  return userClient.put<UpdateUserResponse, UpdateUserRequest>(`/user/${payload.id}`, payload);
+  return userClient.put<UpdateUserResponse, UpdateUserRequest>(`/users/${payload.id}`, payload);
 }
 
 export const userService = {
