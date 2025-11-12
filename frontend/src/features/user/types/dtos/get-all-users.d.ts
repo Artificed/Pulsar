@@ -1,4 +1,4 @@
-import { User } from "@/types/entity/user";
+import { User } from "../user";
 
 export interface GetAllUsersResponse {
   users: User[];

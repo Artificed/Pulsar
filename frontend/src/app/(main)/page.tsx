@@ -1,6 +1,6 @@
 'use client';
 
-import { userService } from "@/lib/api/modules/user/user-service";
+import { userService } from "@/features/user/api/user-service";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {

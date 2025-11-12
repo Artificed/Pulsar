@@ -1,10 +1,13 @@
-import { userClient } from "../../client";
-import { ApiResponse } from "../../client/response";
-import { CreateUserRequest, CreateUserResponse } from "./dtos/create-user";
-import { DeleteUserRequest, DeleteUserResponse } from "./dtos/delete-user";
-import { FindUserByIdResponse } from "./dtos/find-user-by-id";
-import { GetAllUsersResponse } from "./dtos/get-all-users";
-import { UpdateUserRequest, UpdateUserResponse } from "./dtos/update-user";
+import config from "@/lib/api/config";
+import ApiClient from "@/lib/api/client";
+import { ApiResponse } from "@/lib/api/response";
+import { GetAllUsersResponse } from "../types/dtos/get-all-users";
+import { FindUserByIdResponse } from "../types/dtos/find-user-by-id";
+import { CreateUserRequest, CreateUserResponse } from "../types/dtos/create-user";
+import { DeleteUserRequest, DeleteUserResponse } from "../types/dtos/delete-user";
+import { UpdateUserRequest, UpdateUserResponse } from "../types/dtos/update-user";
+
+const userClient = new ApiClient(config.USER_SERVICE_URL!);
 
 const getAllUsers = async (): Promise<ApiResponse<GetAllUsersResponse>> => {
   return userClient.get<GetAllUsersResponse>("/users");
