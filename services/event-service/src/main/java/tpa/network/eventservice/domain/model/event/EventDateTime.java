@@ -14,13 +14,21 @@ public class EventDateTime {
         return new EventDateTime(value);
     }
 
+    public static EventDateTime reconstruct(LocalDateTime value) {
+        validateNotNull(value);
+        return new EventDateTime(value);
+    }
+
     private static void validate(LocalDateTime value) {
-        if (value == null) {
-            throw new InvalidDateTimeException("Event date and time cannot be null!");
-        }
-        
+        validateNotNull(value);
         if (value.isBefore(LocalDateTime.now())) {
             throw new InvalidDateTimeException("Event date and time cannot be in the past!");
+        }
+    }
+
+    private static void validateNotNull(LocalDateTime value) {
+        if (value == null) {
+            throw new InvalidDateTimeException("Event date and time cannot be null!");
         }
     }
 }

@@ -29,7 +29,7 @@ public class EventPersistenceMapper {
                 Title.fromString(eventDocument.getTitle()),
                 Description.fromString(eventDocument.getDescription()),
                 eventDocument.getImageUrl(),
-                EventDateTime.fromLocalDateTime(eventDocument.getDatetime()),
+                EventDateTime.reconstruct(eventDocument.getDatetime()),
                 eventDocument.getDurationMinutes(),
                 Location.fromString(eventDocument.getLocation()),
                 Price.fromDouble(eventDocument.getPrice()),
