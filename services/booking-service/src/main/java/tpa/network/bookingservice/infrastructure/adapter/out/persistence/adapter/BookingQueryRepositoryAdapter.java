@@ -1,6 +1,7 @@
 package tpa.network.bookingservice.infrastructure.adapter.out.persistence.adapter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import tpa.network.bookingservice.domain.port.out.query.BookingQueryRepositoryPort;
 import tpa.network.bookingservice.domain.readmodel.BookingReadModel;
@@ -10,6 +11,7 @@ import tpa.network.bookingservice.infrastructure.adapter.out.persistence.mongodb
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class BookingQueryRepositoryAdapter implements BookingQueryRepositoryPort {
@@ -18,14 +20,24 @@ public class BookingQueryRepositoryAdapter implements BookingQueryRepositoryPort
 
     @Override
     public List<BookingReadModel> findAll() {
-        return repository.findAll().stream()
+        log.debug("Querying all bookings from database");
+        var bookings = repository.findAll().stream()
                 .map(mapper::toReadModel)
                 .toList();
+        log.debug("Found {} bookings in database", bookings.size());
+        return bookings;
     }
 
     @Override
     public Optional<BookingReadModel> findById(String id) {
-        return repository.findById(id)
+        log.debug("Querying booking by id: {} from database", id);
+        var booking = repository.findById(id)
                 .map(mapper::toReadModel);
+        if (booking.isPresent()) {
+            log.debug("Found booking with id: {}", id);
+        } else {
+            log.debug("Booking not found with id: {}", id);
+        }
+        return booking;
     }
 }

@@ -1,6 +1,7 @@
 package tpa.network.bookingservice.infrastructure.adapter.in.rest.query;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tpa.network.bookingservice.domain.port.in.query.GetAllBookingsQuery;
@@ -9,6 +10,7 @@ import tpa.network.bookingservice.infrastructure.adapter.in.rest.query.dto.Booki
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/bookings")
 @RequiredArgsConstructor
@@ -19,18 +21,27 @@ public class BookingQueryController {
 
     @GetMapping
     public ResponseEntity<List<BookingResponse>> getAllBookings() {
+        log.info("REST API - Received request to get all bookings");
         var bookings = getAllBookingsQuery.execute();
         var response = bookings.stream()
                 .map(b -> new BookingResponse(b.id(), b.userId(), b.eventId(), b.quantity()))
                 .toList();
+        log.info("REST API - Found {} bookings", response.size());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable String id) {
+        log.info("REST API - Received request to get booking by id: {}", id);
         return getBookingByIdQuery.execute(id)
                 .map(b -> new BookingResponse(b.id(), b.userId(), b.eventId(), b.quantity()))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(response -> {
+                    log.info("REST API - Found booking with id: {}", id);
+                    return ResponseEntity.ok(response);
+                })
+                .orElseGet(() -> {
+                    log.warn("REST API - Booking not found with id: {}", id);
+                    return ResponseEntity.notFound().build();
+                });
     }
 }

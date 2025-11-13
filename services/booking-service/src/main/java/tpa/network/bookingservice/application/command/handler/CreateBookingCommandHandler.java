@@ -1,6 +1,7 @@
 package tpa.network.bookingservice.application.command.handler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tpa.network.bookingservice.domain.exception.EventNotFoundException;
 import tpa.network.bookingservice.domain.exception.UserNotFoundException;
@@ -11,6 +12,7 @@ import tpa.network.bookingservice.domain.port.out.command.BookingCommandReposito
 import tpa.network.bookingservice.domain.port.out.grpc.EventServicePort;
 import tpa.network.bookingservice.domain.port.out.grpc.UserServicePort;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CreateBookingCommandHandler implements CreateBookingCommand {
@@ -20,11 +22,15 @@ public class CreateBookingCommandHandler implements CreateBookingCommand {
 
     @Override
     public Id execute(CreateBookingRequest request) {
+        log.info("Executing CreateBookingCommand for userId: {}, eventId: {}", request.userId(), request.eventId());
+        
         if (!userServicePort.existsById(request.userId())) {
+            log.warn("Failed to create booking - user not found with id: {}", request.userId());
             throw new UserNotFoundException(request.userId());
         }
 
         if (!eventServicePort.existsById(request.eventId())) {
+            log.warn("Failed to create booking - event not found with id: {}", request.eventId());
             throw new EventNotFoundException(request.eventId());
         }
 
@@ -35,6 +41,7 @@ public class CreateBookingCommandHandler implements CreateBookingCommand {
         );
 
         Booking savedBooking = commandRepository.insert(booking);
+        log.info("Successfully created booking with id: {}", savedBooking.getId().getValue());
         return savedBooking.getId();
     }
 }
