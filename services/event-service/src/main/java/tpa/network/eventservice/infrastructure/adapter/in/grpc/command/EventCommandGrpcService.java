@@ -3,6 +3,7 @@ package tpa.network.eventservice.infrastructure.adapter.in.grpc.command;
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import tpa.network.eventservice.*;
 import tpa.network.eventservice.domain.port.in.command.CreateEventCommand;
@@ -12,6 +13,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+@Slf4j
 @GrpcService
 @RequiredArgsConstructor
 public class EventCommandGrpcService extends EventCommandServiceGrpc.EventCommandServiceImplBase {
@@ -21,6 +23,8 @@ public class EventCommandGrpcService extends EventCommandServiceGrpc.EventComman
 
     @Override
     public void createEvent(CreateEventRequest request, StreamObserver<CreateEventResponse> responseObserver) {
+        log.info("gRPC - Received createEvent request for title: {}", request.getTitle());
+        
         Timestamp timestamp = request.getDatetime();
         LocalDateTime datetime = LocalDateTime.ofInstant(
                 Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos()),
@@ -40,6 +44,7 @@ public class EventCommandGrpcService extends EventCommandServiceGrpc.EventComman
 
         var id = createEventCommand.execute(dto);
 
+        log.info("gRPC - Successfully created event with id: {}", id.getValue());
         var response = CreateEventResponse.newBuilder()
                 .setId(id.getValue())
                 .build();
@@ -50,12 +55,15 @@ public class EventCommandGrpcService extends EventCommandServiceGrpc.EventComman
 
     @Override
     public void deleteEvent(DeleteEventRequest request, StreamObserver<DeleteEventResponse> responseObserver) {
+        log.info("gRPC - Received deleteEvent request for id: {}", request.getId());
+        
         var dto = new DeleteEventCommand.DeleteEventRequest(
                 request.getId()
         );
 
         var id = deleteEventCommand.execute(dto);
 
+        log.info("gRPC - Successfully deleted event with id: {}", id.getValue());
         var response = DeleteEventResponse.newBuilder()
                 .setId(id.getValue())
                 .build();
