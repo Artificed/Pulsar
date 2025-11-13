@@ -28,6 +28,18 @@ services:
       - "8080:8080"
       - "9090:9090"
 
+  auth-service:
+    container_name: auth-service
+    restart: unless-stopped
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8080"
+      - "9091:9090"
+
   event-service:
     container_name: event-service
     restart: unless-stopped
@@ -37,8 +49,8 @@ services:
     depends_on:
       - mongodb
     ports:
-      - "8081:8080"
-      - "9091:9090"
+      - "8082:8080"
+      - "9092:9090"
 
   booking-service:
     container_name: booking-service
@@ -49,8 +61,8 @@ services:
     depends_on:
       - mongodb
     ports:
-      - "8082:8080"
-      - "9092:9090"
+      - "8083:8080"
+      - "9093:9090"
 
   mongodb:
     image: mongo:latest
