@@ -15,6 +15,7 @@ message User {
 service UserQueryService {
   rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
   rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
 }
 
 service UserCommandService {
@@ -34,6 +35,14 @@ message GetUserByIdRequest {
 }
 
 message GetUserByIdResponse {
+  optional User user = 1;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message GetUserByEmailResponse {
   optional User user = 1;
 }
 
