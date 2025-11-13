@@ -1,6 +1,7 @@
 package tpa.network.userservice.infrastructure.adapter.out.persistence.adapter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import tpa.network.userservice.domain.model.shared.Id;
 import tpa.network.userservice.domain.model.user.User;
@@ -8,6 +9,7 @@ import tpa.network.userservice.domain.port.out.command.UserCommandRepositoryPort
 import tpa.network.userservice.infrastructure.adapter.out.persistence.mapper.UserPersistenceMapper;
 import tpa.network.userservice.infrastructure.adapter.out.persistence.mongodb.repository.UserRepository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class UserCommandRepositoryAdapter implements UserCommandRepositoryPort {
@@ -16,21 +18,33 @@ public class UserCommandRepositoryAdapter implements UserCommandRepositoryPort {
 
     @Override
     public User insert(User user) {
+        log.debug("Inserting user into database with id: {}", user.getId().getValue());
+        
         var userDocument = mapper.toDocument(user);
         var insertedUser = repository.save(userDocument);
+        
+        log.debug("Successfully inserted user with id: {}", insertedUser.getId());
         return mapper.toUser(insertedUser);
     }
 
     @Override
     public User update(User user) {
+        log.debug("Updating user in database with id: {}", user.getId().getValue());
+        
         var userDocument = mapper.toDocument(user);
         var updatedUser = repository.updateUser(userDocument);
+        
+        log.debug("Successfully updated user with id: {}", updatedUser.getId());
         return mapper.toUser(updatedUser);
     }
 
     @Override
     public Id deleteById(String id) {
+        log.debug("Deleting user from database with id: {}", id);
+        
         repository.deleteById(id);
+        
+        log.debug("Successfully deleted user with id: {}", id);
         return Id.fromString(id);
     }
 }
