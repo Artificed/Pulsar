@@ -22,7 +22,7 @@ public class RefreshTokenHandler implements RefreshTokenUseCase {
         log.info("Attempting to refresh token");
 
         try {
-            Id userId = tokenServicePort.validateRefreshToken(request.refreshToken());
+            var userId = tokenServicePort.validateRefreshToken(request.refreshToken());
             log.debug("Refresh token validated for user: {}", userId.getValue());
 
             var userOpt = userServicePort.getUserById(userId.getValue());
@@ -33,9 +33,9 @@ public class RefreshTokenHandler implements RefreshTokenUseCase {
 
             var user = userOpt.get();
 
-            String newAccessToken = tokenServicePort.generateAccessToken(userId, user.username(), user.email());
-            String newRefreshToken = tokenServicePort.generateRefreshToken(userId);
-            Long expiresIn = tokenServicePort.getAccessTokenExpirationTime();
+            var newAccessToken = tokenServicePort.generateAccessToken(userId, user.username(), user.email());
+            var newRefreshToken = tokenServicePort.generateRefreshToken(userId);
+            var expiresIn = tokenServicePort.getAccessTokenExpirationTime();
 
             log.info("Token refresh successful for user: {}", userId.getValue());
 

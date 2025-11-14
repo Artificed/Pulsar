@@ -36,10 +36,10 @@ public class LoginHandler implements LoginUseCase {
             throw new InvalidCredentialsException();
         }
 
-        Id userId = Id.fromString(user.id());
-        String accessToken = tokenServicePort.generateAccessToken(userId, user.username(), user.email());
-        String refreshToken = tokenServicePort.generateRefreshToken(userId);
-        Long expiresIn = tokenServicePort.getAccessTokenExpirationTime();
+        var userId = Id.fromString(user.id());
+        var accessToken = tokenServicePort.generateAccessToken(userId, user.username(), user.email());
+        var refreshToken = tokenServicePort.generateRefreshToken(userId);
+        var expiresIn = tokenServicePort.getAccessTokenExpirationTime();
 
         log.info("Login successful for user: {}", user.id());
 

@@ -23,7 +23,7 @@ public class ValidateTokenHandler implements ValidateTokenUseCase {
         log.debug("Validating access token");
 
         try {
-            Id userId = tokenServicePort.validateAccessToken(request.accessToken());
+            var userId = tokenServicePort.validateAccessToken(request.accessToken());
             log.debug("Token validated for user: {}", userId.getValue());
 
             var userOpt = userServicePort.getUserById(userId.getValue());

@@ -25,8 +25,8 @@ public class RegisterHandler implements RegisterUseCase {
             throw new UserAlreadyExistsException("User already exists with email: " + request.email());
         }
 
-        String passwordHash = passwordEncoderPort.encode(request.password());
-        String userId = userServicePort.createUser(request.username(), request.email(), passwordHash);
+        var passwordHash = passwordEncoderPort.encode(request.password());
+        var userId = userServicePort.createUser(request.username(), request.email(), passwordHash);
 
         log.info("Registration successful for user: {}", userId);
         return new RegisterResponse(userId);
