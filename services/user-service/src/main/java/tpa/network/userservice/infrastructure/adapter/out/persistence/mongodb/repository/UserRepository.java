@@ -10,17 +10,4 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends MongoRepository<UserDocument, String> {
     Optional<UserDocument> findByEmail(String email);
-
-    default UserDocument updateUser(UserDocument user) {
-        assert user.getId() != null;
-
-        UserDocument existing = findById(user.getId())
-                .orElseThrow(UserNotFoundException::new);
-
-        existing.setUsername(user.getUsername());
-        existing.setEmail(user.getEmail());
-        existing.setPassword(user.getPassword());
-
-        return save(existing);
-    }
 }

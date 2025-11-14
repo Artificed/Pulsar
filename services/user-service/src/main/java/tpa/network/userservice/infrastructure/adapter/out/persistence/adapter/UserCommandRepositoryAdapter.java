@@ -26,25 +26,4 @@ public class UserCommandRepositoryAdapter implements UserCommandRepositoryPort {
         log.debug("Successfully inserted user with id: {}", insertedUser.getId());
         return mapper.toUser(insertedUser);
     }
-
-    @Override
-    public User update(User user) {
-        log.debug("Updating user in database with id: {}", user.getId().getValue());
-        
-        var userDocument = mapper.toDocument(user);
-        var updatedUser = repository.updateUser(userDocument);
-        
-        log.debug("Successfully updated user with id: {}", updatedUser.getId());
-        return mapper.toUser(updatedUser);
-    }
-
-    @Override
-    public Id deleteById(String id) {
-        log.debug("Deleting user from database with id: {}", id);
-        
-        repository.deleteById(id);
-        
-        log.debug("Successfully deleted user with id: {}", id);
-        return Id.fromString(id);
-    }
 }

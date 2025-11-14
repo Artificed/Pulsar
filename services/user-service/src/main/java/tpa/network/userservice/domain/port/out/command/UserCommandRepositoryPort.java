@@ -5,6 +5,4 @@ import tpa.network.userservice.domain.model.user.User;
 
 public interface UserCommandRepositoryPort {
     User insert(User user);
-    User update(User user);
-    Id deleteById(String id);
 }
