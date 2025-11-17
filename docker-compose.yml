@@ -93,7 +93,7 @@ services:
     depends_on:
       - elasticsearch
     ports:
-      - "5000:5000"
+      - "5044:5044"
       - "9600:9600"
     environment:
       - LS_JAVA_OPTS=-Xms512m -Xmx512m
