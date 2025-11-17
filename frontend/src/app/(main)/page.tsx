@@ -1,13 +1,13 @@
 'use client';
 
-import { userService } from "@/features/user/api/user-service";
+import { eventService } from "@/features/event/api/event-service";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
   const test = useQuery({
     queryKey: ["test"],
     queryFn: async () => {
-      const result = await userService.getAllUsers();
+      const result = await eventService.getAllEvents()
       return result;
     }
   })
