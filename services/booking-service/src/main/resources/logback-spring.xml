@@ -7,7 +7,12 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%level) %cyan(%logger) - %msg%n</pattern>
         </encoder>
     </appender>
-    
+
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>logstash:5044</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
     <logger name="tpa.network.bookingservice" level="INFO"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.mongodb" level="WARN"/>
@@ -15,5 +20,6 @@
     
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
     </root>
 </configuration>
