@@ -74,44 +74,5 @@ services:
     volumes:
       - mongodb_data:/data/db
 
-  elasticsearch:
-    image: elasticsearch:9.2.1
-    container_name: elasticsearch
-    restart: unless-stopped
-    ports:
-      - "9200:9200"
-    environment:
-      - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
-      - discovery.type=single-node
-    volumes:
-      - elastic_data:/usr/share/elasticsearch/data
-
-  logstash:
-    image: logstash:9.2.1
-    container_name: logstash
-    restart: unless-stopped
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5044:5044"
-      - "9600:9600"
-    environment:
-      - LS_JAVA_OPTS=-Xms512m -Xmx512m
-    volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-
-  kibana:
-    image: kibana:9.2.1
-    container_name: kibana
-    restart: unless-stopped
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-
 volumes:
   mongodb_data:
-  elastic_data:
