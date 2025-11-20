@@ -25,6 +25,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+      - otel-lgtm
     ports:
       - "8080:8080"
       - "9090:9090"
@@ -37,6 +38,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+      - otel-lgtm
     ports:
       - "8081:8080"
       - "9091:9090"
@@ -49,6 +51,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+      - otel-lgtm
     ports:
       - "8082:8080"
       - "9092:9090"
@@ -61,6 +64,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongodb
+      - otel-lgtm
     ports:
       - "8083:8080"
       - "9093:9090"
@@ -73,6 +77,14 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: test123
     volumes:
       - mongodb_data:/data/db
+
+  otel-lgtm:
+    image: grafana/otel-lgtm
+    container_name: otel-lgtm
+    ports:
+      - "5000:3000"
+      - "4317:4317"
+      - "4318:4318"
 
 volumes:
   mongodb_data:
