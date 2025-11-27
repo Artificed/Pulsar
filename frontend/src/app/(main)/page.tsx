@@ -54,6 +54,8 @@ const floatingOrbs = [
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const mouseRef = useRef({ x: -100, y: -100 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -66,6 +68,12 @@ export default function Home() {
     let stars: Star[] = [];
     let meteors: Meteor[] = [];
     let constellations: Constellation[] = [];
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -196,6 +204,18 @@ export default function Home() {
       const scrollTop = container.scrollTop;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      const mouse = mouseRef.current;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${mouse.x - 6}px, ${mouse.y - 6}px, 0)`;
+      }
+
+      const glowGradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 300);
+      glowGradient.addColorStop(0, "rgba(100, 100, 255, 0.15)");
+      glowGradient.addColorStop(1, "transparent");
+      ctx.fillStyle = glowGradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
       constellations.forEach((c) => {
         
         c.pulseOffset += 0.003 * c.pulseDirection;
@@ -300,9 +320,20 @@ export default function Home() {
         
         const drawY = star.y - scrollTop;
         if (drawY >= -10 && drawY <= canvas.height + 10) {
-          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          
+          const dx = star.x - mouse.x;
+          const dy = drawY - mouse.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          let size = star.size;
+          let opacity = star.opacity;
+
+          if (dist < 150) {
+            opacity = Math.min(1, star.opacity + 0.5);
+          }
+
+          ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
           ctx.beginPath();
-          ctx.arc(star.x, drawY, star.size, 0, Math.PI * 2);
+          ctx.arc(star.x, drawY, size, 0, Math.PI * 2);
           ctx.fill();
         }
       });
@@ -357,17 +388,20 @@ export default function Home() {
     };
 
     window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', handleMouseMove);
     resizeCanvas();
     animate();
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
-    <div ref={containerRef} className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white">
+    <div ref={containerRef} className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white cursor-none">
+      <div ref={cursorRef} className="fixed top-0 left-0 w-6 h-6 bg-white rounded-full pointer-events-none z-50 mix-blend-difference shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
       
       <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0f0518] via-[#090118] via-[#05010e] to-[#000000]" />
