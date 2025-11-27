@@ -1,9 +1,18 @@
 'use client';
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
+type Star = {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+};
 
-const generateStars = (count: number) => {
+const generateStars = (count: number): Star[] => {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -13,7 +22,6 @@ const generateStars = (count: number) => {
     delay: Math.random() * 2,
   }));
 };
-
 
 const floatingOrbs = [
   { id: 1, x: "10%", y: "10%", size: "25vw", color: "purple", duration: 20 },
@@ -31,12 +39,17 @@ const floatingOrbs = [
   { id: 13, x: "85%", y: "250%", size: "25vw", color: "indigo", duration: 32 },
   { id: 14, x: "10%", y: "320%", size: "12vw", color: "violet", duration: 19 },
   { id: 15, x: "60%", y: "400%", size: "20vw", color: "purple", duration: 26 },
-  { id: 16, x: "20%", y: "450%", size: "18vw", color: "pink", duration: 24 },
+  { id: 16, x: "20%", y: "445%", size: "18vw", color: "pink", duration: 24 },
+  { id: 17, x: "70%", y: "470%", size: "18vw", color: "fuchsia", duration: 24 },
 ];
 
-const stars = generateStars(800);
-
 export default function Home() {
+  const [stars, setStars] = useState<Star[]>([]);
+
+  useEffect(() => {
+    setStars(generateStars(800));
+  }, []);
+
   return (
     <div className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white">
       <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
