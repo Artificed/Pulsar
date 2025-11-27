@@ -1,7 +1,6 @@
 'use client';
 
-import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type Star = {
   x: number;
@@ -19,6 +18,16 @@ type ShootingStar = {
   opacity: number;
   dx: number;
   dy: number;
+};
+
+type Constellation = {
+  stars: { x: number; y: number }[];
+  opacity: number;
+  speed: number;
+  pulseOffset: number;
+  pulseDirection: number;
+  totalLength: number;
+  segmentLengths: number[];
 };
 
 const floatingOrbs = [
@@ -55,11 +64,13 @@ export default function Home() {
     let animationFrameId: number;
     let stars: Star[] = [];
     let shootingStars: ShootingStar[] = [];
+    let constellations: Constellation[] = [];
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       initStars();
+      initConstellations();
     };
 
     const initStars = () => {
@@ -77,12 +88,94 @@ export default function Home() {
       }
     };
 
+    const initConstellations = () => {
+      constellations = [];
+      const totalHeight = window.innerHeight * 5;
+      const count = Math.floor(totalHeight / 400); 
+      const centers: {x: number, y: number}[] = [];
+
+      for (let i = 0; i < count; i++) {
+        let centerX = 0, centerY = 0;
+        let valid = false;
+        let attempts = 0;
+        
+        while (!valid && attempts < 50) {
+          centerX = Math.random() * (canvas.width - 200) + 100;
+          centerY = Math.random() * totalHeight;
+          valid = true;
+          for (const c of centers) {
+            const dx = c.x - centerX;
+            const dy = c.y - centerY;
+            if (Math.sqrt(dx*dx + dy*dy) < 500) {
+              valid = false;
+              break;
+            }
+          }
+          attempts++;
+        }
+
+        if (!valid) continue;
+        centers.push({x: centerX, y: centerY});
+
+        const numStars = Math.floor(Math.random() * 3) + 3; 
+        
+        const points: {x: number, y: number}[] = [];
+        for(let j=0; j<numStars; j++) {
+            points.push({
+                x: centerX + (Math.random() * 300 - 150),
+                y: centerY + (Math.random() * 300 - 150)
+            });
+        }
+        
+        const path: {x: number, y: number}[] = [points[0]];
+        const unvisited = points.slice(1);
+        
+        while(unvisited.length > 0) {
+            const current = path[path.length - 1];
+            let nearestIdx = 0;
+            let minDist = Number.MAX_VALUE;
+            
+            for(let k=0; k<unvisited.length; k++) {
+                const dx = unvisited[k].x - current.x;
+                const dy = unvisited[k].y - current.y;
+                const dist = dx*dx + dy*dy;
+                if(dist < minDist) {
+                    minDist = dist;
+                    nearestIdx = k;
+                }
+            }
+            
+            path.push(unvisited[nearestIdx]);
+            unvisited.splice(nearestIdx, 1);
+        }
+        
+        let totalLength = 0;
+        const segmentLengths: number[] = [];
+        for(let k=0; k<path.length-1; k++) {
+            const dx = path[k+1].x - path[k].x;
+            const dy = path[k+1].y - path[k].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            segmentLengths.push(dist);
+            totalLength += dist;
+        }
+
+        constellations.push({
+          stars: path,
+          opacity: Math.random() * 0.5 + 0.4,
+          speed: Math.random() * 0.005 + 0.001,
+          pulseOffset: Math.random(),
+          pulseDirection: 1,
+          totalLength,
+          segmentLengths,
+        });
+      }
+    };
+
     const createShootingStar = () => {
       const scrollTop = container.scrollTop;
       const startX = Math.random() * canvas.width;
       
       const startY = scrollTop + Math.random() * (window.innerHeight / 2);
-      
       
       const angle = Math.PI * 0.75 + (Math.random() * 0.2 - 0.1); 
       const speed = 15 + Math.random() * 10;
@@ -101,14 +194,108 @@ export default function Home() {
     const animate = () => {
       const scrollTop = container.scrollTop;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       
+      constellations.forEach((c) => {
+        
+        c.pulseOffset += 0.003 * c.pulseDirection;
+        if (c.pulseOffset > 1 || c.pulseOffset < 0) {
+          c.pulseDirection *= -1;
+        }
+        
+        const firstStarY = c.stars[0].y - scrollTop;
+        if (firstStarY > -300 && firstStarY < canvas.height + 300) {
+          
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(255, 255, 255, 0.2)`;
+          ctx.lineWidth = 1;
+          
+          c.stars.forEach((star, index) => {
+            const drawY = star.y - scrollTop;
+            if (index === 0) {
+              ctx.moveTo(star.x, drawY);
+            } else {
+              ctx.lineTo(star.x, drawY);
+            }
+          });
+          ctx.stroke();
+          
+          const totalSegments = c.stars.length - 1;
+          const stripPixelLength = 80; 
+          
+          const currentPixelPos = c.pulseOffset * c.totalLength;
+          const startPixel = currentPixelPos - stripPixelLength / 2;
+          const endPixel = currentPixelPos + stripPixelLength / 2;
+
+          let currentSegmentStartPixel = 0;
+
+          for (let i = 0; i < totalSegments; i++) {
+            const segmentLength = c.segmentLengths[i];
+            const currentSegmentEndPixel = currentSegmentStartPixel + segmentLength;
+            
+            const overlapStart = Math.max(startPixel, currentSegmentStartPixel);
+            const overlapEnd = Math.min(endPixel, currentSegmentEndPixel);
+
+            if (overlapStart < overlapEnd) {
+              
+              const localStartT = (overlapStart - currentSegmentStartPixel) / segmentLength;
+              const localEndT = (overlapEnd - currentSegmentStartPixel) / segmentLength;
+
+              const p1 = c.stars[i];
+              const p2 = c.stars[i + 1];
+
+              const x1 = p1.x + (p2.x - p1.x) * localStartT;
+              const y1 = (p1.y - scrollTop) + ((p2.y - scrollTop) - (p1.y - scrollTop)) * localStartT;
+              
+              const x2 = p1.x + (p2.x - p1.x) * localEndT;
+              const y2 = (p1.y - scrollTop) + ((p2.y - scrollTop) - (p1.y - scrollTop)) * localEndT;
+    
+              const grad = ctx.createLinearGradient(x1, y1, x2, y2);
+              
+              const getOpacity = (pixelPos: number) => {
+                  const dist = Math.abs(pixelPos - currentPixelPos);
+                  return Math.max(0, 1 - dist / (stripPixelLength / 2));
+              };
+
+              grad.addColorStop(0, `rgba(255, 255, 255, ${getOpacity(overlapStart)})`);
+              
+              
+              if (currentPixelPos > overlapStart && currentPixelPos < overlapEnd) {
+                  const peakPos = (currentPixelPos - overlapStart) / (overlapEnd - overlapStart);
+                  grad.addColorStop(peakPos, `rgba(255, 255, 255, 1)`);
+              }
+              
+              grad.addColorStop(1, `rgba(255, 255, 255, ${getOpacity(overlapEnd)})`);
+
+              ctx.beginPath();
+              ctx.strokeStyle = grad;
+              ctx.lineWidth = 2;
+              ctx.lineCap = 'round';
+              ctx.shadowBlur = 5;
+              ctx.shadowColor = "white";
+              ctx.moveTo(x1, y1);
+              ctx.lineTo(x2, y2);
+              ctx.stroke();
+              ctx.shadowBlur = 0;
+            }
+            
+            currentSegmentStartPixel += segmentLength;
+          }
+          
+          c.stars.forEach((star) => {
+             const drawY = star.y - scrollTop;
+             ctx.fillStyle = `rgba(255, 255, 255, ${c.opacity})`;
+             ctx.beginPath();
+             ctx.arc(star.x, drawY, 2, 0, Math.PI * 2);
+             ctx.fill();
+          });
+        }
+      });
+
       stars.forEach((star) => {
         star.opacity += star.speed;
         if (star.opacity > 1 || star.opacity < 0.1) {
           star.speed = -star.speed;
         }
-
         
         const drawY = star.y - scrollTop;
         if (drawY >= -10 && drawY <= canvas.height + 10) {
@@ -124,7 +311,6 @@ export default function Home() {
         s.x += s.dx;
         s.y += s.dy;
         s.opacity -= 0.02;
-        
         if (s.opacity <= 0 || s.x < 0 || s.x > canvas.width) {
           shootingStars.splice(i, 1);
           continue;
@@ -155,7 +341,7 @@ export default function Home() {
         }
       }
 
-      if (Math.random() < 0.015) {=
+      if (Math.random() < 0.015) {
         createShootingStar();
       }
 
