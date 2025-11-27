@@ -16,33 +16,42 @@ const generateStars = (count: number) => {
 
 
 const floatingOrbs = [
-  { id: 1, x: "10%", y: "10%", size: "40vw", color: "purple", duration: 20 },
-  { id: 2, x: "70%", y: "60%", size: "35vw", color: "blue", duration: 25 },
-  { id: 3, x: "20%", y: "120%", size: "30vw", color: "indigo", duration: 18 },
-  { id: 4, x: "80%", y: "180%", size: "25vw", color: "violet", duration: 22 },
-  { id: 5, x: "15%", y: "220%", size: "35vw", color: "cyan", duration: 30 },
-  { id: 6, x: "60%", y: "280%", size: "30vw", color: "purple", duration: 24 },
-  { id: 7, x: "30%", y: "350%", size: "40vw", color: "blue", duration: 28 },
-  { id: 8, x: "75%", y: "420%", size: "25vw", color: "indigo", duration: 20 },
+  { id: 1, x: "10%", y: "10%", size: "25vw", color: "purple", duration: 20 },
+  { id: 2, x: "70%", y: "60%", size: "20vw", color: "fuchsia", duration: 25 },
+  { id: 3, x: "20%", y: "120%", size: "18vw", color: "indigo", duration: 18 },
+  { id: 4, x: "80%", y: "180%", size: "15vw", color: "violet", duration: 22 },
+  { id: 5, x: "15%", y: "220%", size: "20vw", color: "pink", duration: 30 },
+  { id: 6, x: "60%", y: "280%", size: "18vw", color: "purple", duration: 24 },
+  { id: 7, x: "30%", y: "350%", size: "25vw", color: "fuchsia", duration: 28 },
+  { id: 8, x: "75%", y: "420%", size: "15vw", color: "indigo", duration: 20 },
+  { id: 9, x: "50%", y: "50%", size: "30vw", color: "violet", duration: 35 },
+  { id: 10, x: "90%", y: "10%", size: "12vw", color: "pink", duration: 15 },
+  { id: 11, x: "5%", y: "90%", size: "15vw", color: "purple", duration: 28 },
+  { id: 12, x: "40%", y: "150%", size: "18vw", color: "fuchsia", duration: 22 },
+  { id: 13, x: "85%", y: "250%", size: "25vw", color: "indigo", duration: 32 },
+  { id: 14, x: "10%", y: "320%", size: "12vw", color: "violet", duration: 19 },
+  { id: 15, x: "60%", y: "400%", size: "20vw", color: "purple", duration: 26 },
+  { id: 16, x: "20%", y: "450%", size: "18vw", color: "pink", duration: 24 },
 ];
 
-const stars = generateStars(150);
+const stars = generateStars(800);
 
 export default function Home() {
   return (
     <div className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white">
       <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1b4b] via-[#0B1026] via-[#0a0a1a] via-[#050510] to-[#000000]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0f0518] via-[#090118] via-[#05010e] to-[#000000]" />
 
         {floatingOrbs.map((orb) => (
           <motion.div
             key={orb.id}
-            className={`absolute rounded-full pointer-events-none blur-[100px] ${orb.color === "purple" ? "bg-purple-600/20" :
-                orb.color === "blue" ? "bg-blue-600/15" :
-                  orb.color === "indigo" ? "bg-indigo-600/15" :
-                    orb.color === "violet" ? "bg-violet-600/10" :
-                      "bg-cyan-600/10"
-              }`}
+            className={`absolute rounded-full pointer-events-none blur-[120px] opacity-50 mix-blend-screen ${
+              orb.color === "purple" ? "bg-purple-600/20" :
+              orb.color === "fuchsia" ? "bg-fuchsia-600/20" :
+              orb.color === "indigo" ? "bg-indigo-600/20" :
+              orb.color === "violet" ? "bg-violet-600/20" :
+              "bg-pink-600/20"
+            }`}
             style={{
               width: orb.size,
               height: orb.size,
