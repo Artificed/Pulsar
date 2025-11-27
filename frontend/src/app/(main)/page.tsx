@@ -58,17 +58,18 @@ export default function Home() {
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight * 5; 
+      canvas.height = window.innerHeight;
       initStars();
     };
 
     const initStars = () => {
       stars = [];
-      const count = Math.floor((canvas.width * canvas.height) / 10000);
+      const totalHeight = window.innerHeight * 5;
+      const count = Math.floor((canvas.width * totalHeight) / 8000); 
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
+          y: Math.random() * totalHeight,
           size: Math.random() * 1.5 + 0.5,
           opacity: Math.random(),
           speed: (Math.random() * 0.01 + 0.002) * (Math.random() > 0.5 ? 1 : -1),
@@ -98,6 +99,7 @@ export default function Home() {
     };
 
     const animate = () => {
+      const scrollTop = container.scrollTop;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       
@@ -106,47 +108,54 @@ export default function Home() {
         if (star.opacity > 1 || star.opacity < 0.1) {
           star.speed = -star.speed;
         }
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
 
+        
+        const drawY = star.y - scrollTop;
+        if (drawY >= -10 && drawY <= canvas.height + 10) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          ctx.beginPath();
+          ctx.arc(star.x, drawY, star.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
       
       for (let i = shootingStars.length - 1; i >= 0; i--) {
         const s = shootingStars[i];
         s.x += s.dx;
         s.y += s.dy;
         s.opacity -= 0.02;
-
-        if (s.opacity <= 0 || s.x < 0 || s.x > canvas.width || s.y > canvas.height) {
+        
+        if (s.opacity <= 0 || s.x < 0 || s.x > canvas.width) {
           shootingStars.splice(i, 1);
           continue;
         }
 
+        const drawY = s.y - scrollTop;
         
-        const tailX = s.x - (s.dx / s.speed) * s.length;
-        const tailY = s.y - (s.dy / s.speed) * s.length;
+        if (drawY > -200 && drawY < canvas.height + 200) {
+          const tailX = s.x - (s.dx / s.speed) * s.length;
+          const tailY = drawY - (s.dy / s.speed) * s.length;
 
-        const grad = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
-        grad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
-        grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
+          const grad = ctx.createLinearGradient(s.x, drawY, tailX, tailY);
+          grad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
+          grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
 
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(tailX, tailY);
-        ctx.stroke();
-        
-        ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
-        ctx.fill();
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(s.x, drawY);
+          ctx.lineTo(tailX, tailY);
+          ctx.stroke();
+          
+          ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+          ctx.beginPath();
+          ctx.arc(s.x, drawY, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
-      if (Math.random() < 0.015) { 
+      if (Math.random() < 0.015) {=
         createShootingStar();
       }
 
@@ -170,7 +179,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0f0518] via-[#090118] via-[#05010e] to-[#000000]" />
       </div>
 
-      <canvas ref={canvasRef} className="absolute inset-x-0 top-0 z-0 pointer-events-none mix-blend-screen" />
+      <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none mix-blend-screen" />
 
       <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
         {floatingOrbs.map((orb) => (
