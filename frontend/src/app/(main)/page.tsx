@@ -1,26 +1,24 @@
 'use client';
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Star = {
-  id: number;
   x: number;
   y: number;
   size: number;
-  duration: number;
-  delay: number;
+  opacity: number;
+  speed: number;
 };
 
-const generateStars = (count: number): Star[] => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 500,
-    size: Math.random() * 2 + 1,
-    duration: Math.random() * 3 + 2,
-    delay: Math.random() * 2,
-  }));
+type ShootingStar = {
+  x: number;
+  y: number;
+  length: number;
+  speed: number;
+  opacity: number;
+  dx: number;
+  dy: number;
 };
 
 const floatingOrbs = [
@@ -44,17 +42,137 @@ const floatingOrbs = [
 ];
 
 export default function Home() {
-  const [stars, setStars] = useState<Star[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setStars(generateStars(800));
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let stars: Star[] = [];
+    let shootingStars: ShootingStar[] = [];
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight * 5; 
+      initStars();
+    };
+
+    const initStars = () => {
+      stars = [];
+      const count = Math.floor((canvas.width * canvas.height) / 10000);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 1.5 + 0.5,
+          opacity: Math.random(),
+          speed: (Math.random() * 0.01 + 0.002) * (Math.random() > 0.5 ? 1 : -1),
+        });
+      }
+    };
+
+    const createShootingStar = () => {
+      const scrollTop = container.scrollTop;
+      const startX = Math.random() * canvas.width;
+      
+      const startY = scrollTop + Math.random() * (window.innerHeight / 2);
+      
+      
+      const angle = Math.PI * 0.75 + (Math.random() * 0.2 - 0.1); 
+      const speed = 15 + Math.random() * 10;
+      
+      shootingStars.push({
+        x: startX,
+        y: startY,
+        length: 100 + Math.random() * 50,
+        speed: speed,
+        opacity: 1,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+      });
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      
+      stars.forEach((star) => {
+        star.opacity += star.speed;
+        if (star.opacity > 1 || star.opacity < 0.1) {
+          star.speed = -star.speed;
+        }
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.x += s.dx;
+        s.y += s.dy;
+        s.opacity -= 0.02;
+
+        if (s.opacity <= 0 || s.x < 0 || s.x > canvas.width || s.y > canvas.height) {
+          shootingStars.splice(i, 1);
+          continue;
+        }
+
+        
+        const tailX = s.x - (s.dx / s.speed) * s.length;
+        const tailY = s.y - (s.dy / s.speed) * s.length;
+
+        const grad = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
+        grad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
+        grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+        
+        ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (Math.random() < 0.015) { 
+        createShootingStar();
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   return (
-    <div className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white">
+    <div ref={containerRef} className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white">
+      
       <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0f0518] via-[#090118] via-[#05010e] to-[#000000]" />
+      </div>
 
+      <canvas ref={canvasRef} className="absolute inset-x-0 top-0 z-0 pointer-events-none mix-blend-screen" />
+
+      <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
         {floatingOrbs.map((orb) => (
           <motion.div
             key={orb.id}
@@ -83,83 +201,21 @@ export default function Home() {
             }}
           />
         ))}
-
-        {stars.map((star) => (
-          <motion.div
-            key={star.id}
-            className="absolute rounded-full bg-white"
-            style={{
-              width: star.size,
-              height: star.size,
-              left: `${star.x}%`,
-              top: `${star.y}%`,
-            }}
-            animate={{
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: star.duration,
-              repeat: Infinity,
-              delay: star.delay,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
-        <motion.div
-          className="absolute w-1 h-1 bg-white rounded-full"
-          style={{
-            boxShadow: "0 0 6px 2px rgba(11, 5, 5, 0.6), -100px 0 60px 8px rgba(255,255,255,0.3)",
-          }}
-          initial={{ left: "100%", top: "10%", opacity: 0 }}
-          animate={{
-            left: ["-10%"],
-            top: ["30%"],
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatDelay: 8,
-            ease: "easeOut",
-          }}
-        />
-
-        <motion.div
-          className="absolute w-1 h-1 bg-white rounded-full"
-          style={{
-            boxShadow: "0 0 6px 2px rgba(255,255,255,0.6), -80px 0 50px 6px rgba(255,255,255,0.3)",
-          }}
-          initial={{ left: "80%", top: "150%", opacity: 0 }}
-          animate={{
-            left: ["-20%"],
-            top: ["180%"],
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            repeatDelay: 12,
-            delay: 5,
-            ease: "easeOut",
-          }}
-        />
       </div>
 
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center border-b border-white/5">
+      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Hero Section</h1>
       </section>
 
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center border-b border-white/5">
+      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Featured Events</h1>
       </section>
 
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center border-b border-white/5">
+      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Testimonials / Gallery</h1>
       </section>
 
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center border-b border-white/5">
+      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Learn Astronomy</h1>
       </section>
 
