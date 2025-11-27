@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 type Star = {
@@ -10,7 +11,7 @@ type Star = {
   speed: number;
 };
 
-type ShootingStar = {
+type Meteor = {
   x: number;
   y: number;
   length: number;
@@ -63,7 +64,7 @@ export default function Home() {
 
     let animationFrameId: number;
     let stars: Star[] = [];
-    let shootingStars: ShootingStar[] = [];
+    let meteors: Meteor[] = [];
     let constellations: Constellation[] = [];
 
     const resizeCanvas = () => {
@@ -76,7 +77,7 @@ export default function Home() {
     const initStars = () => {
       stars = [];
       const totalHeight = window.innerHeight * 5;
-      const count = Math.floor((canvas.width * totalHeight) / 8000); 
+      const count = Math.floor((canvas.width * totalHeight) / 16000); 
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas.width,
@@ -171,16 +172,16 @@ export default function Home() {
       }
     };
 
-    const createShootingStar = () => {
+    const createMeteor = () => {
       const scrollTop = container.scrollTop;
       const startX = Math.random() * canvas.width;
       
       const startY = scrollTop + Math.random() * (window.innerHeight / 2);
       
       const angle = Math.PI * 0.75 + (Math.random() * 0.2 - 0.1); 
-      const speed = 15 + Math.random() * 10;
+      const speed = 5 + Math.random() * 10;
       
-      shootingStars.push({
+      meteors.push({
         x: startX,
         y: startY,
         length: 100 + Math.random() * 50,
@@ -306,43 +307,50 @@ export default function Home() {
         }
       });
       
-      for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const s = shootingStars[i];
-        s.x += s.dx;
-        s.y += s.dy;
-        s.opacity -= 0.02;
-        if (s.opacity <= 0 || s.x < 0 || s.x > canvas.width) {
-          shootingStars.splice(i, 1);
+      for (let i = meteors.length - 1; i >= 0; i--) {
+        const m = meteors[i];
+        m.x += m.dx;
+        m.y += m.dy;
+        m.opacity -= 0.02;
+        if (m.opacity <= 0 || m.x < 0 || m.x > canvas.width) {
+          meteors.splice(i, 1);
           continue;
         }
 
-        const drawY = s.y - scrollTop;
+        const drawY = m.y - scrollTop;
         
         if (drawY > -200 && drawY < canvas.height + 200) {
-          const tailX = s.x - (s.dx / s.speed) * s.length;
-          const tailY = drawY - (s.dy / s.speed) * s.length;
+          const tailX = m.x - (m.dx / m.speed) * m.length;
+          const tailY = drawY - (m.dy / m.speed) * m.length;
 
-          const grad = ctx.createLinearGradient(s.x, drawY, tailX, tailY);
-          grad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = "rgba(255, 255, 255, 0.6)";
+
+          const grad = ctx.createLinearGradient(m.x, drawY, tailX, tailY);
+          grad.addColorStop(0, `rgba(255, 255, 255, ${m.opacity})`);
           grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
 
           ctx.strokeStyle = grad;
-          ctx.lineWidth = 2;
+          ctx.lineWidth = 3;
           ctx.lineCap = 'round';
           ctx.beginPath();
-          ctx.moveTo(s.x, drawY);
+          ctx.moveTo(m.x, drawY);
           ctx.lineTo(tailX, tailY);
           ctx.stroke();
           
-          ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+          
+          ctx.shadowBlur = 25;
+          ctx.shadowColor = "rgba(255, 255, 255, 1)";
+          ctx.fillStyle = `rgba(255, 255, 255, ${m.opacity})`;
           ctx.beginPath();
-          ctx.arc(s.x, drawY, 2, 0, Math.PI * 2);
+          ctx.arc(m.x, drawY, 2, 0, Math.PI * 2);
           ctx.fill();
+          ctx.shadowBlur = 0;
         }
       }
 
-      if (Math.random() < 0.015) {
-        createShootingStar();
+      if (Math.random() < 0.03) {
+        createMeteor();
       }
 
       animationFrameId = requestAnimationFrame(animate);
