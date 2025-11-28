@@ -72,7 +72,6 @@ export default function Home() {
   const [cursorTrail, setCursorTrail] = useState<CursorTrail[]>([]);
   const [isClicking, setIsClicking] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const trailIdRef = useRef(0);
 
   
   const cursorX = useMotionValue(-100);
@@ -103,10 +102,9 @@ export default function Home() {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
 
-      
-      trailIdRef.current += 1;
+      const uniqueId = Date.now() + Math.random();
       setCursorTrail(prev => {
-        const newTrail = [...prev, { id: trailIdRef.current, x: e.clientX, y: e.clientY }];
+        const newTrail = [...prev, { id: uniqueId, x: e.clientX, y: e.clientY }];
         return newTrail.slice(-12); 
       });
     };
@@ -459,22 +457,22 @@ export default function Home() {
             key={particle.id}
             className="fixed pointer-events-none z-[60] rounded-full"
             initial={{ 
-              x: particle.x - 4, 
-              y: particle.y - 4, 
-              scale: 1, 
-              opacity: 0.8 
+              x: particle.x - 6, 
+              y: particle.y - 6, 
+              scale: 1.2, 
+              opacity: 1 
             }}
             animate={{ 
               scale: 0,
               opacity: 0,
             }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             style={{
-              width: 8 - (index * 0.3),
-              height: 8 - (index * 0.3),
-              background: `radial-gradient(circle, rgba(167, 139, 250, ${0.8 - index * 0.05}) 0%, rgba(139, 92, 246, ${0.4 - index * 0.02}) 50%, transparent 70%)`,
-              boxShadow: `0 0 ${10 - index}px rgba(167, 139, 250, 0.5)`,
+              width: 12 - (index * 0.4),
+              height: 12 - (index * 0.4),
+              background: `radial-gradient(circle, rgba(255, 255, 255, ${0.9 - index * 0.04}) 0%, rgba(167, 139, 250, ${0.7 - index * 0.03}) 40%, rgba(139, 92, 246, ${0.5 - index * 0.02}) 70%, transparent 100%)`,
+              boxShadow: `0 0 ${16 - index}px rgba(167, 139, 250, 0.8), 0 0 ${24 - index}px rgba(139, 92, 246, 0.5), 0 0 ${32 - index}px rgba(168, 85, 247, 0.3)`,
             }}
           />
         ))}
@@ -497,7 +495,7 @@ export default function Home() {
         }}
         transition={{ duration: 0.15 }}
       >
-        <motion.div
+        {/* <motion.div
           className="absolute inset-0"
           animate={{ rotate: 360 }}
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -506,7 +504,7 @@ export default function Home() {
           <div className="absolute w-2 h-2 bg-fuchsia-400 rounded-full top-1/2 -right-1 -translate-y-1/2" />
           <div className="absolute w-2 h-2 bg-indigo-400 rounded-full -bottom-1 left-1/2 -translate-x-1/2" />
           <div className="absolute w-2 h-2 bg-pink-400 rounded-full top-1/2 -left-1 -translate-y-1/2" />
-        </motion.div>
+        </motion.div> */}
       </motion.div>
 
       <motion.div 
