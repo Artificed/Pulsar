@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 type Star = {
   x: number;
@@ -31,7 +31,11 @@ type Constellation = {
   segmentLengths: number[];
 };
 
-
+type CursorTrail = {
+  id: number;
+  x: number;
+  y: number;
+};
 
 const nebulaClouds = [
   
@@ -63,7 +67,24 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const cursorOuterRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef({ x: -100, y: -100 });
+  const [cursorTrail, setCursorTrail] = useState<CursorTrail[]>([]);
+  const [isClicking, setIsClicking] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const trailIdRef = useRef(0);
+
+  
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const springConfig = { damping: 25, stiffness: 400 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
+
+  
+  const outerSpringConfig = { damping: 20, stiffness: 150 };
+  const outerXSpring = useSpring(cursorX, outerSpringConfig);
+  const outerYSpring = useSpring(cursorY, outerSpringConfig);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -79,9 +100,31 @@ export default function Home() {
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+
+      
+      trailIdRef.current += 1;
+      setCursorTrail(prev => {
+        const newTrail = [...prev, { id: trailIdRef.current, x: e.clientX, y: e.clientY }];
+        return newTrail.slice(-12); 
+      });
     };
 
+    const handleMouseDown = () => setIsClicking(true);
+    const handleMouseUp = () => setIsClicking(false);
+
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    
+    const checkHover = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const isHoverTarget = target.closest('a, button, [role="button"], input, textarea, select, [data-hover]');
+      setIsHovering(!!isHoverTarget);
+    };
+    window.addEventListener('mouseover', checkHover);
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -214,9 +257,7 @@ export default function Home() {
       
       const mouse = mouseRef.current;
 
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${mouse.x - 6}px, ${mouse.y - 6}px, 0)`;
-      }
+      
 
       const glowGradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 300);
       glowGradient.addColorStop(0, "rgba(100, 100, 255, 0.15)");
@@ -403,13 +444,117 @@ export default function Home() {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseover', checkHover);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [cursorX, cursorY]);
 
   return (
     <div ref={containerRef} className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white cursor-none">
-      <div ref={cursorRef} className="fixed top-0 left-0 w-6 h-6 bg-white rounded-full pointer-events-none z-50 mix-blend-difference shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+      <AnimatePresence>
+        {cursorTrail.map((particle, index) => (
+          <motion.div
+            key={particle.id}
+            className="fixed pointer-events-none z-[60] rounded-full"
+            initial={{ 
+              x: particle.x - 4, 
+              y: particle.y - 4, 
+              scale: 1, 
+              opacity: 0.8 
+            }}
+            animate={{ 
+              scale: 0,
+              opacity: 0,
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            style={{
+              width: 8 - (index * 0.3),
+              height: 8 - (index * 0.3),
+              background: `radial-gradient(circle, rgba(167, 139, 250, ${0.8 - index * 0.05}) 0%, rgba(139, 92, 246, ${0.4 - index * 0.02}) 50%, transparent 70%)`,
+              boxShadow: `0 0 ${10 - index}px rgba(167, 139, 250, 0.5)`,
+            }}
+          />
+        ))}
+      </AnimatePresence>
+
+      <motion.div 
+        ref={cursorOuterRef}
+        className="fixed pointer-events-none z-[51] rounded-full border-2 border-purple-400/50"
+        style={{
+          x: outerXSpring,
+          y: outerYSpring,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+        animate={{
+          width: isClicking ? 36 : isHovering ? 64 : 50,
+          height: isClicking ? 36 : isHovering ? 64 : 50,
+          borderColor: isClicking ? 'rgba(236, 72, 153, 0.8)' : isHovering ? 'rgba(139, 92, 246, 0.8)' : 'rgba(167, 139, 250, 0.5)',
+          scale: isClicking ? 0.8 : 1,
+        }}
+        transition={{ duration: 0.15 }}
+      >
+        <motion.div
+          className="absolute inset-0"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="absolute w-2 h-2 bg-purple-400 rounded-full -top-1 left-1/2 -translate-x-1/2" />
+          <div className="absolute w-2 h-2 bg-fuchsia-400 rounded-full top-1/2 -right-1 -translate-y-1/2" />
+          <div className="absolute w-2 h-2 bg-indigo-400 rounded-full -bottom-1 left-1/2 -translate-x-1/2" />
+          <div className="absolute w-2 h-2 bg-pink-400 rounded-full top-1/2 -left-1 -translate-y-1/2" />
+        </motion.div>
+      </motion.div>
+
+      <motion.div 
+        ref={cursorRef}
+        className="fixed pointer-events-none z-[52] rounded-full mix-blend-screen"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+        animate={{
+          width: isClicking ? 24 : isHovering ? 14 : 18,
+          height: isClicking ? 24 : isHovering ? 14 : 18,
+          backgroundColor: isClicking ? 'rgb(236, 72, 153)' : 'rgb(255, 255, 255)',
+        }}
+        transition={{ duration: 0.1 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-full bg-white"
+          animate={{
+            scale: [1, 1.5, 1],
+            opacity: [0.8, 0, 0.8],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        className="fixed pointer-events-none z-[49] rounded-full"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+          translateX: '-50%',
+          translateY: '-50%',
+          width: 200,
+          height: 200,
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.08) 30%, transparent 70%)',
+        }}
+        animate={{
+          scale: isClicking ? 1.5 : isHovering ? 1.2 : 1,
+        }}
+        transition={{ duration: 0.2 }}
+      />
       
       <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0f0518] via-[#090118] via-[#05010e] to-[#000000]" />
