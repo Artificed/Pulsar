@@ -416,7 +416,6 @@ export default function Home() {
           ctx.lineTo(tailX, tailY);
           ctx.stroke();
           
-          
           ctx.shadowBlur = 25;
           ctx.shadowColor = "rgba(255, 255, 255, 1)";
           ctx.fillStyle = `rgba(255, 255, 255, ${m.opacity})`;
@@ -495,24 +494,14 @@ export default function Home() {
         }}
         transition={{ duration: 0.15 }}
       >
-        {/* <motion.div
-          className="absolute inset-0"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        >
-          <div className="absolute w-2 h-2 bg-purple-400 rounded-full -top-1 left-1/2 -translate-x-1/2" />
-          <div className="absolute w-2 h-2 bg-fuchsia-400 rounded-full top-1/2 -right-1 -translate-y-1/2" />
-          <div className="absolute w-2 h-2 bg-indigo-400 rounded-full -bottom-1 left-1/2 -translate-x-1/2" />
-          <div className="absolute w-2 h-2 bg-pink-400 rounded-full top-1/2 -left-1 -translate-y-1/2" />
-        </motion.div> */}
       </motion.div>
 
       <motion.div 
         ref={cursorRef}
         className="fixed pointer-events-none z-[52] rounded-full mix-blend-screen"
         style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
+          x: cursorX,
+          y: cursorY,
           translateX: '-50%',
           translateY: '-50%',
         }}
