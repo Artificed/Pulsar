@@ -31,24 +31,32 @@ type Constellation = {
   segmentLengths: number[];
 };
 
-const floatingOrbs = [
-  { id: 1, x: "10%", y: "10%", size: "25vw", color: "purple", duration: 20 },
-  { id: 2, x: "70%", y: "60%", size: "20vw", color: "fuchsia", duration: 25 },
-  { id: 3, x: "20%", y: "120%", size: "18vw", color: "indigo", duration: 18 },
-  { id: 4, x: "80%", y: "180%", size: "15vw", color: "violet", duration: 22 },
-  { id: 5, x: "15%", y: "220%", size: "20vw", color: "pink", duration: 30 },
-  { id: 6, x: "60%", y: "280%", size: "18vw", color: "purple", duration: 24 },
-  { id: 7, x: "30%", y: "350%", size: "25vw", color: "fuchsia", duration: 28 },
-  { id: 8, x: "75%", y: "420%", size: "15vw", color: "indigo", duration: 20 },
-  { id: 9, x: "50%", y: "50%", size: "30vw", color: "violet", duration: 35 },
-  { id: 10, x: "90%", y: "10%", size: "12vw", color: "pink", duration: 15 },
-  { id: 11, x: "5%", y: "90%", size: "15vw", color: "purple", duration: 28 },
-  { id: 12, x: "40%", y: "150%", size: "18vw", color: "fuchsia", duration: 22 },
-  { id: 13, x: "85%", y: "250%", size: "25vw", color: "indigo", duration: 32 },
-  { id: 14, x: "10%", y: "320%", size: "12vw", color: "violet", duration: 19 },
-  { id: 15, x: "60%", y: "400%", size: "20vw", color: "purple", duration: 26 },
-  { id: 16, x: "20%", y: "445%", size: "18vw", color: "pink", duration: 24 },
-  { id: 17, x: "70%", y: "470%", size: "18vw", color: "fuchsia", duration: 24 },
+
+
+const nebulaClouds = [
+  
+  { id: 1, x: "3%", y: "3%", width: "35vw", height: "2vw", rotation: 35, color: "purple", duration: 60, blur: 55, opacity: 15 },
+  { id: 2, x: "55%", y: "6%", width: "22vw", height: "2.5vw", rotation: -15, color: "fuchsia", duration: 40, blur: 30, opacity: 5 },
+  { id: 3, x: "25%", y: "12%", width: "28vw", height: "1.5vw", rotation: 50, color: "indigo", duration: 50, blur: 45, opacity: 25 },
+  { id: 4, x: "70%", y: "16%", width: "18vw", height: "2vw", rotation: -40, color: "violet", duration: 55, blur: 50, opacity: 18 },
+  
+  { id: 5, x: "8%", y: "23%", width: "26vw", height: "3vw", rotation: 10, color: "pink", duration: 38, blur: 28, opacity: 4 },
+  { id: 6, x: "60%", y: "28%", width: "40vw", height: "1.5vw", rotation: -60, color: "purple", duration: 65, blur: 60, opacity: 12 },
+  { id: 7, x: "35%", y: "34%", width: "20vw", height: "2vw", rotation: 25, color: "indigo", duration: 48, blur: 40, opacity: 30 },
+  
+  { id: 8, x: "5%", y: "42%", width: "24vw", height: "2.5vw", rotation: -20, color: "fuchsia", duration: 42, blur: 32, opacity: 30 },
+  { id: 9, x: "50%", y: "48%", width: "32vw", height: "1.5vw", rotation: 70, color: "violet", duration: 58, blur: 50, opacity: 20 },
+  { id: 10, x: "75%", y: "52%", width: "15vw", height: "2vw", rotation: -25, color: "pink", duration: 70, blur: 65, opacity: 4 },
+  { id: 11, x: "20%", y: "56%", width: "30vw", height: "2vw", rotation: -35, color: "purple", duration: 45, blur: 38, opacity: 32 },
+  
+  { id: 12, x: "65%", y: "62%", width: "20vw", height: "3vw", rotation: 15, color: "indigo", duration: 36, blur: 25, opacity: 25 },
+  { id: 13, x: "10%", y: "68%", width: "38vw", height: "1.5vw", rotation: 80, color: "fuchsia", duration: 62, blur: 55, opacity: 15 },
+  { id: 14, x: "40%", y: "74%", width: "25vw", height: "2vw", rotation: -50, color: "violet", duration: 52, blur: 42, opacity: 28 },
+  
+  { id: 15, x: "2%", y: "82%", width: "20vw", height: "2.5vw", rotation: -10, color: "pink", duration: 40, blur: 30, opacity: 5 },
+  { id: 16, x: "55%", y: "86%", width: "35vw", height: "2vw", rotation: 45, color: "purple", duration: 55, blur: 48, opacity: 22 },
+  { id: 17, x: "30%", y: "92%", width: "45vw", height: "1.5vw", rotation: -75, color: "indigo", duration: 68, blur: 58, opacity: 12 },
+  { id: 18, x: "72%", y: "95%", width: "22vw", height: "2vw", rotation: 30, color: "fuchsia", duration: 44, blur: 35, opacity: 28 },
 ];
 
 export default function Home() {
@@ -410,29 +418,33 @@ export default function Home() {
       <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none mix-blend-screen" />
 
       <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
-        {floatingOrbs.map((orb) => (
+        {nebulaClouds.map((cloud) => (
           <motion.div
-            key={orb.id}
-            className={`absolute rounded-full pointer-events-none blur-[120px] opacity-50 mix-blend-screen ${
-              orb.color === "purple" ? "bg-purple-600/20" :
-              orb.color === "fuchsia" ? "bg-fuchsia-600/20" :
-              orb.color === "indigo" ? "bg-indigo-600/20" :
-              orb.color === "violet" ? "bg-violet-600/20" :
-              "bg-pink-600/20"
-            }`}
+            key={cloud.id}
+            className="absolute rounded-full pointer-events-none mix-blend-screen"
             style={{
-              width: orb.size,
-              height: orb.size,
-              left: orb.x,
-              top: orb.y,
+              width: cloud.width,
+              height: cloud.height,
+              left: cloud.x,
+              top: cloud.y,
+              filter: `blur(${cloud.blur}px)`,
+              opacity: cloud.opacity / 100,
+              backgroundColor: 
+                cloud.color === "purple" ? "rgb(168, 85, 247)" :
+                cloud.color === "fuchsia" ? "rgb(217, 70, 239)" :
+                cloud.color === "indigo" ? "rgb(99, 102, 241)" :
+                cloud.color === "violet" ? "rgb(139, 92, 246)" :
+                "rgb(236, 72, 153)",
             }}
+            initial={{ rotate: cloud.rotation }}
             animate={{
-              x: [0, 100, -50, 80, 0],
-              y: [0, -80, 50, -30, 0],
-              scale: [1, 1.2, 0.9, 1.1, 1],
+              x: [0, 30, -15, 20, 0],
+              y: [0, -20, 12, -8, 0],
+              scale: [1, 1.08, 0.95, 1.04, 1],
+              rotate: [cloud.rotation, cloud.rotation + 5, cloud.rotation - 3, cloud.rotation + 2, cloud.rotation],
             }}
             transition={{
-              duration: orb.duration,
+              duration: cloud.duration,
               repeat: Infinity,
               ease: "easeInOut",
             }}
