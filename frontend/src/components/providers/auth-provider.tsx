@@ -1,11 +1,25 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { authService } from "@/features/auth/api/auth-service";
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+  sub: string;
+  username: string;
+  email: string;
+  exp: number;
+}
+
+interface User {
+  userId: string;
+  username: string;
+  email: string;
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
+  user: User | null;
   login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
 }
@@ -15,12 +29,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     checkAuth();
   }, []);
 
-  const checkAuth = async () => {
+  const checkAuth = () => {
     const accessToken = localStorage.getItem("accessToken");
     
     if (!accessToken) {
@@ -30,29 +45,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const response = await authService.validateToken({ accessToken });
-      if (response.payload?.valid) {
-        setIsAuthenticated(true);
-      } else {
-        
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (refreshToken) {
-          try {
-            const refreshResponse = await authService.refreshToken({ refreshToken });
-            if (refreshResponse.payload) {
-              localStorage.setItem("accessToken", refreshResponse.payload.accessToken);
-              localStorage.setItem("refreshToken", refreshResponse.payload.refreshToken);
-              setIsAuthenticated(true);
-            } else {
-              clearTokens();
-            }
-          } catch {
-            clearTokens();
-          }
-        } else {
-          clearTokens();
-        }
+      const decoded = jwtDecode<JwtPayload>(accessToken);
+      
+      if (decoded.exp * 1000 < Date.now()) {
+        clearTokens();
+        setIsLoading(false);
+        return;
       }
+
+      setIsAuthenticated(true);
+      setUser({
+        userId: decoded.sub,
+        username: decoded.username,
+        email: decoded.email,
+      });
     } catch {
       clearTokens();
     } finally {
@@ -64,12 +70,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setIsAuthenticated(false);
+    setUser(null);
   };
 
   const login = (accessToken: string, refreshToken: string) => {
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
-    setIsAuthenticated(true);
+    
+    try {
+      const decoded = jwtDecode<JwtPayload>(accessToken);
+      setIsAuthenticated(true);
+      setUser({
+        userId: decoded.sub,
+        username: decoded.username,
+        email: decoded.email,
+      });
+    } catch {
+      clearTokens();
+    }
   };
 
   const logout = () => {
@@ -77,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

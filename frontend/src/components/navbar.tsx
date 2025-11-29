@@ -12,7 +12,7 @@ interface NavbarProps {
 
 export default function Navbar({ variant = 'default' }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isAuthenticated, isLoading, logout } = useAuth();
+  const { isAuthenticated, isLoading, user, logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -59,12 +59,17 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               {isLoading ? (
                 <div className="px-4 py-2 text-sm text-slate-400">Loading...</div>
               ) : isAuthenticated ? (
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-200 cursor-none"
-                >
-                  Sign Out
-                </button>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-slate-300">
+                    {user?.username || 'User'}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-200 cursor-none"
+                  >
+                    Sign Out
+                  </button>
+                </div>
               ) : (
                 <Link
                   href="/login"
@@ -114,15 +119,20 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                 {isLoading ? (
                   <div className="block px-4 py-2 text-sm text-center text-slate-400">Loading...</div>
                 ) : isAuthenticated ? (
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="block w-full px-4 py-2 text-sm text-center bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg cursor-none"
-                  >
-                    Sign Out
-                  </button>
+                  <>
+                    <div className="block px-4 py-2 text-sm text-center text-slate-300">
+                      {user?.username || 'User'}
+                    </div>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="block w-full px-4 py-2 text-sm text-center bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg cursor-none"
+                    >
+                      Sign Out
+                    </button>
+                  </>
                 ) : (
                   <Link
                     href="/login"
