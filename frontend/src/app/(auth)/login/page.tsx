@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { authService } from "@/features/auth/api/auth-service";
+import Navbar from "@/components/navbar";
 
 type Star = {
   x: number;
@@ -93,12 +94,12 @@ export default function Login() {
     try {
       const response = await authService.login({ email, password });
       
-      if (response.success && response.data) {
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
+      if (response.payload) {
+        localStorage.setItem("accessToken", response.payload.accessToken);
+        localStorage.setItem("refreshToken", response.payload.refreshToken);
         window.location.href = "/";
       } else {
-        setError(response.error?.message || "Login failed. Please try again.");
+        setError(response.error || "Login failed. Please try again.");
       }
     } catch {
       setError("An unexpected error occurred. Please try again.");
@@ -109,6 +110,8 @@ export default function Login() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+      <Navbar variant="auth" />
+
       <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0f0518] to-[#000000]" />
 
       <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />

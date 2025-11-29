@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import Navbar from "@/components/navbar";
 
 type Star = {
   x: number;
@@ -450,6 +451,8 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className="relative h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black text-white cursor-none">
+      <Navbar />
+      
       <AnimatePresence>
         {cursorTrail.map((particle, index) => (
           <motion.div
