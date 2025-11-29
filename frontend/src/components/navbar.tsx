@@ -55,17 +55,17 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-4">
               {isLoading ? (
                 <div className="px-4 py-2 text-sm text-slate-400">Loading...</div>
               ) : isAuthenticated ? (
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-slate-300">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-white">
                     {user?.username || 'User'}
                   </span>
                   <button
                     onClick={handleLogout}
-                    className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-200 cursor-none"
+                    className="px-4 py-2 text-sm text-slate-300 hover:text-white border border-white/20 hover:border-white/40 rounded-lg transition-all duration-200 cursor-none"
                   >
                     Sign Out
                   </button>
@@ -120,7 +120,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                   <div className="block px-4 py-2 text-sm text-center text-slate-400">Loading...</div>
                 ) : isAuthenticated ? (
                   <>
-                    <div className="block px-4 py-2 text-sm text-center text-slate-300">
+                    <div className="px-4 py-2 text-sm text-white">
                       {user?.username || 'User'}
                     </div>
                     <button
@@ -128,7 +128,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                         handleLogout();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="block w-full px-4 py-2 text-sm text-center bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg cursor-none"
+                      className="block w-full px-4 py-2 text-sm text-center text-slate-300 hover:text-white border border-white/20 rounded-lg cursor-none"
                     >
                       Sign Out
                     </button>
