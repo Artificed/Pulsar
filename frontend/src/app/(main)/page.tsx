@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Navbar from "@/components/navbar";
 
 type Star = {
@@ -588,7 +589,191 @@ export default function Home() {
       </div>
 
       <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Hero Section</h1>
+        <div className="absolute bottom-[-15%] right-[-5%] w-[700px] h-[700px] pointer-events-none">
+          <div className="absolute inset-[-80px] rounded-full bg-indigo-900/10 blur-[120px]" />
+          <div className="absolute inset-[-40px] rounded-full bg-purple-900/[0.08] blur-[80px]" />
+          
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: '140%',
+              height: '140%',
+              transform: 'translate(-50%, -50%) rotateX(75deg)',
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 400, repeat: Infinity, ease: "linear" }}
+          >
+            <div className="absolute inset-[5%] rounded-full border-[3px] border-purple-500/10" style={{
+              boxShadow: '0 0 20px rgba(139, 92, 246, 0.05)',
+            }} />
+            <div className="absolute inset-[12%] rounded-full border-[8px] border-violet-400/[0.08]" style={{
+              boxShadow: 'inset 0 0 30px rgba(139, 92, 246, 0.03)',
+            }} />
+            <div className="absolute inset-[18%] rounded-full border-[4px] border-indigo-400/[0.12]" />
+            <div className="absolute inset-[8%] rounded-full" style={{
+              background: 'radial-gradient(ellipse at center, transparent 60%, rgba(139, 92, 246, 0.04) 70%, transparent 85%)',
+            }} />
+          </motion.div>
+          
+          <motion.div
+            className="w-full h-full rounded-full relative overflow-hidden"
+            style={{
+              background: 'radial-gradient(circle at 30% 30%, #2a1f4e 0%, #1a1235 15%, #120d28 30%, #0c0820 50%, #060412 70%, #020108 100%)',
+              boxShadow: 'inset -60px -60px 120px rgba(0,0,0,0.95), inset 20px 20px 60px rgba(99, 82, 150, 0.15), 0 0 100px rgba(79, 52, 146, 0.2), 0 0 200px rgba(79, 52, 146, 0.1)',
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 300, repeat: Infinity, ease: "linear" }}
+          > 
+            <div className="absolute inset-0 rounded-full opacity-40" style={{
+              background: `
+                radial-gradient(ellipse 80px 40px at 25% 35%, rgba(60, 40, 90, 0.4) 0%, transparent 70%),
+                radial-gradient(ellipse 120px 60px at 60% 25%, rgba(45, 30, 75, 0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 100px 50px at 40% 60%, rgba(50, 35, 80, 0.35) 0%, transparent 70%),
+                radial-gradient(ellipse 60px 80px at 70% 55%, rgba(55, 38, 85, 0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 90px 45px at 20% 70%, rgba(40, 28, 70, 0.4) 0%, transparent 70%)
+              `,
+            }} />
+            
+            <div className="absolute inset-0 rounded-full opacity-30" style={{
+              background: `
+                linear-gradient(180deg, 
+                  transparent 0%, 
+                  rgba(80, 50, 120, 0.1) 15%,
+                  transparent 20%,
+                  rgba(60, 40, 100, 0.15) 35%,
+                  transparent 42%,
+                  rgba(70, 45, 110, 0.1) 55%,
+                  transparent 62%,
+                  rgba(50, 35, 90, 0.12) 75%,
+                  transparent 82%,
+                  rgba(60, 40, 100, 0.08) 95%,
+                  transparent 100%
+                )
+              `,
+            }} />
+            
+            <div className="absolute inset-0 rounded-full opacity-25" style={{
+              background: `
+                radial-gradient(circle 15px at 30% 40%, rgba(20, 15, 35, 0.6) 0%, transparent 100%),
+                radial-gradient(circle 25px at 55% 30%, rgba(25, 18, 40, 0.5) 0%, transparent 100%),
+                radial-gradient(circle 10px at 45% 55%, rgba(18, 12, 32, 0.7) 0%, transparent 100%),
+                radial-gradient(circle 20px at 65% 65%, rgba(22, 16, 38, 0.5) 0%, transparent 100%),
+                radial-gradient(circle 12px at 25% 60%, rgba(20, 14, 35, 0.6) 0%, transparent 100%),
+                radial-gradient(circle 18px at 50% 75%, rgba(24, 17, 40, 0.4) 0%, transparent 100%)
+              `,
+            }} />
+            
+            <div className="absolute inset-0 rounded-full opacity-20" style={{
+              background: `
+                radial-gradient(ellipse 200% 30% at 50% 20%, rgba(100, 70, 140, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse 200% 25% at 50% 80%, rgba(80, 55, 120, 0.15) 0%, transparent 50%)
+              `,
+            }} />
+            
+            <div className="absolute inset-0 rounded-full" style={{
+              background: 'linear-gradient(135deg, transparent 0%, transparent 40%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.95) 100%)',
+            }} />
+            
+            <div className="absolute inset-0 rounded-full" style={{
+              background: 'radial-gradient(circle at 75% 25%, transparent 55%, rgba(120, 90, 180, 0.15) 75%, rgba(100, 70, 160, 0.08) 100%)',
+            }} />
+            
+            <div className="absolute inset-0 rounded-full" style={{
+              background: 'linear-gradient(125deg, transparent 0%, transparent 45%, rgba(90, 60, 140, 0.1) 50%, transparent 55%, transparent 100%)',
+            }} />
+            
+            <div className="absolute inset-0 rounded-full" style={{
+              background: 'radial-gradient(circle at 25% 30%, rgba(140, 110, 180, 0.08) 0%, transparent 40%)',
+            }} />
+          </motion.div>
+          
+          <div className="absolute inset-[-2px] rounded-full pointer-events-none" style={{
+            background: 'radial-gradient(circle at 70% 30%, transparent 48%, rgba(100, 70, 150, 0.06) 50%, transparent 52%)',
+          }} />
+        </div>
+
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/10 via-violet-800/5 to-indigo-900/10 blur-3xl rounded-full" />
+        </div>
+
+        <div className="relative z-20 text-center px-6 max-w-4xl mx-auto">
+          <motion.p
+            className="text-purple-400/70 text-sm md:text-base tracking-[0.4em] uppercase mb-6 font-light"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Journey Beyond the Stars
+          </motion.p>
+
+          <motion.h1
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-[1.1]"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+          >
+            <span className="block text-white">Experience the Wonders</span>
+            <span className="block bg-gradient-to-r from-purple-400 via-violet-400 to-indigo-400 bg-clip-text text-transparent">
+              of the Universe
+            </span>
+          </motion.h1>
+
+          <motion.p
+            className="text-xl md:text-2xl text-slate-400 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            at <span className="text-purple-300 font-medium">Pulsar Planetarium</span>
+          </motion.p>
+
+          <motion.div
+            className="flex flex-col sm:flex-row gap-5 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <Link href="/event">
+              <motion.button
+                className="px-10 py-4 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full text-white font-semibold text-lg shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-shadow duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                data-hover
+              >
+                View Events
+              </motion.button>
+            </Link>
+
+            <Link href="/learn">
+              <motion.button
+                className="px-10 py-4 border-2 border-purple-500/40 rounded-full text-purple-300 font-semibold text-lg hover:bg-purple-500/10 hover:border-purple-400/60 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                data-hover
+              >
+                Learn Astronomy
+              </motion.button>
+            </Link>
+          </motion.div>
+
+          <motion.div
+            className="absolute -bottom-24 left-1/2 -translate-x-1/2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+          >
+            <motion.div
+              className="flex flex-col items-center gap-2 text-slate-500"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <span className="text-xs tracking-widest uppercase">Scroll</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
