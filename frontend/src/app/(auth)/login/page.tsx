@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { authService } from "@/features/auth/api/auth-service";
+import { useAuth } from "@/components/providers/auth-provider";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar";
 
 type Star = {
@@ -28,6 +30,8 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,9 +99,8 @@ export default function Login() {
       const response = await authService.login({ email, password });
       
       if (response.payload) {
-        localStorage.setItem("accessToken", response.payload.accessToken);
-        localStorage.setItem("refreshToken", response.payload.refreshToken);
-        window.location.href = "/";
+        login(response.payload.accessToken, response.payload.refreshToken);
+        router.push("/");
       } else {
         setError(response.error || "Login failed. Please try again.");
       }

@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/components/providers/auth-provider";
+import { useRouter } from "next/navigation";
 
 interface NavbarProps {
   variant?: 'default' | 'auth';
@@ -10,6 +12,13 @@ interface NavbarProps {
 
 export default function Navbar({ variant = 'default' }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isAuthenticated, isLoading, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -47,12 +56,23 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
             </div>
 
             <div className="hidden md:flex items-center gap-3">
-              <Link
-                href="/login"
-                className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-200 cursor-none"
-              >
-                Sign In
-              </Link>
+              {isLoading ? (
+                <div className="px-4 py-2 text-sm text-slate-400">Loading...</div>
+              ) : isAuthenticated ? (
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-200 cursor-none"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-200 cursor-none"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
 
             <button
@@ -91,13 +111,27 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
                 </Link>
               ))}
               <div className="pt-4 border-t border-white/10 space-y-2">
-                <Link
-                  href="/login"
-                  className="block px-4 py-2 text-sm text-center bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg cursor-none"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Sign In
-                </Link>
+                {isLoading ? (
+                  <div className="block px-4 py-2 text-sm text-center text-slate-400">Loading...</div>
+                ) : isAuthenticated ? (
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block w-full px-4 py-2 text-sm text-center bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg cursor-none"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="block px-4 py-2 text-sm text-center bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg cursor-none"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>
