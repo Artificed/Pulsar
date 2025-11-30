@@ -590,106 +590,141 @@ export default function Home() {
 
       <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <div className="absolute bottom-[-15%] right-[-5%] w-[700px] h-[700px] pointer-events-none">
-          <div className="absolute inset-[-80px] rounded-full bg-indigo-900/10 blur-[120px]" />
-          <div className="absolute inset-[-40px] rounded-full bg-purple-900/[0.08] blur-[80px]" />
+          <div className="absolute inset-[-30px] rounded-full bg-purple-900/[0.06] blur-[60px]" />
           
           <motion.div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             style={{
-              width: '140%',
-              height: '140%',
+              width: '130%',
+              height: '130%',
               transform: 'translate(-50%, -50%) rotateX(75deg)',
             }}
             animate={{ rotate: 360 }}
-            transition={{ duration: 400, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 500, repeat: Infinity, ease: "linear" }}
           >
-            <div className="absolute inset-[5%] rounded-full border-[3px] border-purple-500/10" style={{
-              boxShadow: '0 0 20px rgba(139, 92, 246, 0.05)',
-            }} />
-            <div className="absolute inset-[12%] rounded-full border-[8px] border-violet-400/[0.08]" style={{
-              boxShadow: 'inset 0 0 30px rgba(139, 92, 246, 0.03)',
-            }} />
-            <div className="absolute inset-[18%] rounded-full border-[4px] border-indigo-400/[0.12]" />
-            <div className="absolute inset-[8%] rounded-full" style={{
-              background: 'radial-gradient(ellipse at center, transparent 60%, rgba(139, 92, 246, 0.04) 70%, transparent 85%)',
-            }} />
+            <div className="absolute inset-[8%] rounded-full border-[2px] border-purple-400/10" />
+            <div className="absolute inset-[12%] rounded-full border-[4px] border-violet-400/[0.07]" />
+            <div className="absolute inset-[16%] rounded-full border-[2px] border-indigo-400/[0.08]" />
           </motion.div>
           
           <motion.div
             className="w-full h-full rounded-full relative overflow-hidden"
             style={{
-              background: 'radial-gradient(circle at 30% 30%, #2a1f4e 0%, #1a1235 15%, #120d28 30%, #0c0820 50%, #060412 70%, #020108 100%)',
-              boxShadow: 'inset -60px -60px 120px rgba(0,0,0,0.95), inset 20px 20px 60px rgba(99, 82, 150, 0.15), 0 0 100px rgba(79, 52, 146, 0.2), 0 0 200px rgba(79, 52, 146, 0.1)',
+              background: 'radial-gradient(circle at 30% 30%, #3d2a6d 0%, #2a1f5c 10%, #1e1548 20%, #150f38 35%, #0d0a28 55%, #060418 75%, #020108 100%)',
+              boxShadow: 'inset -80px -80px 150px rgba(0,0,0,0.98), inset 30px 30px 80px rgba(139, 92, 246, 0.2), inset 10px 10px 40px rgba(236, 72, 153, 0.1), 0 0 60px rgba(139, 92, 246, 0.15)',
             }}
             animate={{ rotate: 360 }}
-            transition={{ duration: 300, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 400, repeat: Infinity, ease: "linear" }}
           > 
-            <div className="absolute inset-0 rounded-full opacity-40" style={{
+            <motion.div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: `
+                  radial-gradient(ellipse 120% 20% at 50% 5%, rgba(34, 211, 238, 0.3) 0%, rgba(139, 92, 246, 0.15) 30%, transparent 60%),
+                  radial-gradient(ellipse 100% 15% at 50% 95%, rgba(236, 72, 153, 0.25) 0%, rgba(168, 85, 247, 0.1) 30%, transparent 60%)
+                `,
+              }}
+              animate={{
+                opacity: [0.6, 1, 0.6],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            <div className="absolute inset-0 rounded-full opacity-50" style={{
               background: `
-                radial-gradient(ellipse 80px 40px at 25% 35%, rgba(60, 40, 90, 0.4) 0%, transparent 70%),
-                radial-gradient(ellipse 120px 60px at 60% 25%, rgba(45, 30, 75, 0.3) 0%, transparent 70%),
-                radial-gradient(ellipse 100px 50px at 40% 60%, rgba(50, 35, 80, 0.35) 0%, transparent 70%),
-                radial-gradient(ellipse 60px 80px at 70% 55%, rgba(55, 38, 85, 0.3) 0%, transparent 70%),
-                radial-gradient(ellipse 90px 45px at 20% 70%, rgba(40, 28, 70, 0.4) 0%, transparent 70%)
+                radial-gradient(ellipse 100px 50px at 25% 35%, rgba(139, 92, 246, 0.4) 0%, transparent 70%),
+                radial-gradient(ellipse 150px 70px at 60% 25%, rgba(236, 72, 153, 0.25) 0%, transparent 70%),
+                radial-gradient(ellipse 120px 60px at 40% 60%, rgba(34, 211, 238, 0.2) 0%, transparent 70%),
+                radial-gradient(ellipse 80px 100px at 70% 55%, rgba(168, 85, 247, 0.35) 0%, transparent 70%),
+                radial-gradient(ellipse 110px 55px at 20% 70%, rgba(99, 102, 241, 0.3) 0%, transparent 70%)
               `,
             }} />
             
-            <div className="absolute inset-0 rounded-full opacity-30" style={{
+            <motion.div 
+              className="absolute w-[120px] h-[80px] rounded-full"
+              style={{
+                top: '35%',
+                left: '25%',
+                background: 'radial-gradient(ellipse, rgba(236, 72, 153, 0.5) 0%, rgba(168, 85, 247, 0.3) 40%, transparent 70%)',
+                filter: 'blur(8px)',
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.7, 1, 0.7],
+              }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            <div className="absolute inset-0 rounded-full opacity-40" style={{
               background: `
                 linear-gradient(180deg, 
                   transparent 0%, 
-                  rgba(80, 50, 120, 0.1) 15%,
-                  transparent 20%,
-                  rgba(60, 40, 100, 0.15) 35%,
-                  transparent 42%,
-                  rgba(70, 45, 110, 0.1) 55%,
-                  transparent 62%,
-                  rgba(50, 35, 90, 0.12) 75%,
-                  transparent 82%,
-                  rgba(60, 40, 100, 0.08) 95%,
+                  rgba(139, 92, 246, 0.15) 12%,
+                  transparent 18%,
+                  rgba(236, 72, 153, 0.1) 28%,
+                  transparent 35%,
+                  rgba(34, 211, 238, 0.12) 45%,
+                  transparent 52%,
+                  rgba(168, 85, 247, 0.15) 62%,
+                  transparent 70%,
+                  rgba(99, 102, 241, 0.1) 80%,
+                  transparent 88%,
+                  rgba(139, 92, 246, 0.08) 95%,
                   transparent 100%
                 )
               `,
             }} />
             
-            <div className="absolute inset-0 rounded-full opacity-25" style={{
+            <motion.div 
+              className="absolute inset-0 rounded-full opacity-20"
+              style={{
+                background: `
+                  radial-gradient(circle 20px at 30% 40%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+                  radial-gradient(circle 30px at 55% 30%, rgba(236, 72, 153, 0.4) 0%, transparent 100%),
+                  radial-gradient(circle 15px at 45% 55%, rgba(34, 211, 238, 0.5) 0%, transparent 100%),
+                  radial-gradient(circle 25px at 65% 65%, rgba(139, 92, 246, 0.4) 0%, transparent 100%),
+                  radial-gradient(circle 18px at 25% 60%, rgba(168, 85, 247, 0.35) 0%, transparent 100%),
+                  radial-gradient(circle 22px at 50% 75%, rgba(99, 102, 241, 0.3) 0%, transparent 100%)
+                `,
+              }}
+              animate={{ rotate: -360 }}
+              transition={{ duration: 600, repeat: Infinity, ease: "linear" }}
+            />
+            
+            <div className="absolute inset-0 rounded-full opacity-30" style={{
               background: `
-                radial-gradient(circle 15px at 30% 40%, rgba(20, 15, 35, 0.6) 0%, transparent 100%),
-                radial-gradient(circle 25px at 55% 30%, rgba(25, 18, 40, 0.5) 0%, transparent 100%),
-                radial-gradient(circle 10px at 45% 55%, rgba(18, 12, 32, 0.7) 0%, transparent 100%),
-                radial-gradient(circle 20px at 65% 65%, rgba(22, 16, 38, 0.5) 0%, transparent 100%),
-                radial-gradient(circle 12px at 25% 60%, rgba(20, 14, 35, 0.6) 0%, transparent 100%),
-                radial-gradient(circle 18px at 50% 75%, rgba(24, 17, 40, 0.4) 0%, transparent 100%)
+                radial-gradient(ellipse 200% 35% at 50% 8%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 200% 30% at 50% 92%, rgba(200, 200, 255, 0.1) 0%, transparent 50%)
               `,
             }} />
             
-            <div className="absolute inset-0 rounded-full opacity-20" style={{
-              background: `
-                radial-gradient(ellipse 200% 30% at 50% 20%, rgba(100, 70, 140, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse 200% 25% at 50% 80%, rgba(80, 55, 120, 0.15) 0%, transparent 50%)
-              `,
+            <div className="absolute inset-0 rounded-full" style={{
+              background: 'linear-gradient(135deg, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0.95) 100%)',
+            }} />
+            
+            <motion.div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'radial-gradient(circle at 80% 20%, transparent 50%, rgba(139, 92, 246, 0.2) 70%, rgba(236, 72, 153, 0.1) 85%, transparent 100%)',
+              }}
+              animate={{
+                opacity: [0.8, 1, 0.8],
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            <div className="absolute inset-0 rounded-full" style={{
+              background: 'linear-gradient(125deg, transparent 0%, transparent 42%, rgba(139, 92, 246, 0.15) 50%, transparent 58%, transparent 100%)',
             }} />
             
             <div className="absolute inset-0 rounded-full" style={{
-              background: 'linear-gradient(135deg, transparent 0%, transparent 40%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.95) 100%)',
+              background: 'radial-gradient(circle at 25% 28%, rgba(255, 255, 255, 0.12) 0%, transparent 35%)',
             }} />
             
             <div className="absolute inset-0 rounded-full" style={{
-              background: 'radial-gradient(circle at 75% 25%, transparent 55%, rgba(120, 90, 180, 0.15) 75%, rgba(100, 70, 160, 0.08) 100%)',
-            }} />
-            
-            <div className="absolute inset-0 rounded-full" style={{
-              background: 'linear-gradient(125deg, transparent 0%, transparent 45%, rgba(90, 60, 140, 0.1) 50%, transparent 55%, transparent 100%)',
-            }} />
-            
-            <div className="absolute inset-0 rounded-full" style={{
-              background: 'radial-gradient(circle at 25% 30%, rgba(140, 110, 180, 0.08) 0%, transparent 40%)',
+              background: 'radial-gradient(circle at 35% 35%, rgba(200, 180, 255, 0.08) 0%, transparent 25%)',
             }} />
           </motion.div>
-          
-          <div className="absolute inset-[-2px] rounded-full pointer-events-none" style={{
-            background: 'radial-gradient(circle at 70% 30%, transparent 48%, rgba(100, 70, 150, 0.06) 50%, transparent 52%)',
-          }} />
         </div>
 
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] pointer-events-none">
