@@ -94,9 +94,16 @@ export default function FeaturedEvents() {
 
     const isActive = adjustedDiff === 0;
     const absPos = Math.abs(adjustedDiff);
+    const direction = adjustedDiff > 0 ? 1 : -1;
+    
+    let xOffset = 0;
+    for (let i = 0; i < absPos; i++) {
+      const cardScale = i === 0 ? 1 : Math.max(0.75, 1 - i * 0.12);
+      xOffset += 280 * cardScale + 80;
+    }
 
     return {
-      x: adjustedDiff * 380,
+      x: xOffset * direction,
       scale: isActive ? 1 : Math.max(0.75, 1 - absPos * 0.12),
       zIndex: 10 - absPos,
       opacity: absPos > 2 ? 0 : 1 - absPos * 0.25,
@@ -156,7 +163,7 @@ export default function FeaturedEvents() {
             return (
               <motion.div
                 key={event.id}
-                className="absolute cursor-pointer"
+                className="absolute cursor-none"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{
                   x: style.x,
@@ -239,7 +246,7 @@ export default function FeaturedEvents() {
           <button
             key={index}
             onClick={() => setActiveIndex(index)}
-            className="relative p-1"
+            className="relative p-1 cursor-none"
             data-hover
           >
             <motion.div
@@ -271,7 +278,7 @@ export default function FeaturedEvents() {
       >
         <Link href="/event">
           <motion.button
-            className="px-8 py-3 border border-purple-500/40 rounded-full text-purple-300 font-medium hover:bg-purple-500/10 hover:border-purple-400/60 transition-all duration-300 flex items-center gap-2"
+            className="px-8 py-3 border border-purple-500/40 rounded-full text-purple-300 font-medium hover:bg-purple-500/10 hover:border-purple-400/60 transition-all duration-300 flex items-center gap-2 cursor-none"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             data-hover
