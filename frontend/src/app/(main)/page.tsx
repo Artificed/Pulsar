@@ -9,6 +9,7 @@ import {
   HeroSection,
   NebulaBackground,
   StarfieldCanvas,
+  Testimonials,
   CursorTrail,
 } from "@/components/home";
 
@@ -81,9 +82,7 @@ export default function Home() {
 
       <FeaturedEvents />
 
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Testimonials / Gallery</h1>
-      </section>
+      <Testimonials />
 
       <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Learn Astronomy</h1>
