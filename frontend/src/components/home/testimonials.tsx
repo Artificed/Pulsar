@@ -61,33 +61,176 @@ export default function Testimonials() {
 
   const activeTestimonial = testimonials[activeIndex];
 
-  const avatarPositions = [
-    { top: '18%', left: '15%', size: 100 },
-    { top: '20%', right: '18%', size: 88 },
-    { top: '55%', left: '12%', size: 80 },
-    { top: '58%', right: '14%', size: 92 },
-    { bottom: '18%', left: '22%', size: 80 },
+  const avatarPositions: {
+    top?: string;
+    bottom?: string;
+    left?: string;
+    right?: string;
+    size: number;
+    bubblePos: 'right' | 'left' | 'top' | 'bottom';
+  }[] = [
+    { top: '20%', left: '8%', size: 90, bubblePos: 'right' },
+    { top: '30%', right: '8%', size: 88, bubblePos: 'left' },
+    { top: '50%', left: '10%', size: 80, bubblePos: 'right' },
+    { top: '60%', right: '10%', size: 85, bubblePos: 'left' },
+    { bottom: '15%', left: '8%', size: 80, bubblePos: 'right' },
   ];
 
   return (
     <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px]">
           <motion.div
-            className="absolute inset-0 rounded-full border border-purple-500/10"
+            className="absolute inset-0 rounded-full"
+            style={{ 
+              border: '2px solid transparent',
+              background: 'linear-gradient(0deg, transparent, rgba(168, 85, 247, 0.5), transparent) border-box',
+              WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+              WebkitMaskComposite: 'xor',
+              maskComposite: 'exclude',
+            }}
             animate={{ rotate: 360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
           />
           <motion.div
-            className="absolute inset-8 rounded-full border border-purple-500/10"
+            className="absolute inset-0 rounded-full"
+            style={{ 
+              border: '2px solid transparent',
+              background: 'linear-gradient(180deg, transparent, rgba(236, 72, 153, 0.5), transparent) border-box',
+              WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+              WebkitMaskComposite: 'xor',
+              maskComposite: 'exclude',
+            }}
             animate={{ rotate: -360 }}
-            transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          />
+          
+          <motion.div
+            className="absolute inset-16 rounded-full"
+            style={{ 
+              border: '2px solid transparent',
+              background: 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.6), transparent) border-box',
+              WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+              WebkitMaskComposite: 'xor',
+              maskComposite: 'exclude',
+            }}
+            animate={{ rotate: -360 }}
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           />
           <motion.div
-            className="absolute inset-16 rounded-full border border-purple-500/10"
+            className="absolute inset-16 rounded-full"
+            style={{ 
+              border: '2px solid transparent',
+              background: 'linear-gradient(270deg, transparent, rgba(59, 130, 246, 0.5), transparent) border-box',
+              WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+              WebkitMaskComposite: 'xor',
+              maskComposite: 'exclude',
+            }}
             animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           />
+          
+          <motion.div
+            className="absolute inset-32 rounded-full"
+            style={{ 
+              border: '3px solid transparent',
+              background: 'linear-gradient(45deg, transparent, rgba(168, 85, 247, 0.8), rgba(236, 72, 153, 0.6), transparent) border-box',
+              WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+              WebkitMaskComposite: 'xor',
+              maskComposite: 'exclude',
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          />
+
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute top-1/2 left-1/2 w-1 h-1 rounded-full bg-purple-400"
+              style={{
+                boxShadow: '0 0 10px 2px rgba(168, 85, 247, 0.8)',
+              }}
+              animate={{
+                x: [0, Math.cos(i * 30 * Math.PI / 180) * 280],
+                y: [0, Math.sin(i * 30 * Math.PI / 180) * 280],
+                opacity: [0, 1, 1, 0],
+                scale: [0, 1.5, 1.5, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                delay: i * 0.25,
+                ease: "easeOut",
+              }}
+            />
+          ))}
+
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`inner-${i}`}
+              className="absolute top-1/2 left-1/2 w-1.5 h-1.5 rounded-full bg-pink-400"
+              style={{
+                boxShadow: '0 0 12px 3px rgba(236, 72, 153, 0.8)',
+              }}
+              animate={{
+                x: [Math.cos(i * 45 * Math.PI / 180) * 180, 0],
+                y: [Math.sin(i * 45 * Math.PI / 180) * 180, 0],
+                opacity: [0, 1, 1, 0],
+                scale: [1.5, 0.5, 0.5, 0],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                delay: i * 0.3 + 0.5,
+                ease: "easeIn",
+              }}
+            />
+          ))}
+
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full"
+            style={{ 
+              background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%)',
+              filter: 'blur(8px)',
+            }}
+            animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full"
+            style={{ 
+              background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, rgba(168, 85, 247, 0.2) 50%, transparent 70%)',
+            }}
+            animate={{ scale: [1.2, 0.8, 1.2], opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/10"
+            style={{ 
+              boxShadow: '0 0 60px 20px rgba(168, 85, 247, 0.5), 0 0 100px 40px rgba(139, 92, 246, 0.3), 0 0 140px 60px rgba(236, 72, 153, 0.2)',
+            }}
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={`pulse-${i}`}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-purple-500/40"
+              initial={{ width: 0, height: 0, opacity: 1 }}
+              animate={{ 
+                width: [0, 500], 
+                height: [0, 500], 
+                opacity: [0.8, 0],
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity, 
+                delay: i * 1,
+                ease: "easeOut",
+              }}
+            />
+          ))}
         </div>
       </div>
 
@@ -106,8 +249,6 @@ export default function Testimonials() {
               bottom: pos.bottom,
             }}
             onClick={() => setActiveIndex(index)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
             data-hover
           >
             <motion.div
@@ -152,45 +293,44 @@ export default function Testimonials() {
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
               )}
+
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div
+                    className={`absolute z-20 ${
+                      pos.bubblePos === 'right' ? 'left-full ml-10 top-1/2 -translate-y-1/2' :
+                      pos.bubblePos === 'left' ? 'right-full mr-10 top-1/2 -translate-y-1/2' :
+                      pos.bubblePos === 'bottom' ? 'top-full mt-10 left-1/2 -translate-x-1/2' :
+                      'bottom-full mb-10 left-1/2 -translate-x-1/2'
+                    }`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className={`relative bg-white/10 backdrop-blur-md rounded-2xl p-4 w-[320px] border border-white/20`}>
+                      <p className="text-white text-sm leading-relaxed mb-3">
+                        "{testimonial.quote}"
+                      </p>
+                      <p className="text-purple-400 text-xs font-medium">{testimonial.name}</p>
+                      <p className="text-slate-400 text-xs">{testimonial.role}</p>
+                      
+                      <div className={`absolute w-3 h-3 bg-white/10 border border-white/20 rotate-45 ${
+                        pos.bubblePos === 'right' ? '-left-1.5 top-1/2 -translate-y-1/2 border-r-0 border-t-0' :
+                        pos.bubblePos === 'left' ? '-right-1.5 top-1/2 -translate-y-1/2 border-l-0 border-b-0' :
+                        pos.bubblePos === 'bottom' ? '-top-1.5 left-1/2 -translate-x-1/2 border-b-0 border-r-0' :
+                        '-bottom-1.5 left-1/2 -translate-x-1/2 border-l-0 border-t-0'
+                      }`} />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </motion.button>
         );
       })}
 
-      <div className="relative z-10 max-w-3xl mx-auto px-8 text-center">
-        <motion.div
-          className="mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <svg className="w-16 h-16 mx-auto text-purple-500/30" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-          </svg>
-        </motion.div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeIndex}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="text-2xl md:text-4xl font-light text-white leading-relaxed mb-8">
-              "{activeTestimonial.quote}"
-            </p>
-            
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-12 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-              <div>
-                <p className="text-white font-semibold">{activeTestimonial.name}</p>
-                <p className="text-purple-400 text-sm">{activeTestimonial.role}</p>
-              </div>
-              <div className="w-12 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
 
       <div className="absolute bottom-18 left-1/2 -translate-x-1/2 flex items-center gap-12">
         <motion.div 
