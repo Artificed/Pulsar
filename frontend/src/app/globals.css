@@ -44,3 +44,37 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+@media (max-aspect-ratio: 16/9) {
+  .featured-events-container {
+    height: 380px !important;
+  }
+  .featured-events-card {
+    width: 280px !important;
+    height: 380px !important;
+  }
+  .featured-events-header {
+    margin-bottom: 2rem !important;
+  }
+  .featured-events-dots {
+    margin-top: 1rem !important;
+  }
+  .featured-events-button {
+    margin-top: 1rem !important;
+  }
+  .featured-events-description {
+    bottom: 2rem !important;
+  }
+
+  .testimonials-center {
+    width: 550px !important;
+    height: 550px !important;
+  }
+  .testimonials-stats {
+    bottom: 2.5rem !important;
+    gap: 2rem !important;
+  }
+  .testimonials-bubble {
+    width: 280px !important;
+  }
+}

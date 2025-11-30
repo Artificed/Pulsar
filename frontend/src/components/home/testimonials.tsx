@@ -69,18 +69,33 @@ export default function Testimonials() {
     size: number;
     bubblePos: 'right' | 'left' | 'top' | 'bottom';
   }[] = [
-    { top: '20%', left: '8%', size: 90, bubblePos: 'right' },
-    { top: '30%', right: '8%', size: 88, bubblePos: 'left' },
+    { top: '20%', left: '12%', size: 90, bubblePos: 'right' },
+    { top: '30%', right: '10%', size: 88, bubblePos: 'left' },
     { top: '50%', left: '10%', size: 80, bubblePos: 'right' },
     { top: '60%', right: '10%', size: 85, bubblePos: 'left' },
-    { bottom: '15%', left: '8%', size: 80, bubblePos: 'right' },
+    { bottom: '15%', left: '10%', size: 80, bubblePos: 'right' },
   ];
 
   return (
     <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center overflow-hidden">
+      <motion.div
+        className="absolute top-32 left-1/2 -translate-x-1/2 text-center z-30"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <p className="text-purple-400/70 text-sm tracking-[0.3em] uppercase mb-4">
+          What People Say
+        </p>
+        <h2 className="text-4xl md:text-5xl font-bold text-white">
+          Visitor <span className="bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">Testimonials</span>
+        </h2>
+      </motion.div>
+
       <div className="absolute inset-0 pointer-events-none">
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px]"
+          className="testimonials-center absolute top-[58%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px]"
           style={{ transform: 'translateZ(0)' }}
         >
           <motion.div
@@ -322,7 +337,7 @@ export default function Testimonials() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className={`relative bg-white/10 backdrop-blur-md rounded-2xl p-4 w-[320px] border border-white/20`}>
+                    <div className={`testimonials-bubble relative bg-white/10 backdrop-blur-md rounded-2xl p-4 w-[320px] border border-white/20`}>
                       <p className="text-white text-sm leading-relaxed mb-3">
                         "{testimonial.quote}"
                       </p>
@@ -343,43 +358,6 @@ export default function Testimonials() {
           </motion.button>
         );
       })}
-
-
-
-      <div className="absolute bottom-18 left-1/2 -translate-x-1/2 flex items-center gap-12">
-        <motion.div 
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-3xl font-bold text-white">50K+</div>
-          <div className="text-slate-500 text-xs uppercase tracking-wider">Visitors</div>
-        </motion.div>
-        <div className="w-px h-8 bg-white/10" />
-        <motion.div 
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-3xl font-bold text-white">4.9</div>
-          <div className="text-slate-500 text-xs uppercase tracking-wider">Rating</div>
-        </motion.div>
-        <div className="w-px h-8 bg-white/10" />
-        <motion.div 
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-3xl font-bold text-white">200+</div>
-          <div className="text-slate-500 text-xs uppercase tracking-wider">Shows/Year</div>
-        </motion.div>
-      </div>
     </section>
   );
 }
