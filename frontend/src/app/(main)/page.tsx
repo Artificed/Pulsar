@@ -257,8 +257,6 @@ export default function Home() {
       
       const mouse = mouseRef.current;
 
-      
-
       const glowGradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 300);
       glowGradient.addColorStop(0, "rgba(100, 100, 255, 0.15)");
       glowGradient.addColorStop(1, "transparent");
@@ -600,7 +598,7 @@ export default function Home() {
               transform: 'translate(-50%, -50%) rotateX(75deg)',
             }}
             animate={{ rotate: 360 }}
-            transition={{ duration: 500, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 800, repeat: Infinity, ease: "linear" }}
           >
             <div className="absolute inset-[8%] rounded-full border-[2px] border-purple-400/10" />
             <div className="absolute inset-[12%] rounded-full border-[4px] border-violet-400/[0.07]" />
@@ -614,7 +612,7 @@ export default function Home() {
               boxShadow: 'inset -80px -80px 150px rgba(0,0,0,0.98), inset 30px 30px 80px rgba(139, 92, 246, 0.2), inset 10px 10px 40px rgba(236, 72, 153, 0.1), 0 0 60px rgba(139, 92, 246, 0.15)',
             }}
             animate={{ rotate: 360 }}
-            transition={{ duration: 400, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 600, repeat: Infinity, ease: "linear" }}
           > 
             <motion.div 
               className="absolute inset-0 rounded-full"
@@ -627,7 +625,7 @@ export default function Home() {
               animate={{
                 opacity: [0.6, 1, 0.6],
               }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             />
             
             <div className="absolute inset-0 rounded-full opacity-50" style={{
@@ -649,10 +647,10 @@ export default function Home() {
                 filter: 'blur(8px)',
               }}
               animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.7, 1, 0.7],
+                scale: [1, 1.15, 1],
+                opacity: [0.7, 0.9, 0.7],
               }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
             
             <div className="absolute inset-0 rounded-full opacity-40" style={{
@@ -675,7 +673,7 @@ export default function Home() {
               `,
             }} />
             
-            <motion.div 
+            <div 
               className="absolute inset-0 rounded-full opacity-20"
               style={{
                 background: `
@@ -687,8 +685,6 @@ export default function Home() {
                   radial-gradient(circle 22px at 50% 75%, rgba(99, 102, 241, 0.3) 0%, transparent 100%)
                 `,
               }}
-              animate={{ rotate: -360 }}
-              transition={{ duration: 600, repeat: Infinity, ease: "linear" }}
             />
             
             <div className="absolute inset-0 rounded-full opacity-30" style={{
@@ -702,15 +698,11 @@ export default function Home() {
               background: 'linear-gradient(135deg, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0.95) 100%)',
             }} />
             
-            <motion.div 
+            <div 
               className="absolute inset-0 rounded-full"
               style={{
                 background: 'radial-gradient(circle at 80% 20%, transparent 50%, rgba(139, 92, 246, 0.2) 70%, rgba(236, 72, 153, 0.1) 85%, transparent 100%)',
               }}
-              animate={{
-                opacity: [0.8, 1, 0.8],
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
             
             <div className="absolute inset-0 rounded-full" style={{
