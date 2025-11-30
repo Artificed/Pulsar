@@ -47,6 +47,13 @@ const testimonials: Testimonial[] = [
     quote: "My kids haven't stopped talking about their visit. The interactive exhibits sparked a genuine curiosity about space that I've never seen before.",
     image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80",
   },
+  {
+    id: "6",
+    name: "James Mitchell",
+    role: "Retired Astronomer",
+    quote: "After 40 years studying the cosmos, I thought nothing could surprise me. Pulsar proved me wrong with their incredible immersive experiences.",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&q=80",
+  },
 ];
 
 export default function Testimonials() {
@@ -69,11 +76,12 @@ export default function Testimonials() {
     size: number;
     bubblePos: 'right' | 'left' | 'top' | 'bottom';
   }[] = [
-    { top: '20%', left: '12%', size: 90, bubblePos: 'right' },
-    { top: '30%', right: '10%', size: 88, bubblePos: 'left' },
-    { top: '50%', left: '10%', size: 80, bubblePos: 'right' },
-    { top: '60%', right: '10%', size: 85, bubblePos: 'left' },
-    { bottom: '15%', left: '10%', size: 80, bubblePos: 'right' },
+    { top: '24%', left: '13%', size: 90, bubblePos: 'right' },
+    { top: '30%', right: '12%', size: 88, bubblePos: 'left' },
+    { top: '52%', left: '10%', size: 80, bubblePos: 'right' },
+    { top: '58%', right: '10%', size: 85, bubblePos: 'left' },
+    { bottom: '14%', left: '11%', size: 80, bubblePos: 'right' },
+    { bottom: '8%', right: '13%', size: 82, bubblePos: 'left' },
   ];
 
   return (
