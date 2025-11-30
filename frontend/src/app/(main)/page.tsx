@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/navbar";
 import {
   CustomCursor,
+  FeaturedEvents,
   HeroSection,
   NebulaBackground,
   StarfieldCanvas,
@@ -78,9 +79,7 @@ export default function Home() {
 
       <HeroSection />
 
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Featured Events</h1>
-      </section>
+      <FeaturedEvents />
 
       <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Testimonials / Gallery</h1>
