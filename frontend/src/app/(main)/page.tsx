@@ -587,33 +587,92 @@ export default function Home() {
       </div>
 
       <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
-        <div className="absolute bottom-[-15%] right-[-5%] w-[700px] h-[700px] pointer-events-none">
-          <div className="absolute inset-[-30px] rounded-full bg-purple-900/[0.06] blur-[60px]" />
-          
-          <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        <div className="absolute bottom-[-18%] right-[-8%] w-[700px] h-[700px] pointer-events-none">
+          <motion.div 
+            className="absolute inset-[-200px] rounded-full"
             style={{
-              width: '130%',
-              height: '130%',
-              transform: 'translate(-50%, -50%) rotateX(75deg)',
+              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, rgba(168, 85, 247, 0.04) 30%, rgba(99, 102, 241, 0.02) 50%, transparent 70%)',
+              filter: 'blur(60px)',
             }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 800, repeat: Infinity, ease: "linear" }}
-          >
-            <div className="absolute inset-[8%] rounded-full border-[2px] border-purple-400/10" />
-            <div className="absolute inset-[12%] rounded-full border-[4px] border-violet-400/[0.07]" />
-            <div className="absolute inset-[16%] rounded-full border-[2px] border-indigo-400/[0.08]" />
-          </motion.div>
+            animate={{
+              scale: [1, 1.05, 1],
+              opacity: [0.8, 1, 0.8],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          <motion.div 
+            className="absolute rounded-full"
+            style={{
+              top: '-5%',
+              left: '-15%',
+              width: '70%',
+              height: '70%',
+              background: 'radial-gradient(ellipse 100% 100% at 70% 70%, rgba(168, 85, 247, 0.35) 0%, rgba(139, 92, 246, 0.2) 30%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)',
+              filter: 'blur(30px)',
+            }}
+            animate={{
+              opacity: [0.6, 0.8, 0.6],
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          <div 
+            className="absolute"
+            style={{
+              top: '-20%',
+              left: '-25%',
+              width: '80%',
+              height: '80%',
+              background: 'radial-gradient(ellipse 80% 80% at 60% 60%, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.08) 40%, transparent 70%)',
+              filter: 'blur(50px)',
+            }}
+          />
+          
+          <div className="absolute inset-[-150px] rounded-full bg-purple-800/[0.12] blur-[100px]" />
+          <div className="absolute inset-[-100px] rounded-full bg-violet-700/[0.15] blur-[80px]" />
+          
+          <motion.div 
+            className="absolute inset-[-50px] rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 40%, rgba(168, 85, 247, 0.1) 60%, transparent 80%)',
+              filter: 'blur(40px)',
+            }}
+            animate={{
+              opacity: [0.6, 0.9, 0.6],
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          <div 
+            className="absolute inset-[-6px] rounded-full"
+            style={{
+              background: 'radial-gradient(circle at 30% 30%, #1a0d30 0%, #120a28 20%, #060412 50%, #000000 70%)',
+              filter: 'blur(12px)',
+              opacity: 0.95,
+            }}
+          />
           
           <motion.div
             className="w-full h-full rounded-full relative overflow-hidden"
             style={{
-              background: 'radial-gradient(circle at 30% 30%, #3d2a6d 0%, #2a1f5c 10%, #1e1548 20%, #150f38 35%, #0d0a28 55%, #060418 75%, #020108 100%)',
-              boxShadow: 'inset -80px -80px 150px rgba(0,0,0,0.98), inset 30px 30px 80px rgba(139, 92, 246, 0.2), inset 10px 10px 40px rgba(236, 72, 153, 0.1), 0 0 60px rgba(139, 92, 246, 0.15)',
+              background: 'radial-gradient(circle at 30% 30%, #120a28 0%, #0e0820 10%, #0a0618 20%, #060412 35%, #000000 55%, #000000 100%)',
+              boxShadow: `
+                inset -100px -100px 160px rgba(0,0,0,1), 
+                inset 20px 20px 60px rgba(168, 85, 247, 0.5), 
+                inset 5px 5px 20px rgba(255, 255, 255, 0.2), 
+                0 0 40px rgba(139, 92, 246, 0.5),
+                0 0 80px rgba(139, 92, 246, 0.3),
+                0 0 120px rgba(168, 85, 247, 0.2),
+                0 0 180px rgba(99, 102, 241, 0.1)
+              `,
             }}
             animate={{ rotate: 360 }}
             transition={{ duration: 600, repeat: Infinity, ease: "linear" }}
           > 
+            <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay pointer-events-none" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            }} /> 
             <motion.div 
               className="absolute inset-0 rounded-full"
               style={{
@@ -695,7 +754,7 @@ export default function Home() {
             }} />
             
             <div className="absolute inset-0 rounded-full" style={{
-              background: 'linear-gradient(135deg, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0.95) 100%)',
+              background: 'linear-gradient(135deg, transparent 0%, transparent 28%, rgba(0, 0, 0, 0.1) 35%, rgba(0, 0, 0, 0.25) 42%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.65) 75%, rgba(0, 0, 0, 0.7) 100%)',
             }} />
             
             <div 
@@ -706,7 +765,7 @@ export default function Home() {
             />
             
             <div className="absolute inset-0 rounded-full" style={{
-              background: 'linear-gradient(125deg, transparent 0%, transparent 42%, rgba(139, 92, 246, 0.15) 50%, transparent 58%, transparent 100%)',
+              background: 'linear-gradient(125deg, transparent 0%, transparent 38%, rgba(139, 92, 246, 0.06) 45%, rgba(139, 92, 246, 0.08) 50%, rgba(139, 92, 246, 0.06) 55%, transparent 62%, transparent 100%)',
             }} />
             
             <div className="absolute inset-0 rounded-full" style={{
@@ -717,6 +776,23 @@ export default function Home() {
               background: 'radial-gradient(circle at 35% 35%, rgba(200, 180, 255, 0.08) 0%, transparent 25%)',
             }} />
           </motion.div>
+          
+          <motion.div
+            className="absolute inset-[-50px] pointer-events-none"
+            style={{
+              background: `
+                radial-gradient(circle 3px at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 100%),
+                radial-gradient(circle 2px at 80% 20%, rgba(200, 180, 255, 0.2) 0%, transparent 100%),
+                radial-gradient(circle 4px at 15% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 100%),
+                radial-gradient(circle 2px at 85% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 100%),
+                radial-gradient(circle 3px at 50% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 100%)
+              `,
+            }}
+            animate={{
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
         </div>
 
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] pointer-events-none">
