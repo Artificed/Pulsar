@@ -79,7 +79,10 @@ export default function Testimonials() {
   return (
     <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px]">
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px]"
+          style={{ transform: 'translateZ(0)' }}
+        >
           <motion.div
             className="absolute inset-0 rounded-full"
             style={{ 
@@ -88,6 +91,7 @@ export default function Testimonials() {
               WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'xor',
               maskComposite: 'exclude',
+              willChange: 'transform',
             }}
             animate={{ rotate: 360 }}
             transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -100,6 +104,7 @@ export default function Testimonials() {
               WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'xor',
               maskComposite: 'exclude',
+              willChange: 'transform',
             }}
             animate={{ rotate: -360 }}
             transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -113,6 +118,7 @@ export default function Testimonials() {
               WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'xor',
               maskComposite: 'exclude',
+              willChange: 'transform',
             }}
             animate={{ rotate: -360 }}
             transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
@@ -125,6 +131,7 @@ export default function Testimonials() {
               WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'xor',
               maskComposite: 'exclude',
+              willChange: 'transform',
             }}
             animate={{ rotate: 360 }}
             transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
@@ -138,6 +145,7 @@ export default function Testimonials() {
               WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'xor',
               maskComposite: 'exclude',
+              willChange: 'transform',
             }}
             animate={{ rotate: 360 }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -149,6 +157,7 @@ export default function Testimonials() {
               className="absolute top-1/2 left-1/2 w-1 h-1 rounded-full bg-purple-400"
               style={{
                 boxShadow: '0 0 10px 2px rgba(168, 85, 247, 0.8)',
+                willChange: 'transform, opacity',
               }}
               animate={{
                 x: [0, Math.cos(i * 30 * Math.PI / 180) * 280],
@@ -171,6 +180,7 @@ export default function Testimonials() {
               className="absolute top-1/2 left-1/2 w-1.5 h-1.5 rounded-full bg-pink-400"
               style={{
                 boxShadow: '0 0 12px 3px rgba(236, 72, 153, 0.8)',
+                willChange: 'transform, opacity',
               }}
               animate={{
                 x: [Math.cos(i * 45 * Math.PI / 180) * 180, 0],
@@ -192,6 +202,7 @@ export default function Testimonials() {
             style={{ 
               background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%)',
               filter: 'blur(8px)',
+              willChange: 'transform, opacity',
             }}
             animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -200,6 +211,7 @@ export default function Testimonials() {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full"
             style={{ 
               background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, rgba(168, 85, 247, 0.2) 50%, transparent 70%)',
+              willChange: 'transform, opacity',
             }}
             animate={{ scale: [1.2, 0.8, 1.2], opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -208,6 +220,7 @@ export default function Testimonials() {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/10"
             style={{ 
               boxShadow: '0 0 60px 20px rgba(168, 85, 247, 0.5), 0 0 100px 40px rgba(139, 92, 246, 0.3), 0 0 140px 60px rgba(236, 72, 153, 0.2)',
+              willChange: 'transform',
             }}
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
@@ -217,6 +230,7 @@ export default function Testimonials() {
             <motion.div
               key={`pulse-${i}`}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-purple-500/40"
+              style={{ willChange: 'transform, opacity' }}
               initial={{ width: 0, height: 0, opacity: 1 }}
               animate={{ 
                 width: [0, 500], 
