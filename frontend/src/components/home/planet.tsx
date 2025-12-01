@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function Planet() {
   return (
-    <div className="absolute bottom-[-18%] right-[-8%] w-[700px] h-[700px] pointer-events-none">
+    <div className="absolute bottom-[-12%] right-[-5%] w-[45vh] h-[45vh] sm:w-[55vh] sm:h-[55vh] md:w-[65vh] md:h-[65vh] lg:w-[72vh] lg:h-[72vh] pointer-events-none">
       <motion.div 
         className="absolute inset-[-200px] rounded-full"
         style={{
