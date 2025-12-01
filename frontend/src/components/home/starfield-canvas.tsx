@@ -32,7 +32,7 @@ export default function StarfieldCanvas({ containerRef, mouseRef }: StarfieldCan
 
     const initStars = () => {
       stars = [];
-      const totalHeight = window.innerHeight * 5;
+      const totalHeight = window.innerHeight * 4;
       const count = Math.floor((canvas.width * totalHeight) / 16000); 
       for (let i = 0; i < count; i++) {
         stars.push({
@@ -47,7 +47,7 @@ export default function StarfieldCanvas({ containerRef, mouseRef }: StarfieldCan
 
     const initConstellations = () => {
       constellations = [];
-      const totalHeight = window.innerHeight * 5;
+      const totalHeight = window.innerHeight * 4;
       const count = Math.floor(totalHeight / 400); 
       const centers: {x: number, y: number}[] = [];
 

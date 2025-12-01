@@ -70,7 +70,7 @@ export default function Home() {
         isHovering={isHovering}
       />
 
-      <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
+      <div className="absolute inset-x-0 top-0 z-0 h-[400vh] pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0f0518] via-[#090118] via-[#05010e] to-[#000000]" />
       </div>
 
@@ -83,10 +83,6 @@ export default function Home() {
       <FeaturedEvents />
 
       <Testimonials />
-
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Learn Astronomy</h1>
-      </section>
 
       <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
         <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Footer</h1>

@@ -5,7 +5,7 @@ import { nebulaClouds, getNebulaColor } from "./constants";
 
 export default function NebulaBackground() {
   return (
-    <div className="absolute inset-x-0 top-0 z-0 h-[500vh] pointer-events-none overflow-hidden">
+    <div className="absolute inset-x-0 top-0 z-0 h-[400vh] pointer-events-none overflow-hidden">
       {nebulaClouds.map((cloud) => (
         <motion.div
           key={cloud.id}

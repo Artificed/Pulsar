@@ -134,7 +134,7 @@ export default function FeaturedEvents() {
       </div>
 
       <motion.div
-        className="featured-events-header text-center mb-12 mt-8 z-20"
+        className="featured-events-header text-center mb-8 mt-8 z-20"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
