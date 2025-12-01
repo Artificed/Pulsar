@@ -41,7 +41,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          at <span className="text-purple-300 font-medium">Pulsar Planetarium</span>
+          at <span className="text-purple-300 font-medium">Pulsar</span>
         </motion.p>
 
         <motion.div
@@ -61,14 +61,14 @@ export default function HeroSection() {
             </motion.button>
           </Link>
 
-          <Link href="/learn">
+          <Link href="/booking">
             <motion.button
               className="px-10 py-4 border-2 border-purple-500/40 rounded-full text-purple-300 font-semibold text-lg hover:bg-purple-500/10 hover:border-purple-400/60 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               data-hover
             >
-              Learn Astronomy
+              My Bookings
             </motion.button>
           </Link>
         </motion.div>

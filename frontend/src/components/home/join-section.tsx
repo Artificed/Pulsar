@@ -246,7 +246,7 @@ export default function JoinSection() {
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500 text-sm">Pulsar Planetarium</span>
+            <span className="text-slate-500 text-sm">Pulsar</span>
           </div>
           
           <p className="text-slate-600 text-xs">

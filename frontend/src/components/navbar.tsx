@@ -26,7 +26,6 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
     { href: "/", label: "Home" },
     { href: "/event", label: "Events" },
     { href: "/booking", label: "Bookings" },
-    { href: "/learn", label: "Learn" },
   ];
 
   return (
