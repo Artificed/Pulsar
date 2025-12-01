@@ -7,6 +7,7 @@ import {
   CustomCursor,
   FeaturedEvents,
   HeroSection,
+  JoinSection,
   NebulaBackground,
   StarfieldCanvas,
   Testimonials,
@@ -84,9 +85,7 @@ export default function Home() {
 
       <Testimonials />
 
-      <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-slate-300 tracking-widest uppercase">Footer</h1>
-      </section>
+      <JoinSection />
     </div>
   );
 }
