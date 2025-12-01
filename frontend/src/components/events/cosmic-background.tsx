@@ -2,27 +2,36 @@
 
 import { motion } from "framer-motion";
 
+const stars = [...Array(80)].map((_, i) => ({
+  id: i,
+  left: Math.random() * 100,
+  top: Math.random() * 100,
+  opacity: Math.random() * 0.7 + 0.3,
+  duration: 2 + Math.random() * 3,
+  delay: Math.random() * 2,
+}));
+
 export default function CosmicBackground() {
   return (
     <div className="fixed inset-0 pointer-events-none">
       <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0a0118] to-black" />
       
-      {[...Array(80)].map((_, i) => (
+      {stars.map((star) => (
         <motion.div
-          key={i}
+          key={star.id}
           className="absolute w-[2px] h-[2px] bg-white rounded-full"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            opacity: Math.random() * 0.7 + 0.3,
+            left: `${star.left}%`,
+            top: `${star.top}%`,
+            opacity: star.opacity,
           }}
           animate={{
             opacity: [0.3, 0.8, 0.3],
           }}
           transition={{
-            duration: 2 + Math.random() * 3,
+            duration: star.duration,
             repeat: Infinity,
-            delay: Math.random() * 2,
+            delay: star.delay,
           }}
         />
       ))}

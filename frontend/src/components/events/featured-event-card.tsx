@@ -49,7 +49,7 @@ export default function FeaturedEventCard({ event }: FeaturedEventCardProps) {
       />
 
       <motion.div
-        className="relative w-full rounded-3xl overflow-hidden cursor-pointer group z-10 bg-black"
+        className="relative w-full rounded-3xl overflow-hidden cursor-none group z-10 bg-black"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}

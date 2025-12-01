@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
+import { useMotionValue } from "framer-motion";
 import Navbar from "@/components/navbar";
 import { eventService } from "@/features/event/api/event-service";
 import { Event } from "@/features/event/types/event";
@@ -12,10 +13,51 @@ import {
   LoadingSpinner,
   mockEvents,
 } from "@/components/events";
+import { CustomCursor, CursorTrail } from "@/components/home";
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>(mockEvents);
   const [isLoading, setIsLoading] = useState(true);
+  const [cursorTrail, setCursorTrail] = useState<CursorTrail[]>([]);
+  const [isClicking, setIsClicking] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+
+      const uniqueId = Date.now() + Math.random();
+      setCursorTrail(prev => {
+        const newTrail = [...prev, { id: uniqueId, x: e.clientX, y: e.clientY }];
+        return newTrail.slice(-12);
+      });
+    };
+
+    const handleMouseDown = () => setIsClicking(true);
+    const handleMouseUp = () => setIsClicking(false);
+
+    const checkHover = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const isHoverTarget = target.closest('a, button, [role="button"], input, textarea, select, [data-hover]');
+      setIsHovering(!!isHoverTarget);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mouseover', checkHover);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseover', checkHover);
+    };
+  }, [cursorX, cursorY]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -41,7 +83,14 @@ export default function EventsPage() {
   const otherEvents = events.slice(1);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white cursor-none [&_a]:cursor-none [&_button]:cursor-none [&_[role='button']]:cursor-none">
+      <CustomCursor
+        cursorX={cursorX}
+        cursorY={cursorY}
+        cursorTrail={cursorTrail}
+        isClicking={isClicking}
+        isHovering={isHovering}
+      />
       <Navbar />
       <CosmicBackground />
 

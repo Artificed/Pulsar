@@ -37,7 +37,7 @@ export default function EventCard({ event, index }: EventCardProps) {
   if (variant === 'tall') {
     return (
       <motion.div
-        className="group cursor-pointer mb-5"
+        className="group cursor-none mb-5"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -90,7 +90,7 @@ export default function EventCard({ event, index }: EventCardProps) {
 
   return (
     <motion.div
-      className="group cursor-pointer mb-5"
+      className="group cursor-none mb-5"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
