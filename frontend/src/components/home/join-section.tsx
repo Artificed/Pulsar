@@ -2,21 +2,184 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useMemo } from "react";
+
+
+const particleSeeds = [
+  { x: 5, size: 2, duration: 10, delay: 1 },
+  { x: 12, size: 3, duration: 8, delay: 3 },
+  { x: 18, size: 1.5, duration: 12, delay: 0 },
+  { x: 25, size: 2.5, duration: 9, delay: 5 },
+  { x: 32, size: 1, duration: 11, delay: 2 },
+  { x: 38, size: 3.5, duration: 7, delay: 4 },
+  { x: 45, size: 2, duration: 10, delay: 6 },
+  { x: 52, size: 1.5, duration: 13, delay: 1 },
+  { x: 58, size: 2.5, duration: 8, delay: 7 },
+  { x: 65, size: 3, duration: 9, delay: 3 },
+  { x: 72, size: 1, duration: 11, delay: 0 },
+  { x: 78, size: 2, duration: 10, delay: 5 },
+  { x: 85, size: 3.5, duration: 7, delay: 2 },
+  { x: 92, size: 1.5, duration: 12, delay: 4 },
+  { x: 98, size: 2.5, duration: 8, delay: 6 },
+];
 
 export default function JoinSection() {
   return (
     <section className="relative z-10 min-h-screen w-full snap-start flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+
         <motion.div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px]"
+          className="absolute bottom-[45%] left-0 right-0 h-[350px]"
           style={{
-            background: 'radial-gradient(ellipse at center bottom, rgba(139, 92, 246, 0.1) 0%, transparent 70%)',
+            background: 'linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.03) 40%, rgba(139, 92, 246, 0.08) 70%, rgba(236, 72, 153, 0.05) 90%, transparent 100%)',
           }}
           animate={{
-            opacity: [0.5, 0.8, 0.5],
+            opacity: [0.6, 1, 0.6],
           }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
+
+        <div className="absolute bottom-[28%] left-1/2 -translate-x-1/2">
+          <motion.div
+            className="absolute -inset-48 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(251, 146, 60, 0.12) 0%, rgba(236, 72, 153, 0.06) 40%, transparent 65%)',
+              filter: 'blur(60px)',
+            }}
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.4, 0.6, 0.4],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute -inset-24 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(253, 224, 71, 0.2) 0%, rgba(251, 146, 60, 0.1) 40%, transparent 65%)',
+              filter: 'blur(40px)',
+            }}
+            animate={{
+              scale: [1, 1.08, 1],
+              opacity: [0.5, 0.7, 0.5],
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="w-[150px] h-[150px] rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(253, 224, 71, 0.5) 25%, rgba(251, 146, 60, 0.25) 50%, transparent 75%)',
+              filter: 'blur(15px)',
+            }}
+            animate={{
+              scale: [1, 1.03, 1],
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+
+        <svg className="absolute bottom-0 left-0 right-0 w-full h-[50%]" preserveAspectRatio="none" viewBox="0 0 1440 500">
+          <defs>
+            <linearGradient id="mountainGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#000000" stopOpacity="0" />
+              <stop offset="20%" stopColor="#000000" stopOpacity="0.4" />
+              <stop offset="40%" stopColor="#000000" stopOpacity="0.8" />
+              <stop offset="60%" stopColor="#000000" stopOpacity="1" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="1" />
+            </linearGradient>
+            <linearGradient id="mountainEdgeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#a855f7" stopOpacity="0.3" />
+              <stop offset="30%" stopColor="#7c3aed" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0,500 L0,140 L100,100 L200,130 L320,70 L450,110 L580,50 L720,90 L850,40 L1000,80 L1120,55 L1250,95 L1350,65 L1440,100 L1440,500 Z"
+            fill="url(#mountainEdgeGlow)"
+            style={{ filter: 'blur(15px)' }}
+          />
+          <path
+            d="M0,500 L0,160 L100,120 L200,150 L320,90 L450,130 L580,70 L720,110 L850,60 L1000,100 L1120,75 L1250,115 L1350,85 L1440,120 L1440,500 Z"
+            fill="url(#mountainGradient)"
+          />
+          <path
+            d="M0,500 L0,220 L80,190 L160,210 L260,160 L380,195 L480,145 L600,180 L720,130 L860,170 L960,140 L1100,175 L1200,150 L1320,180 L1400,160 L1440,185 L1440,500 Z"
+            fill="#000000"
+          />
+        </svg>
+
+        {particleSeeds.map((particle, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              left: `${particle.x}%`,
+              bottom: '45%',
+              width: particle.size,
+              height: particle.size,
+              background: 'rgba(253, 224, 71, 0.8)',
+              boxShadow: '0 0 6px 2px rgba(253, 224, 71, 0.5)',
+            }}
+            animate={{
+              y: [0, -300, -500],
+              opacity: [0, 1, 0],
+              scale: [0.5, 1, 0.3],
+            }}
+            transition={{
+              duration: particle.duration,
+              repeat: Infinity,
+              ease: "easeOut",
+              delay: particle.delay,
+            }}
+          />
+        ))}
+
+        <motion.div
+          className="absolute top-[10%] left-[20%] w-2 h-2 rounded-full bg-white"
+          style={{ boxShadow: '0 0 10px 3px rgba(255, 255, 255, 0.6)' }}
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute top-[15%] left-[25%] w-1.5 h-1.5 rounded-full bg-white"
+          style={{ boxShadow: '0 0 8px 2px rgba(255, 255, 255, 0.5)' }}
+          animate={{ opacity: [0.3, 0.9, 0.3] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: 0.3 }}
+        />
+        <motion.div
+          className="absolute top-[8%] left-[30%] w-1 h-1 rounded-full bg-white"
+          style={{ boxShadow: '0 0 6px 2px rgba(255, 255, 255, 0.4)' }}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 3, repeat: Infinity, delay: 0.6 }}
+        />
+        <motion.div
+          className="absolute top-[12%] right-[22%] w-2 h-2 rounded-full bg-white"
+          style={{ boxShadow: '0 0 10px 3px rgba(255, 255, 255, 0.6)' }}
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2.2, repeat: Infinity, delay: 0.4 }}
+        />
+        <motion.div
+          className="absolute top-[18%] right-[28%] w-1 h-1 rounded-full bg-white"
+          style={{ boxShadow: '0 0 6px 2px rgba(255, 255, 255, 0.4)' }}
+          animate={{ opacity: [0.3, 0.8, 0.3] }}
+          transition={{ duration: 2.8, repeat: Infinity, delay: 0.7 }}
+        />
+        
+        <svg className="absolute top-0 left-0 w-full h-[25%] opacity-30">
+          <motion.line
+            x1="20%" y1="40%" x2="25%" y2="60%"
+            stroke="rgba(255,255,255,0.3)"
+            strokeWidth="1"
+            animate={{ opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
+          <motion.line
+            x1="25%" y1="60%" x2="30%" y2="32%"
+            stroke="rgba(255,255,255,0.3)"
+            strokeWidth="1"
+            animate={{ opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+          />
+        </svg>
       </div>
 
       <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">
