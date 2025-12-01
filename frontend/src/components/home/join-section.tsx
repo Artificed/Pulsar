@@ -77,19 +77,20 @@ export default function JoinSection() {
           />
         </div>
 
-        <svg className="absolute bottom-0 left-0 right-0 w-full h-[50%]" preserveAspectRatio="none" viewBox="0 0 1440 500">
+        <svg className="absolute bottom-0 left-0 right-0 w-full h-[50%] z-10" preserveAspectRatio="none" viewBox="0 0 1440 500">
           <defs>
             <linearGradient id="mountainGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#000000" stopOpacity="0" />
-              <stop offset="20%" stopColor="#000000" stopOpacity="0.4" />
-              <stop offset="40%" stopColor="#000000" stopOpacity="0.8" />
+              <stop offset="0%" stopColor="#1a0a2e" stopOpacity="1" />
+              <stop offset="20%" stopColor="#130824" stopOpacity="1" />
+              <stop offset="40%" stopColor="#0a0412" stopOpacity="1" />
               <stop offset="60%" stopColor="#000000" stopOpacity="1" />
               <stop offset="100%" stopColor="#000000" stopOpacity="1" />
             </linearGradient>
             <linearGradient id="mountainEdgeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#a855f7" stopOpacity="0.3" />
-              <stop offset="30%" stopColor="#7c3aed" stopOpacity="0.1" />
-              <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+              <stop offset="0%" stopColor="#a855f7" stopOpacity="0.5" />
+              <stop offset="15%" stopColor="#7c3aed" stopOpacity="0.3" />
+              <stop offset="40%" stopColor="#1a0a2e" stopOpacity="1" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="1" />
             </linearGradient>
           </defs>
           <path
