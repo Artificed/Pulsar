@@ -87,7 +87,7 @@ export default function Testimonials() {
   return (
     <section className="relative z-10 h-screen w-full snap-start flex items-center justify-center overflow-hidden">
       <motion.div
-        className="absolute top-32 left-1/2 -translate-x-1/2 text-center z-30"
+        className="absolute top-28 left-1/2 -translate-x-1/2 text-center z-30"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -103,7 +103,7 @@ export default function Testimonials() {
 
       <div className="absolute inset-0 pointer-events-none">
         <div 
-          className="testimonials-center absolute top-[58%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px]"
+          className="testimonials-center absolute top-[58%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[620px] h-[620px]"
           style={{ transform: 'translateZ(0)' }}
         >
           <motion.div
@@ -183,8 +183,8 @@ export default function Testimonials() {
                 willChange: 'transform, opacity',
               }}
               animate={{
-                x: [0, Math.cos(i * 30 * Math.PI / 180) * 280],
-                y: [0, Math.sin(i * 30 * Math.PI / 180) * 280],
+                x: [0, Math.cos(i * 30 * Math.PI / 180) * 240],
+                y: [0, Math.sin(i * 30 * Math.PI / 180) * 240],
                 opacity: [0, 1, 1, 0],
                 scale: [0, 1.5, 1.5, 0],
               }}
@@ -206,8 +206,8 @@ export default function Testimonials() {
                 willChange: 'transform, opacity',
               }}
               animate={{
-                x: [Math.cos(i * 45 * Math.PI / 180) * 180, 0],
-                y: [Math.sin(i * 45 * Math.PI / 180) * 180, 0],
+                x: [Math.cos(i * 45 * Math.PI / 180) * 155, 0],
+                y: [Math.sin(i * 45 * Math.PI / 180) * 155, 0],
                 opacity: [0, 1, 1, 0],
                 scale: [1.5, 0.5, 0.5, 0],
               }}
@@ -256,8 +256,8 @@ export default function Testimonials() {
               style={{ willChange: 'transform, opacity' }}
               initial={{ width: 0, height: 0, opacity: 1 }}
               animate={{ 
-                width: [0, 500], 
-                height: [0, 500], 
+                width: [0, 425], 
+                height: [0, 425], 
                 opacity: [0.8, 0],
               }}
               transition={{ 

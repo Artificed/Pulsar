@@ -99,7 +99,7 @@ export default function FeaturedEvents() {
     let xOffset = 0;
     for (let i = 0; i < absPos; i++) {
       const cardScale = i === 0 ? 1 : Math.max(0.75, 1 - i * 0.12);
-      xOffset += 280 * cardScale + 80;
+      xOffset += 250 * cardScale + 70;
     }
 
     return {
@@ -134,7 +134,7 @@ export default function FeaturedEvents() {
       </div>
 
       <motion.div
-        className="featured-events-header text-center mb-16 z-20"
+        className="featured-events-header text-center mb-12 mt-8 z-20"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -151,7 +151,7 @@ export default function FeaturedEvents() {
       </motion.div>
 
       <div 
-        className="featured-events-container relative w-full h-[520px] flex items-center justify-center"
+        className="featured-events-container relative w-full h-[480px] flex items-center justify-center"
         onMouseEnter={() => setIsAutoPlaying(false)}
         onMouseLeave={() => setIsAutoPlaying(true)}
       >
@@ -182,7 +182,7 @@ export default function FeaturedEvents() {
                 data-hover
               >
                 <div 
-                  className="featured-events-card relative w-[340px] h-[460px] rounded-2xl overflow-hidden group"
+                  className="featured-events-card relative w-[300px] h-[420px] rounded-2xl overflow-hidden group"
                   style={{
                     boxShadow: index === activeIndex 
                       ? '0 25px 50px -12px rgba(139, 92, 246, 0.4), 0 0 80px rgba(139, 92, 246, 0.2)'
@@ -294,7 +294,7 @@ export default function FeaturedEvents() {
       <AnimatePresence mode="wait">
         <motion.div
           key={activeIndex}
-          className="featured-events-description absolute bottom-20 left-0 right-0 text-center px-4 z-10"
+          className="featured-events-description mt-6 text-center px-4 z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
