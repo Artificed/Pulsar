@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { useMotionValue } from "framer-motion";
 import Navbar from "@/components/navbar";
 import { eventService } from "@/features/event/api/event-service";
@@ -15,9 +15,13 @@ import {
 } from "@/components/events";
 import { CustomCursor, CursorTrail } from "@/components/home";
 
-export default function EventsPage() {
-  const [events, setEvents] = useState<Event[]>(mockEvents);
-  const [isLoading, setIsLoading] = useState(true);
+const MemoizedNavbar = memo(Navbar);
+const MemoizedCosmicBackground = memo(CosmicBackground);
+const MemoizedEventsHeader = memo(EventsHeader);
+const MemoizedFeaturedEventCard = memo(FeaturedEventCard);
+const MemoizedEventsGrid = memo(EventsGrid);
+
+function CursorWrapper() {
   const [cursorTrail, setCursorTrail] = useState<CursorTrail[]>([]);
   const [isClicking, setIsClicking] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -59,6 +63,21 @@ export default function EventsPage() {
     };
   }, [cursorX, cursorY]);
 
+  return (
+    <CustomCursor
+      cursorX={cursorX}
+      cursorY={cursorY}
+      cursorTrail={cursorTrail}
+      isClicking={isClicking}
+      isHovering={isHovering}
+    />
+  );
+}
+
+export default function EventsPage() {
+  const [events, setEvents] = useState<Event[]>(mockEvents);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -84,29 +103,23 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-black text-white cursor-none [&_a]:cursor-none [&_button]:cursor-none [&_[role='button']]:cursor-none">
-      <CustomCursor
-        cursorX={cursorX}
-        cursorY={cursorY}
-        cursorTrail={cursorTrail}
-        isClicking={isClicking}
-        isHovering={isHovering}
-      />
-      <Navbar />
-      <CosmicBackground />
+      <CursorWrapper />
+      <MemoizedNavbar />
+      <MemoizedCosmicBackground />
 
       <div className="relative z-10">
         <div className="pt-32 md:pt-36 pb-12 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-              <EventsHeader />
+              <MemoizedEventsHeader />
               <div className="flex-1 w-full">
-                <FeaturedEventCard event={featuredEvent} />
+                <MemoizedFeaturedEventCard event={featuredEvent} />
               </div>
             </div>
           </div>
         </div>
 
-        <EventsGrid events={otherEvents} />
+        <MemoizedEventsGrid events={otherEvents} />
 
         <div className="h-16" />
       </div>
