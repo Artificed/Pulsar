@@ -2,26 +2,6 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useMemo } from "react";
-
-
-const particleSeeds = [
-  { x: 5, size: 2, duration: 10, delay: 1 },
-  { x: 12, size: 3, duration: 8, delay: 3 },
-  { x: 18, size: 1.5, duration: 12, delay: 0 },
-  { x: 25, size: 2.5, duration: 9, delay: 5 },
-  { x: 32, size: 1, duration: 11, delay: 2 },
-  { x: 38, size: 3.5, duration: 7, delay: 4 },
-  { x: 45, size: 2, duration: 10, delay: 6 },
-  { x: 52, size: 1.5, duration: 13, delay: 1 },
-  { x: 58, size: 2.5, duration: 8, delay: 7 },
-  { x: 65, size: 3, duration: 9, delay: 3 },
-  { x: 72, size: 1, duration: 11, delay: 0 },
-  { x: 78, size: 2, duration: 10, delay: 5 },
-  { x: 85, size: 3.5, duration: 7, delay: 2 },
-  { x: 92, size: 1.5, duration: 12, delay: 4 },
-  { x: 98, size: 2.5, duration: 8, delay: 6 },
-];
 
 export default function JoinSection() {
   return (
@@ -108,79 +88,57 @@ export default function JoinSection() {
           />
         </svg>
 
-        {particleSeeds.map((particle, i) => (
+        <div className="absolute top-[12%] left-[10%]">
           <motion.div
-            key={i}
             className="absolute rounded-full"
             style={{
-              left: `${particle.x}%`,
-              bottom: '45%',
-              width: particle.size,
-              height: particle.size,
-              background: 'rgba(253, 224, 71, 0.8)',
-              boxShadow: '0 0 6px 2px rgba(253, 224, 71, 0.5)',
+              width: '180px',
+              height: '180px',
+              top: '-50px',
+              left: '-60px',
+              background: 'radial-gradient(circle at 35% 50%, rgba(226, 232, 240, 0.25) 0%, rgba(148, 163, 184, 0.12) 50%, transparent 70%)',
+              filter: 'blur(25px)',
             }}
             animate={{
-              y: [0, -300, -500],
-              opacity: [0, 1, 0],
-              scale: [0.5, 1, 0.3],
+              scale: [1, 1.15, 1],
+              opacity: [0.7, 1, 0.7],
             }}
-            transition={{
-              duration: particle.duration,
-              repeat: Infinity,
-              ease: "easeOut",
-              delay: particle.delay,
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.svg
+            width="80"
+            height="80"
+            viewBox="0 0 100 100"
+            className="relative"
+            animate={{
+              filter: [
+                'drop-shadow(0 0 12px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 30px rgba(203, 213, 225, 0.5)) drop-shadow(0 0 50px rgba(148, 163, 184, 0.3))',
+                'drop-shadow(0 0 18px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 45px rgba(203, 213, 225, 0.6)) drop-shadow(0 0 70px rgba(148, 163, 184, 0.4))',
+                'drop-shadow(0 0 12px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 30px rgba(203, 213, 225, 0.5)) drop-shadow(0 0 50px rgba(148, 163, 184, 0.3))',
+              ],
             }}
-          />
-        ))}
-
-        <motion.div
-          className="absolute top-[10%] left-[20%] w-2 h-2 rounded-full bg-white"
-          style={{ boxShadow: '0 0 10px 3px rgba(255, 255, 255, 0.6)' }}
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute top-[15%] left-[25%] w-1.5 h-1.5 rounded-full bg-white"
-          style={{ boxShadow: '0 0 8px 2px rgba(255, 255, 255, 0.5)' }}
-          animate={{ opacity: [0.3, 0.9, 0.3] }}
-          transition={{ duration: 2.5, repeat: Infinity, delay: 0.3 }}
-        />
-        <motion.div
-          className="absolute top-[8%] left-[30%] w-1 h-1 rounded-full bg-white"
-          style={{ boxShadow: '0 0 6px 2px rgba(255, 255, 255, 0.4)' }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity, delay: 0.6 }}
-        />
-        <motion.div
-          className="absolute top-[12%] right-[22%] w-2 h-2 rounded-full bg-white"
-          style={{ boxShadow: '0 0 10px 3px rgba(255, 255, 255, 0.6)' }}
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2.2, repeat: Infinity, delay: 0.4 }}
-        />
-        <motion.div
-          className="absolute top-[18%] right-[28%] w-1 h-1 rounded-full bg-white"
-          style={{ boxShadow: '0 0 6px 2px rgba(255, 255, 255, 0.4)' }}
-          animate={{ opacity: [0.3, 0.8, 0.3] }}
-          transition={{ duration: 2.8, repeat: Infinity, delay: 0.7 }}
-        />
-        
-        <svg className="absolute top-0 left-0 w-full h-[25%] opacity-30">
-          <motion.line
-            x1="20%" y1="40%" x2="25%" y2="60%"
-            stroke="rgba(255,255,255,0.3)"
-            strokeWidth="1"
-            animate={{ opacity: [0.2, 0.5, 0.2] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          />
-          <motion.line
-            x1="25%" y1="60%" x2="30%" y2="32%"
-            stroke="rgba(255,255,255,0.3)"
-            strokeWidth="1"
-            animate={{ opacity: [0.2, 0.5, 0.2] }}
-            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-          />
-        </svg>
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <defs>
+              <mask id="crescentMask">
+                <circle cx="50" cy="50" r="45" fill="white" />
+                <circle cx="70" cy="45" r="38" fill="black" />
+              </mask>
+              <linearGradient id="moonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f8fafc" />
+                <stop offset="40%" stopColor="#e2e8f0" />
+                <stop offset="100%" stopColor="#cbd5e1" />
+              </linearGradient>
+            </defs>
+            <circle 
+              cx="50" 
+              cy="50" 
+              r="45" 
+              fill="url(#moonGradient)"
+              mask="url(#crescentMask)"
+            />
+          </motion.svg>
+        </div>
       </div>
 
       <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">
