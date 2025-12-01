@@ -95,8 +95,8 @@ export default function JoinSection() {
               width: '180px',
               height: '180px',
               top: '-50px',
-              left: '-60px',
-              background: 'radial-gradient(circle at 35% 50%, rgba(226, 232, 240, 0.25) 0%, rgba(148, 163, 184, 0.12) 50%, transparent 70%)',
+              left: '-55px',
+              background: 'radial-gradient(circle at 45% 50%, rgba(226, 232, 240, 0.25) 0%, rgba(148, 163, 184, 0.12) 50%, transparent 70%)',
               filter: 'blur(25px)',
             }}
             animate={{
