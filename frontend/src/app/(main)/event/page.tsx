@@ -544,20 +544,10 @@ const EventCard = ({ event, index, featured = false }: { event: Event; index: nu
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
             
-            <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/10">
+            <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/10 text-center">
               <div className="text-2xl font-bold leading-none">{formattedDate.date}</div>
               <div className="text-xs uppercase text-purple-400 font-medium">{formattedDate.month}</div>
             </div>
-
-            {isLowSeats && (
-              <motion.div 
-                className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-red-500/90 text-white text-xs font-semibold shadow-lg"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                🔥 {event.seatsAvailable} left
-              </motion.div>
-            )}
 
             <div className="absolute bottom-0 left-0 right-0 p-5">
               <div className="flex items-center gap-2 text-purple-300 text-xs mb-2">
@@ -607,16 +597,10 @@ const EventCard = ({ event, index, featured = false }: { event: Event; index: nu
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
           
-          <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-sm rounded-lg px-2.5 py-1.5 border border-white/10">
+          <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-sm rounded-lg px-2.5 py-1.5 border border-white/10 text-center">
             <div className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-bold leading-none`}>{formattedDate.date}</div>
             <div className="text-[10px] uppercase text-purple-400">{formattedDate.month}</div>
           </div>
-
-          {isLowSeats && (
-            <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-red-500/80 text-white text-[10px] font-medium">
-              {event.seatsAvailable} left
-            </div>
-          )}
 
           <div className="absolute inset-0 bg-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
