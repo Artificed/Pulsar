@@ -78,6 +78,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: test123
     volumes:
       - mongodb_data:/data/db
+      - ./scripts/mongo-init:/docker-entrypoint-initdb.d:ro
 
   otel-lgtm:
     image: grafana/otel-lgtm
