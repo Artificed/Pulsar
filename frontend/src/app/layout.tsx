@@ -1,5 +1,6 @@
 import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { ChatProvider } from "@/components/providers/chat-provider";
 import "./globals.css";
 
 export default function RootLayout({
@@ -12,7 +13,9 @@ export default function RootLayout({
       <body>
         <QueryProvider>
           <AuthProvider>
-            {children}
+            <ChatProvider>
+              {children}
+            </ChatProvider>
           </AuthProvider>
         </QueryProvider>
       </body>

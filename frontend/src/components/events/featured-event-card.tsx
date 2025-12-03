@@ -117,7 +117,7 @@ export default function FeaturedEventCard({ event }: FeaturedEventCardProps) {
 
           <div className="absolute top-6 md:top-8 right-6 md:right-8">
             <motion.div
-              className="bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-xl"
+              className="bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-xl text-center"
               whileHover={{ scale: 1.05 }}
             >
               <div className="text-4xl font-bold text-white leading-none">{formattedDate.date}</div>
