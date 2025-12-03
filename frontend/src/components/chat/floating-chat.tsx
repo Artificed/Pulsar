@@ -77,28 +77,49 @@ export default function FloatingChat() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const messageText = inputValue.trim();
     setInputValue('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const responses = [
-        "That's a great question! Let me help you find the perfect event.",
-        "I can help you with event recommendations, booking information, and more!",
-        "Looking for something specific? I can search through our upcoming events for you.",
-        "Feel free to ask me about event details, venues, or ticket availability!",
-        "I'm here to make your event experience seamless. What would you like to know?",
-      ];
-      
+    try {
+      const history = messages.slice(1).map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: messageText,
+          history,
+        }),
+      });
+
+      const data = await response.json();
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: data.message || data.error || 'Sorry, I encountered an error. Please try again.',
         timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'Sorry, I\'m having trouble connecting right now. Please try again later.',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
