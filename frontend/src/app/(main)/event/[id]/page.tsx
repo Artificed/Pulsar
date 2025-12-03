@@ -8,6 +8,7 @@ import { eventService } from "@/features/event/api/event-service";
 import { Event } from "@/features/event/types/event";
 import { mockEvents, formatDate } from "@/components/events/constants";
 import { CustomCursor, CursorTrail } from "@/components/home";
+import { FloatingChat } from "@/components/chat";
 
 const MemoizedNavbar = memo(Navbar);
 
@@ -236,6 +237,8 @@ export default function EventDetail() {
           </div>
         </div>
       </div>
+
+      <FloatingChat />
     </div>
   );
 }

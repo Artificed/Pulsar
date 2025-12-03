@@ -14,6 +14,7 @@ import {
   mockEvents,
 } from "@/components/events";
 import { CustomCursor, CursorTrail } from "@/components/home";
+import { FloatingChat } from "@/components/chat";
 
 const MemoizedNavbar = memo(Navbar);
 const MemoizedCosmicBackground = memo(CosmicBackground);
@@ -123,6 +124,8 @@ export default function EventsPage() {
 
         <div className="h-16" />
       </div>
+
+      <FloatingChat />
     </div>
   );
 }
