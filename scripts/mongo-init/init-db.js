@@ -1,3 +1,192 @@
+db = db.getSiblingDB('pulsar_user_db');
+
+db.users.insertMany([
+    {
+        _id: ObjectId("507f1f77bcf86cd799439001"),
+        username: "Aldric Tan",
+        email: "aldric@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439002"),
+        username: "Helena Aurelia Sanjaya",
+        email: "helena@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439003"),
+        username: "Brenda Calista Haryanto",
+        email: "brenda@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439004"),
+        username: "Bertrand Geraldo Tjahyadi",
+        email: "bertrand@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439005"),
+        username: "Celine Tan",
+        email: "celine@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439006"),
+        username: "Fortino",
+        email: "fortino@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439007"),
+        username: "Reinhart Gian",
+        email: "reinhart@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439008"),
+        username: "Ni Komang Gayatri Kusuma Wardhani",
+        email: "ni.komang@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439009"),
+        username: "Steven Hardyanto",
+        email: "steven@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd79943900a"),
+        username: "Kevin Nathanael Hendarto",
+        email: "kevin@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd79943900b"),
+        username: "Tommy Awada",
+        email: "tommy@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd79943900c"),
+        username: "Marco Linardi",
+        email: "marco@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd79943900d"),
+        username: "Marvel Collin",
+        email: "marvel@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd79943900e"),
+        username: "Agnes Faustine Illona Soejanto",
+        email: "agnes@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd79943900f"),
+        username: "Octavius Sandriago",
+        email: "octavius@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439011"),
+        username: "Paul Tsai Adinata",
+        email: "paul@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439012"),
+        username: "Ryuu Stanley Tistogondo",
+        email: "ryuu@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439013"),
+        username: "Steven Taniardi",
+        email: "steven@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439014"),
+        username: "Vincentius Devin Agung Oktara",
+        email: "vincentius@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439015"),
+        username: "Veron Fujimori",
+        email: "veron@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439016"),
+        username: "William Sebastian Liman",
+        email: "william@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439017"),
+        username: "Willsen Wiratan",
+        email: "willsen@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+        _id: ObjectId("507f1f77bcf86cd799439018"),
+        username: "Yudhistira",
+        email: "yudhistira@gmail.com",
+        password: "$2a$10$fINUv0EIxYIeHPKrjLjxhOwJpllR2GzHVd9tDNC6KimNcOUcQpx4K",
+        createdAt: new Date(),
+        updatedAt: new Date()
+    }
+]);
+
 db = db.getSiblingDB('pulsar_event_db');
 
 db.events.insertMany([
