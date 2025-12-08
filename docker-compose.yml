@@ -10,6 +10,8 @@ services:
         NEXT_PUBLIC_AUTH_SERVICE_URL: http://localhost:8081
         NEXT_PUBLIC_EVENT_SERVICE_URL: http://localhost:8082
         NEXT_PUBLIC_BOOKING_SERVICE_URL: http://localhost:8083
+        NEXT_PUBLIC_EVENT_MCP_SERVER_URL: http://event-service:8080/mcp
+        NEXT_PUBLIC_BOOKING_MCP_SERVER_URL: http://booking-service:8080/mcp
         NEXT_PUBLIC_GEMINI_API_KEY: ${NEXT_PUBLIC_GEMINI_API_KEY}
     depends_on:
       - user-service

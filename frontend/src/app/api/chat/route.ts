@@ -4,7 +4,11 @@ import { Client } from '@modelcontextprotocol/sdk/client';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || '');
-const MCP_SERVER_URL = process.env.MCP_SERVER_URL || 'http://localhost:8082/mcp';
+
+const MCP_SERVER_URLS = [
+  process.env.NEXT_PUBLIC_EVENT_MCP_SERVER_URL || 'http://localhost:8082/mcp',
+  process.env.NEXT_PUBLIC_BOOKING_MCP_SERVER_URL || 'http://localhost:8083/mcp'
+].filter(Boolean);
 
 const SYSTEM_PROMPT = `You are Pulsar AI, a friendly and helpful event assistant for the Pulsar planetarium and cosmic event platform. 
 
@@ -56,20 +60,28 @@ function convertSchema(schema: any): any {
   return result;
 }
 
-async function getMcpClient() {
-  const client = new Client({
-    name: 'pulsar-chat-client',
-    version: '1.0.0',
-  });
-
-  const transport = new StreamableHTTPClientTransport(new URL(MCP_SERVER_URL));
-  await client.connect(transport);
-  
-  return client;
+async function getMcpClients() {
+  const clients = await Promise.all(
+    MCP_SERVER_URLS.map(async (url, index) => {
+      try {
+        const client = new Client({
+          name: `pulsar-chat-client-${index}`,
+          version: '1.0.0',
+        });
+        const transport = new StreamableHTTPClientTransport(new URL(url));
+        await client.connect(transport);
+        return { client, url };
+      } catch (error) {
+        console.warn(`Failed to connect to MCP server at ${url}:`, error);
+        return null;
+      }
+    })
+  );
+  return clients.filter((c): c is { client: Client; url: string } => c !== null);
 }
 
 export async function POST(request: NextRequest) {
-  let mcpClient: Client | null = null;
+  let mcpClients: { client: Client; url: string }[] = [];
   
   try {
     const { message, history } = await request.json();
@@ -81,17 +93,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let tools: { name: string; description: string; parameters: any }[] = [];
+    let tools: { name: string; description: string; parameters: any; serverUrl: string }[] = [];
     try {
-      mcpClient = await getMcpClient();
-      const toolsResponse = await mcpClient.listTools();
-      
-      tools = toolsResponse.tools.map((tool) => ({
+      mcpClients = await getMcpClients();
+      const allTools = await Promise.all(
+        mcpClients.map(async ({ client, url }) => {
+          try {
+            const toolsResponse = await client.listTools();
+            return toolsResponse.tools.map(tool => ({
+              ...tool,
+              serverUrl: url, 
+            }));
+          } catch (error) {
+            console.warn(`Failed to list tools from ${url}:`, error);
+            return [];
+          }
+        })
+      );
+
+      tools = allTools.flat().map((tool) => ({
         name: tool.name,
         description: tool.description || '',
         parameters: convertSchema(tool.inputSchema),
+        serverUrl: tool.serverUrl,
       }));
-      
+        
       console.log('MCP Tools available:', tools.map(t => t.name));
     } catch (mcpError) {
       console.warn('MCP connection failed, continuing without tools:', mcpError);
@@ -144,8 +170,11 @@ export async function POST(request: NextRequest) {
         console.log(`Calling MCP tool: ${name}`, args);
         
         try {
-          if (mcpClient) {
-            const toolResult = await mcpClient.callTool({ name, arguments: args });
+          const toolInfo = tools.find(t => t.name === name);
+          const clientInfo = mcpClients.find(c => c.url === toolInfo?.serverUrl);
+          
+          if (clientInfo) {
+            const toolResult = await clientInfo.client.callTool({ name, arguments: args });
             console.log(`Tool ${name} result:`, toolResult);
             
             toolResults.push({
@@ -179,11 +208,10 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   } finally {
-    if (mcpClient) {
-      try {
-        await mcpClient.close();
-      } catch {
-      }
-    }
+    await Promise.all(
+      mcpClients.map(({ client }) => 
+        client.close().catch(() => {})
+      )
+    );
   }
 }
