@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface BookingQueryRepositoryPort {
     List<BookingReadModel> findAll();
     Optional<BookingReadModel> findById(String id);
+    List<BookingReadModel> findByUserId(String userId);
 }

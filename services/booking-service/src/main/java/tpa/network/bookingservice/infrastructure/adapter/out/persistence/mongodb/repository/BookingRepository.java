@@ -5,8 +5,12 @@ import org.springframework.stereotype.Repository;
 import tpa.network.bookingservice.domain.exception.BookingNotFoundException;
 import tpa.network.bookingservice.infrastructure.adapter.out.persistence.mongodb.document.BookingDocument;
 
+import java.util.List;
+
 @Repository
 public interface BookingRepository extends MongoRepository<BookingDocument, String> {
+
+    List<BookingDocument> findByUserId(String userId);
 
     default BookingDocument updateBooking(BookingDocument booking) {
         assert booking.getId() != null;

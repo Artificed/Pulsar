@@ -40,4 +40,14 @@ public class BookingQueryRepositoryAdapter implements BookingQueryRepositoryPort
         }
         return booking;
     }
+
+    @Override
+    public List<BookingReadModel> findByUserId(String userId) {
+        log.debug("Querying bookings by userId: {} from database", userId);
+        var bookings = repository.findByUserId(userId).stream()
+                .map(mapper::toReadModel)
+                .toList();
+        log.debug("Found {} bookings for userId: {}", bookings.size(), userId);
+        return bookings;
+    }
 }
