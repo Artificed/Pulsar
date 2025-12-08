@@ -10,7 +10,7 @@ const MCP_SERVER_URLS = [
   process.env.NEXT_PUBLIC_BOOKING_MCP_SERVER_URL || 'http://localhost:8083/mcp'
 ].filter(Boolean);
 
-const SYSTEM_PROMPT = `You are Pulsar AI, a friendly and helpful event assistant for the Pulsar planetarium and cosmic event platform. 
+const SYSTEM_PROMPT = `You are Pulsar AI, a friendly and helpful event assistant for the Pulsar planetarium and cosmic event platform.
 
 Your role is to help users with:
 - Finding and recommending events (planetarium shows, space exhibitions, stargazing nights, etc.)
@@ -19,9 +19,28 @@ Your role is to help users with:
 - Providing information about astronomy and space-related topics
 - General customer support for the platform
 
-You have access to tools that can help you look up real event data, bookings, and user information. Use these tools when users ask about specific events, their bookings, or need real data.
+IMPORTANT: You have access to real-time tools that fetch actual data from our system. You MUST use these tools when users ask about:
+- Events (use getAllEvents to list all events, or getEventById for specific events)
+- Bookings (use the appropriate booking tools)
+- Any other real data from our database
 
-Keep your responses concise, friendly, and helpful. Use a warm, enthusiastic tone that matches the cosmic theme of the platform.`;
+NEVER make up or fabricate event, booking, or user data. ALWAYS call the appropriate tool first to get real information.
+
+If a user asks:
+- "list all events" → ALWAYS call getAllEvents
+- "details for event X" → call getEventById
+- "my bookings" → call the booking tools
+
+IMPORTANT RULE ABOUT MISSING DATA:
+If a tool returns no data, missing data, an error, or an empty result (e.g., event not found, booking not found), you MUST NOT guess or invent information. 
+Instead, respond in a friendly cosmic-themed way indicating uncertainty, such as:
+- "Hmm, I'm not seeing that in our star map."
+- "I couldn't find any event matching that."
+- "I'm not sure about that one — it might not exist in our system."
+
+Final responsibility:
+After receiving real tool data, always format the information clearly and present it in a warm, enthusiastic, cosmic-themed tone.
+Keep responses concise, helpful, and friendly.`;
 
 function convertToGeminiType(jsonType: string): SchemaType {
   const typeMap: Record<string, SchemaType> = {
@@ -100,6 +119,7 @@ export async function POST(request: NextRequest) {
         mcpClients.map(async ({ client, url }) => {
           try {
             const toolsResponse = await client.listTools();
+            console.log(`Tools from ${url}:`, toolsResponse.tools.map(t => t.name));
             return toolsResponse.tools.map(tool => ({
               ...tool,
               serverUrl: url, 
@@ -173,23 +193,38 @@ export async function POST(request: NextRequest) {
           const toolInfo = tools.find(t => t.name === name);
           const clientInfo = mcpClients.find(c => c.url === toolInfo?.serverUrl);
           
-          if (clientInfo) {
-            const toolResult = await clientInfo.client.callTool({ name, arguments: args });
-            console.log(`Tool ${name} result:`, toolResult);
-            
+          if (!clientInfo) {
+            console.error(`No client found for tool ${name}`);
             toolResults.push({
               functionResponse: {
                 name,
-                response: { result: toolResult.content },
+                response: { error: 'MCP server not available for this tool' },
               },
             });
+            continue;
           }
+          
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Tool call timeout after 10 seconds')), 10000)
+          );
+          
+          const toolCallPromise = clientInfo.client.callTool({ name, arguments: args });
+          
+          const toolResult = await Promise.race([toolCallPromise, timeoutPromise]) as any;
+          console.log(`Tool ${name} result:`, JSON.stringify(toolResult, null, 2));
+          
+          toolResults.push({
+            functionResponse: {
+              name,
+              response: { result: toolResult.content },
+            },
+          });
         } catch (toolError) {
           console.error(`Tool ${name} error:`, toolError);
           toolResults.push({
             functionResponse: {
               name,
-              response: { error: `Tool execution failed: ${toolError}` },
+              response: { error: `Tool execution failed: ${toolError instanceof Error ? toolError.message : String(toolError)}` },
             },
           });
         }

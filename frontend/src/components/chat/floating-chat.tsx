@@ -186,16 +186,16 @@ export default function FloatingChat() {
                     }`}
                   >
                     {message.role === 'assistant' ? (
-                      <div className="text-sm prose prose-invert prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5">
+                      <div className="text-sm prose prose-invert prose-sm max-w-none">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           components={{
-                            p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                            p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
                             strong: ({ children }) => <strong className="font-bold text-purple-300">{children}</strong>,
                             em: ({ children }) => <em className="italic text-gray-300">{children}</em>,
-                            ul: ({ children }) => <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>,
-                            ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 my-2">{children}</ol>,
-                            li: ({ children }) => <li className="text-gray-200">{children}</li>,
+                            ul: ({ children }) => <ul className="list-disc ml-4 space-y-0.5 my-2">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal ml-4 space-y-0.5 my-2">{children}</ol>,
+                            li: ({ children }) => <li className="text-gray-200 leading-relaxed pl-1">{children}</li>,
                             code: ({ inline, children }: any) =>
                               inline ? (
                                 <code className="bg-gray-900 text-purple-300 px-1.5 py-0.5 rounded text-xs font-mono">
@@ -207,9 +207,9 @@ export default function FloatingChat() {
                                 </code>
                               ),
                             pre: ({ children }) => <pre className="my-2">{children}</pre>,
-                            h1: ({ children }) => <h1 className="text-lg font-bold mb-2 text-purple-300">{children}</h1>,
-                            h2: ({ children }) => <h2 className="text-base font-bold mb-1.5 text-purple-300">{children}</h2>,
-                            h3: ({ children }) => <h3 className="text-sm font-bold mb-1 text-purple-300">{children}</h3>,
+                            h1: ({ children }) => <h1 className="text-lg font-bold mb-2 mt-3 text-purple-300">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-base font-bold mb-1.5 mt-2 text-purple-300">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-sm font-bold mb-1 mt-2 text-purple-300">{children}</h3>,
                             blockquote: ({ children }) => (
                               <blockquote className="border-l-4 border-purple-500 pl-3 italic text-gray-400 my-2">
                                 {children}
