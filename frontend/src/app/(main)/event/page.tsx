@@ -2,6 +2,7 @@
 
 import { useState, useEffect, memo } from "react";
 import { useMotionValue } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/navbar";
 import { eventService } from "@/features/event/api/event-service";
 import { Event } from "@/features/event/types/event";
@@ -11,7 +12,6 @@ import {
   EventsHeader,
   FeaturedEventCard,
   LoadingSpinner,
-  mockEvents,
 } from "@/components/events";
 import { CustomCursor, CursorTrail } from "@/components/home";
 import { FloatingChat } from "@/components/chat";
@@ -76,27 +76,40 @@ function CursorWrapper() {
 }
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<Event[]>(mockEvents);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await eventService.getAllEvents();
-        if (response.statusCode === 200 && response.payload?.events?.length > 0) {
-          setEvents(response.payload.events);
-        }
-      } catch (error) {
-        console.error("Failed to fetch events:", error);
-      } finally {
-        setIsLoading(false);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['events'],
+    queryFn: async () => {
+      const response = await eventService.getAllEvents();
+      if (response.statusCode === 200 && response.payload) {
+        return response.payload;
       }
-    };
-    fetchEvents();
-  }, []);
+      throw new Error('Failed to load events');
+    },
+  });
+
+  const events = data || [];
 
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (error || events.length === 0) {
+    return (
+      <div className="min-h-screen bg-black text-white cursor-none">
+        <CursorWrapper />
+        <MemoizedNavbar />
+        <MemoizedCosmicBackground />
+        <div className="relative z-10 flex items-center justify-center min-h-[80vh]">
+          <div className="text-center">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              {error ? (error instanceof Error ? error.message : String(error)) : "No events available at the moment"}
+            </h2>
+            <p className="text-gray-400">Please check back later for upcoming events.</p>
+          </div>
+        </div>
+        <FloatingChat />
+      </div>
+    );
   }
 
   const featuredEvent = events[0];

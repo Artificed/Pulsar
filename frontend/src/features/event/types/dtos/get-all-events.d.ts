@@ -1,5 +1,3 @@
 import { Event } from "../event";
 
-export interface GetAllEventsResponse {
-  events: Event[];
-}
+export type GetAllEventsResponse = Event[];

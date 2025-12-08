@@ -3,10 +3,11 @@
 import { useState, useEffect, memo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, useMotionValue } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/navbar";
 import { eventService } from "@/features/event/api/event-service";
 import { Event } from "@/features/event/types/event";
-import { mockEvents, formatDate } from "@/components/events/constants";
+import { formatDate } from "@/components/events/constants";
 import { CustomCursor, CursorTrail } from "@/components/home";
 import { FloatingChat } from "@/components/chat";
 
@@ -68,33 +69,23 @@ function CursorWrapper() {
 export default function EventDetail() {
   const params = useParams();
   const router = useRouter();
-  const [event, setEvent] = useState<Event | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedSeats, setSelectedSeats] = useState(1);
 
-  useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const response = await eventService.getEventById(params.id as string);
-        if (response.statusCode === 200 && response.payload?.event) {
-          setEvent(response.payload.event);
-        } else {
-          const mockEvent = mockEvents.find(e => e.id === params.id);
-          if (mockEvent) setEvent(mockEvent);
-        }
-      } catch (error) {
-        const mockEvent = mockEvents.find(e => e.id === params.id);
-        if (mockEvent) setEvent(mockEvent);
-      } finally {
-        setIsLoading(false);
+  const { data: event, isLoading, error } = useQuery({
+    queryKey: ['event', params.id],
+    queryFn: async () => {
+      const response = await eventService.getEventById(params.id as string);
+      if (response.statusCode === 200 && response.payload) {
+        return response.payload;
       }
-    };
-    fetchEvent();
-  }, [params.id]);
+      throw new Error('Event not found');
+    },
+  });
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center cursor-none">
+        <CursorWrapper />
         <motion.div
           className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full"
           animate={{ rotate: 360 }}
@@ -104,13 +95,15 @@ export default function EventDetail() {
     );
   }
 
-  if (!event) {
+  if (!event || error) {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Event not found</h1>
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4 cursor-none">
+        <CursorWrapper />
+        <MemoizedNavbar />
+        <h1 className="text-2xl font-bold">{error ? (error instanceof Error ? error.message : String(error)) : "Event not found"}</h1>
         <button
           onClick={() => router.push('/event')}
-          className="px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors"
+          className="px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors cursor-none"
         >
           Back to Events
         </button>
