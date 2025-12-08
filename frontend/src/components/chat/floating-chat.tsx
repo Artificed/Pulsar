@@ -3,6 +3,8 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat, Message } from '@/components/providers/chat-provider';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function FloatingChat() {
   const { messages, setMessages, isOpen, setIsOpen } = useChat();
@@ -183,7 +185,49 @@ export default function FloatingChat() {
                         : 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700'
                     }`}
                   >
-                    <p className="text-sm">{message.content}</p>
+                    {message.role === 'assistant' ? (
+                      <div className="text-sm prose prose-invert prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                            strong: ({ children }) => <strong className="font-bold text-purple-300">{children}</strong>,
+                            em: ({ children }) => <em className="italic text-gray-300">{children}</em>,
+                            ul: ({ children }) => <ul className="list-disc list-inside space-y-1 my-2">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 my-2">{children}</ol>,
+                            li: ({ children }) => <li className="text-gray-200">{children}</li>,
+                            code: ({ inline, children }: any) =>
+                              inline ? (
+                                <code className="bg-gray-900 text-purple-300 px-1.5 py-0.5 rounded text-xs font-mono">
+                                  {children}
+                                </code>
+                              ) : (
+                                <code className="block bg-gray-900 text-purple-300 p-2 rounded text-xs font-mono overflow-x-auto my-2">
+                                  {children}
+                                </code>
+                              ),
+                            pre: ({ children }) => <pre className="my-2">{children}</pre>,
+                            h1: ({ children }) => <h1 className="text-lg font-bold mb-2 text-purple-300">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-base font-bold mb-1.5 text-purple-300">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-sm font-bold mb-1 text-purple-300">{children}</h3>,
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-4 border-purple-500 pl-3 italic text-gray-400 my-2">
+                                {children}
+                              </blockquote>
+                            ),
+                            a: ({ href, children }) => (
+                              <a href={href} className="text-purple-400 hover:text-purple-300 underline" target="_blank" rel="noopener noreferrer">
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <p className="text-sm">{message.content}</p>
+                    )}
                     <p className={`text-xs mt-1 ${message.role === 'user' ? 'text-purple-200' : 'text-gray-500'}`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
