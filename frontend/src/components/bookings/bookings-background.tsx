@@ -1,74 +1,111 @@
 'use client';
 
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+const stars = [...Array(80)].map((_, i) => ({
+  id: i,
+  left: Math.random() * 100,
+  top: Math.random() * 100,
+  size: Math.random() * 2 + 1,
+  opacity: Math.random() * 0.7 + 0.3,
+  layer: Math.floor(Math.random() * 3),
+}));
+
+const nebulaClouds = [
+  { x: '-5%', y: '-5%', size: 500, color: 'rgba(139, 92, 246, 0.12)', blur: 100 },
+  { x: '85%', y: '60%', size: 450, color: 'rgba(168, 85, 247, 0.1)', blur: 90 },
+];
 
 export default function BookingsBackground() {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const layer0Stars = stars.filter(s => s.layer === 0);
+  const layer1Stars = stars.filter(s => s.layer === 1);
+  const layer2Stars = stars.filter(s => s.layer === 2);
+
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0d0815] to-[#0a0a12]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#0a0118] to-black" />
       
       <div 
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px),
-                           linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
-        }}
-      />
+        className="absolute inset-0"
+        style={{ transform: `translateY(${scrollY * 0.02}px)` }}
+      >
+        {nebulaClouds.map((cloud, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              left: cloud.x,
+              top: cloud.y,
+              width: cloud.size,
+              height: cloud.size,
+              background: `radial-gradient(circle, ${cloud.color} 0%, transparent 70%)`,
+              filter: `blur(${cloud.blur}px)`,
+            }}
+          />
+        ))}
+      </div>
 
-      <motion.div
-        className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%)',
-        }}
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.5, 0.7, 0.5],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
+      <div 
+        className="absolute inset-0"
+        style={{ transform: `translateY(${scrollY * 0.03}px)` }}
+      >
+        {layer0Stars.map((star) => (
+          <div
+            key={star.id}
+            className="absolute rounded-full bg-white/40"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              width: star.size * 0.8,
+              height: star.size * 0.8,
+            }}
+          />
+        ))}
+      </div>
 
-      <motion.div
-        className="absolute -bottom-60 -left-40 w-[500px] h-[500px] rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.06) 0%, transparent 70%)',
-        }}
-        animate={{
-          scale: [1, 1.15, 1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: 2,
-        }}
-      />
+      <div 
+        className="absolute inset-0"
+        style={{ transform: `translateY(${scrollY * 0.06}px)` }}
+      >
+        {layer1Stars.map((star) => (
+          <div
+            key={star.id}
+            className="absolute rounded-full bg-white/60"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              width: star.size,
+              height: star.size,
+            }}
+          />
+        ))}
+      </div>
 
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full bg-purple-400/30"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{
-            duration: 4 + Math.random() * 4,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: Math.random() * 4,
-          }}
-        />
-      ))}
+      <div 
+        className="absolute inset-0"
+        style={{ transform: `translateY(${scrollY * 0.1}px)` }}
+      >
+        {layer2Stars.map((star) => (
+          <div
+            key={star.id}
+            className="absolute rounded-full bg-white"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              width: star.size * 1.2,
+              height: star.size * 1.2,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
