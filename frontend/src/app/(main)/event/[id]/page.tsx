@@ -3,13 +3,14 @@
 import { useState, useEffect, memo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, useMotionValue } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Navbar from "@/components/navbar";
 import { eventService } from "@/features/event/api/event-service";
-import { Event } from "@/features/event/types/event";
+import { bookingService } from "@/features/booking/api/booking-service";
 import { formatDate } from "@/components/events/constants";
 import { CustomCursor, CursorTrail } from "@/components/home";
 import { FloatingChat } from "@/components/chat";
+import { useAuth } from "@/components/providers/auth-provider";
 
 const MemoizedNavbar = memo(Navbar);
 
@@ -70,6 +71,9 @@ export default function EventDetail() {
   const params = useParams();
   const router = useRouter();
   const [selectedSeats, setSelectedSeats] = useState(1);
+  const [bookingError, setBookingError] = useState<string | null>(null);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const { isAuthenticated, user } = useAuth();
 
   const { data: event, isLoading, error } = useQuery({
     queryKey: ['event', params.id],
@@ -81,6 +85,43 @@ export default function EventDetail() {
       throw new Error('Event not found');
     },
   });
+
+  const createBookingMutation = useMutation({
+    mutationFn: async ({ userId, eventId, quantity }: { userId: string; eventId: string; quantity: number }) => {
+      const response = await bookingService.createBooking({ userId, eventId, quantity });
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        return response.payload;
+      }
+      throw new Error(response.error || 'Failed to create booking');
+    },
+    onSuccess: () => {
+      setBookingSuccess(true);
+      setBookingError(null);
+      setTimeout(() => {
+        router.push('/booking');
+      }, 2000);
+    },
+    onError: (error: Error) => {
+      setBookingError(error.message);
+      setBookingSuccess(false);
+    },
+  });
+
+  const handleBookNow = () => {
+    if (!isAuthenticated || !user) {
+      router.push(`/login?redirect=/event/${params.id}`);
+      return;
+    }
+
+    if (!event) return;
+
+    setBookingError(null);
+    createBookingMutation.mutate({
+      userId: user.userId,
+      eventId: event.id,
+      quantity: selectedSeats,
+    });
+  };
 
   if (isLoading) {
     return (
@@ -213,13 +254,55 @@ export default function EventDetail() {
                   <span className="text-2xl font-bold">${totalPrice}</span>
                 </div>
 
+                {bookingError && (
+                  <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/30 text-red-400 text-sm">
+                    {bookingError}
+                  </div>
+                )}
+
+                {bookingSuccess && (
+                  <div className="mb-4 p-3 rounded-lg bg-green-500/20 border border-green-500/30 text-green-400 text-sm flex items-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Booking confirmed! Redirecting...
+                  </div>
+                )}
+
                 <motion.button
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold cursor-none"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => router.push(`/booking?eventId=${event.id}&seats=${selectedSeats}`)}
+                  className={`w-full py-4 rounded-xl font-semibold cursor-none flex items-center justify-center gap-2 ${
+                    bookingSuccess
+                      ? 'bg-green-600'
+                      : createBookingMutation.isPending
+                      ? 'bg-purple-600/50 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-purple-600 to-fuchsia-600'
+                  } text-white`}
+                  whileHover={!createBookingMutation.isPending && !bookingSuccess ? { scale: 1.02 } : {}}
+                  whileTap={!createBookingMutation.isPending && !bookingSuccess ? { scale: 0.98 } : {}}
+                  onClick={handleBookNow}
+                  disabled={createBookingMutation.isPending || bookingSuccess}
                 >
-                  Book Now
+                  {createBookingMutation.isPending ? (
+                    <>
+                      <motion.div
+                        className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      />
+                      Processing...
+                    </>
+                  ) : bookingSuccess ? (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Booked!
+                    </>
+                  ) : !isAuthenticated ? (
+                    'Sign In to Book'
+                  ) : (
+                    'Book Now'
+                  )}
                 </motion.button>
 
                 <div className="mt-4 text-center text-sm text-white/30">
