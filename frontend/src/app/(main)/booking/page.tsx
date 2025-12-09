@@ -73,52 +73,7 @@ function CursorWrapper() {
   );
 }
 
-function StatCard({ value, label, color = "purple" }: { value: number; label: string; color?: string }) {
-  const colorConfig = {
-    purple: {
-      gradient: "from-purple-500/10 via-purple-500/5 to-transparent",
-      border: "border-purple-500/20",
-      text: "text-purple-400",
-      glow: "shadow-purple-500/10",
-      icon: "bg-purple-500/20"
-    },
-    green: {
-      gradient: "from-green-500/10 via-green-500/5 to-transparent",
-      border: "border-green-500/20",
-      text: "text-green-400",
-      glow: "shadow-green-500/10",
-      icon: "bg-green-500/20"
-    },
-    amber: {
-      gradient: "from-amber-500/10 via-amber-500/5 to-transparent",
-      border: "border-amber-500/20",
-      text: "text-amber-400",
-      glow: "shadow-amber-500/10",
-      icon: "bg-amber-500/20"
-    },
-  };
 
-  const config = colorConfig[color as keyof typeof colorConfig];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.02, y: -2 }}
-      transition={{ duration: 0.3 }}
-      className={`relative bg-gradient-to-br ${config.gradient} backdrop-blur-sm rounded-2xl p-6 border ${config.border} ${config.glow} shadow-lg overflow-hidden group`}
-    >
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      
-      <div className="relative z-10">
-        <div className={`text-4xl md:text-5xl font-bold ${config.text} mb-2`}>{value}</div>
-        <div className="text-xs md:text-sm text-white/40 uppercase tracking-wider">{label}</div>
-      </div>
-
-      <div className={`absolute -right-4 -bottom-4 w-24 h-24 ${config.icon} rounded-full blur-2xl opacity-20`} />
-    </motion.div>
-  );
-}
 
 export default function BookingsPage() {
   const { isAuthenticated, isLoading: authLoading, user } = useAuth();
@@ -177,8 +132,6 @@ export default function BookingsPage() {
   const filteredBookings = filter === 'upcoming' ? upcomingBookings 
     : filter === 'past' ? pastBookings 
     : [...upcomingBookings, ...pastBookings];
-
-  const totalTickets = bookings.reduce((sum: number, b: BookingWithEvent) => sum + b.quantity, 0);
 
   if (authLoading || (isAuthenticated && isLoading)) {
     return <LoadingSpinner />;
@@ -273,57 +226,35 @@ export default function BookingsPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10"
+                className="flex gap-1 mb-6"
               >
-                <StatCard value={upcomingBookings.length} label="Upcoming Events" color="green" />
-                <StatCard value={pastBookings.length} label="Past Events" color="purple" />
-                <StatCard value={totalTickets} label="Total Tickets" color="amber" />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="flex flex-wrap gap-2 mb-8"
-              >
-                <div className="flex gap-1 p-1.5 bg-white/[0.03] backdrop-blur-sm rounded-xl border border-white/5">
-                  {[
-                    { key: 'all', label: 'All', count: bookings.length },
-                    { key: 'upcoming', label: 'Upcoming', count: upcomingBookings.length },
-                    { key: 'past', label: 'Past', count: pastBookings.length },
-                  ].map((tab) => (
-                    <motion.button
-                      key={tab.key}
-                      onClick={() => setFilter(tab.key as typeof filter)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`relative px-6 py-2.5 text-sm font-medium rounded-lg transition-all cursor-none ${
-                        filter === tab.key
-                          ? 'bg-gradient-to-r from-purple-500/30 to-fuchsia-500/30 text-white shadow-lg shadow-purple-500/20'
-                          : 'text-white/50 hover:text-white/80 hover:bg-white/[0.02]'
-                      }`}
-                    >
-                      <span className="relative z-10">{tab.label}</span>
-                      <span className={`ml-2 text-xs ${filter === tab.key ? 'text-white/70' : 'text-white/30'}`}>
-                        {tab.count}
-                      </span>
-                      {filter === tab.key && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-fuchsia-500/20 rounded-lg"
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                        />
-                      )}
-                    </motion.button>
-                  ))}
-                </div>
+                {[
+                  { key: 'all', label: 'All', count: bookings.length },
+                  { key: 'upcoming', label: 'Upcoming', count: upcomingBookings.length },
+                  { key: 'past', label: 'Past', count: pastBookings.length },
+                ].map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setFilter(tab.key as typeof filter)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all cursor-none ${
+                      filter === tab.key
+                        ? 'bg-purple-500/20 text-purple-300'
+                        : 'text-white/40 hover:text-white/60 hover:bg-white/[0.03]'
+                    }`}
+                  >
+                    {tab.label}
+                    <span className={`ml-1.5 ${filter === tab.key ? 'text-purple-400/70' : 'text-white/20'}`}>
+                      {tab.count}
+                    </span>
+                  </button>
+                ))}
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="space-y-4"
+                transition={{ delay: 0.15 }}
+                className="space-y-2"
               >
                 {filteredBookings.length === 0 ? (
                   <motion.div 

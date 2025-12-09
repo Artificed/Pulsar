@@ -52,8 +52,8 @@ export default function BookingCardCompact({ booking, index, onCancelBooking }: 
         <div className="absolute -right-20 -top-20 w-40 h-40 bg-purple-500/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
         {dateInfo && (
-          <div className="relative z-10 flex-shrink-0 w-20 text-center">
-            <div className="relative bg-gradient-to-br from-purple-500/20 via-purple-500/10 to-fuchsia-500/20 rounded-2xl p-3 border border-purple-500/20 shadow-lg shadow-purple-500/5 overflow-hidden">
+          <div className="relative z-10 flex-shrink-0 w-20 text-center h-24 md:h-28 flex items-center">
+            <div className="relative bg-gradient-to-br from-purple-500/20 via-purple-500/10 to-fuchsia-500/20 rounded-2xl p-3 border border-purple-500/20 shadow-lg shadow-purple-500/5 overflow-hidden w-full">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative">
                 <div className="text-xs text-purple-400/80 font-semibold tracking-wider">{dateInfo.month}</div>
@@ -84,8 +84,13 @@ export default function BookingCardCompact({ booking, index, onCancelBooking }: 
           <div>
             <div className="flex items-start justify-between gap-3 mb-2">
               <div className="min-w-0 flex-1">
-                <h3 className="font-bold text-lg text-white truncate group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-fuchsia-300 group-hover:bg-clip-text transition-all duration-300">
-                  {booking.eventTitle}
+                <h3 className="font-bold text-lg truncate transition-colors duration-300">
+                  <span className="bg-gradient-to-r from-purple-300 to-fuchsia-300 bg-clip-text text-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute">
+                    {booking.eventTitle}
+                  </span>
+                  <span className="text-white group-hover:opacity-0 transition-opacity duration-300">
+                    {booking.eventTitle}
+                  </span>
                 </h3>
                 <div className="flex items-center gap-2 text-sm text-white/50 mt-1.5">
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
