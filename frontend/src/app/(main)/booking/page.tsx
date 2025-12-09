@@ -171,10 +171,10 @@ export default function BookingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white cursor-none [&_a]:cursor-none [&_button]:cursor-none">
+    <div className="relative min-h-screen bg-[#0a0a0f] text-white cursor-none [&_a]:cursor-none [&_button]:cursor-none">
+      <BookingsBackground />
       <CursorWrapper />
       <MemoizedNavbar />
-      <BookingsBackground />
 
       <div className="relative z-10 pt-24 pb-16 px-4">
         <div className="max-w-7xl mx-auto">
