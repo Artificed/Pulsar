@@ -3,64 +3,17 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { eventService } from "@/features/event/api/event-service";
+import { Event } from "@/features/event/types/event";
 
-type FeaturedEvent = {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  datetime: string;
-  location: string;
-  price: number;
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
 };
-
-const mockEvents: FeaturedEvent[] = [
-  {
-    id: "1",
-    title: "Journey to the Edge of the Universe",
-    description: "Experience a breathtaking voyage through billions of light-years, witnessing the birth and death of stars.",
-    image_url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&q=80",
-    datetime: "2025-12-15T19:00:00",
-    location: "Main Dome",
-    price: 25,
-  },
-  {
-    id: "2",
-    title: "The Aurora Borealis Experience",
-    description: "Immerse yourself in the dancing lights of the polar skies in this stunning 360° projection show.",
-    image_url: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80",
-    datetime: "2025-12-18T20:30:00",
-    location: "Immersion Theater",
-    price: 30,
-  },
-  {
-    id: "3",
-    title: "Mars: The Next Frontier",
-    description: "Explore humanity's plans to colonize the Red Planet with cutting-edge visualization technology.",
-    image_url: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=800&q=80",
-    datetime: "2025-12-20T18:00:00",
-    location: "Discovery Hall",
-    price: 20,
-  },
-  {
-    id: "4",
-    title: "Black Holes: Monsters of the Cosmos",
-    description: "Dive into the most mysterious objects in the universe and witness the power of singularities.",
-    image_url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=800&q=80",
-    datetime: "2025-12-22T19:30:00",
-    location: "Main Dome",
-    price: 25,
-  },
-  {
-    id: "5",
-    title: "Stargazing Night: Winter Constellations",
-    description: "Join our astronomers for a live telescope viewing session of Orion, Taurus, and more.",
-    image_url: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&q=80",
-    datetime: "2025-12-25T21:00:00",
-    location: "Observatory Deck",
-    price: 15,
-  },
-];
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -75,18 +28,38 @@ const formatDate = (dateString: string) => {
 export default function FeaturedEvents() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [featuredEvents, setFeaturedEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    const fetchEvents = async () => {
+      try {
+        const response = await eventService.getAllEvents();
+        if (response.payload && response.statusCode === 200) {
+          const randomEvents = shuffleArray(response.payload).slice(0, 5);
+          setFeaturedEvents(randomEvents);
+        }
+      } catch (error) {
+        console.error("Failed to fetch events:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoPlaying || featuredEvents.length === 0) return;
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % mockEvents.length);
+      setActiveIndex((prev) => (prev + 1) % featuredEvents.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, featuredEvents.length]);
 
   const getCardStyle = (index: number) => {
     const diff = index - activeIndex;
-    const totalCards = mockEvents.length;
+    const totalCards = featuredEvents.length;
     
     let adjustedDiff = diff;
     if (diff > totalCards / 2) adjustedDiff = diff - totalCards;
@@ -112,7 +85,23 @@ export default function FeaturedEvents() {
     };
   };
 
-  const activeEvent = mockEvents[activeIndex];
+  if (isLoading) {
+    return (
+      <section className="relative z-10 h-screen w-full snap-start flex flex-col items-center justify-center overflow-hidden">
+        <div className="text-purple-400 text-lg">Loading featured events...</div>
+      </section>
+    );
+  }
+
+  if (featuredEvents.length === 0) {
+    return (
+      <section className="relative z-10 h-screen w-full snap-start flex flex-col items-center justify-center overflow-hidden">
+        <div className="text-slate-400 text-lg">No events available at the moment.</div>
+      </section>
+    );
+  }
+
+  const activeEvent = featuredEvents[activeIndex];
   const formattedDate = formatDate(activeEvent.datetime);
 
   return (
@@ -156,7 +145,7 @@ export default function FeaturedEvents() {
         onMouseLeave={() => setIsAutoPlaying(true)}
       >
         <AnimatePresence mode="popLayout">
-          {mockEvents.map((event, index) => {
+          {featuredEvents.map((event, index) => {
             const style = getCardStyle(index);
             const date = formatDate(event.datetime);
             
@@ -191,7 +180,7 @@ export default function FeaturedEvents() {
                 >
                   <div 
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${event.image_url})` }}
+                    style={{ backgroundImage: `url(${event.imageUrl})` }}
                   />
                   
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
@@ -242,7 +231,7 @@ export default function FeaturedEvents() {
       </div>
 
       <div className="featured-events-dots mt-8 flex items-center gap-3 z-20">
-        {mockEvents.map((_, index) => (
+        {featuredEvents.map((_, index) => (
           <button
             key={index}
             onClick={() => setActiveIndex(index)}
