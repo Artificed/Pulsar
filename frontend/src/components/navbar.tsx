@@ -46,14 +46,16 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
     >
       <div className="bg-transparent backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className={`flex items-center gap-2 group ${cursorClass}`}>
-              <span className="text-xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-                Pulsar
-              </span>
-            </Link>
+          <div className="grid grid-cols-3 items-center h-16">
+            <div className="flex justify-start">
+              <Link href="/" className={`flex items-center gap-2 group ${cursorClass}`}>
+                <span className="text-xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                  Pulsar
+                </span>
+              </Link>
+            </div>
 
-            <div className="hidden md:flex items-center gap-1">
+            <div className="hidden md:flex items-center justify-center gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -65,7 +67,7 @@ export default function Navbar({ variant = 'default' }: NavbarProps) {
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center justify-end gap-4">
               {isLoading ? (
                 <div className="px-4 py-2 text-sm text-slate-400">Loading...</div>
               ) : isAuthenticated ? (
