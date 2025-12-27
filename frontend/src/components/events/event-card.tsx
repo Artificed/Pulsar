@@ -38,10 +38,10 @@ export default function EventCard({ event, index }: EventCardProps) {
     return (
       <motion.div
         className="group cursor-none mb-5"
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6, delay: index * 0.08 }}
+        viewport={{ once: true, margin: "-200px", amount: 0 }}
+        transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.2) }}
         onClick={() => router.push(`/event/${event.id}`)}
       >
         <div className="relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10">
@@ -91,10 +91,10 @@ export default function EventCard({ event, index }: EventCardProps) {
   return (
     <motion.div
       className="group cursor-none mb-5"
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, delay: index * 0.08 }}
+      viewport={{ once: true, margin: "-200px", amount: 0 }}
+      transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.2) }}
       onClick={() => router.push(`/event/${event.id}`)}
     >
       <div className="relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10">
