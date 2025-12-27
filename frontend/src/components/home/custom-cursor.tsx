@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, MotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { memo } from "react";
 import { CursorTrail } from "./constants";
 
 interface CustomCursorProps {
@@ -11,7 +12,7 @@ interface CustomCursorProps {
   isHovering: boolean;
 }
 
-export default function CustomCursor({
+const CustomCursor = memo(function CustomCursor({
   cursorX,
   cursorY,
   cursorTrail,
@@ -28,7 +29,7 @@ export default function CustomCursor({
 
   return (
     <>
-      <AnimatePresence>
+      <AnimatePresence mode="popLayout">
         {cursorTrail.map((particle, index) => (
           <motion.div
             key={particle.id}
@@ -36,20 +37,20 @@ export default function CustomCursor({
             initial={{ 
               x: particle.x - 6, 
               y: particle.y - 6, 
-              scale: 1.2, 
-              opacity: 1 
+              scale: 1, 
+              opacity: 0.8 
             }}
             animate={{ 
               scale: 0,
               opacity: 0,
             }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             style={{
-              width: 12 - (index * 0.4),
-              height: 12 - (index * 0.4),
-              background: `radial-gradient(circle, rgba(255, 255, 255, ${0.9 - index * 0.04}) 0%, rgba(167, 139, 250, ${0.7 - index * 0.03}) 40%, rgba(139, 92, 246, ${0.5 - index * 0.02}) 70%, transparent 100%)`,
-              boxShadow: `0 0 ${16 - index}px rgba(167, 139, 250, 0.8), 0 0 ${24 - index}px rgba(139, 92, 246, 0.5), 0 0 ${32 - index}px rgba(168, 85, 247, 0.3)`,
+              width: 10,
+              height: 10,
+              background: `radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(167, 139, 250, 0.6) 40%, transparent 100%)`,
+              boxShadow: `0 0 12px rgba(167, 139, 250, 0.6)`,
             }}
           />
         ))}
@@ -119,4 +120,6 @@ export default function CustomCursor({
       />
     </>
   );
-}
+});
+
+export default CustomCursor;

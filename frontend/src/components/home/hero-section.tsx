@@ -52,7 +52,7 @@ export default function HeroSection() {
         >
           <Link href="/event">
             <motion.button
-              className="px-10 py-4 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full text-white font-semibold text-lg shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-shadow duration-300"
+              className="px-10 py-4 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full text-white font-semibold text-lg shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-shadow duration-300 cursor-none"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               data-hover
@@ -63,7 +63,7 @@ export default function HeroSection() {
 
           <Link href="/booking">
             <motion.button
-              className="px-10 py-4 border-2 border-purple-500/40 rounded-full text-purple-300 font-semibold text-lg hover:bg-purple-500/10 hover:border-purple-400/60 transition-all duration-300"
+              className="px-10 py-4 border-2 border-purple-500/40 rounded-full text-purple-300 font-semibold text-lg hover:bg-purple-500/10 hover:border-purple-400/60 transition-all duration-300 cursor-none"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               data-hover
