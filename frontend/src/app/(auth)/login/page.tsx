@@ -6,7 +6,7 @@ import { authService } from "@/features/auth/api/auth-service";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/shared/navbar";
 
 type Star = {
   x: number;

@@ -4,7 +4,7 @@ import { useState, useEffect, memo, useCallback } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/shared/navbar";
 import { bookingService } from "@/features/booking/api/booking-service";
 import { LoadingSpinner } from "@/components/events";
 import { CustomCursor, CursorTrail } from "@/components/home";

@@ -2,7 +2,7 @@
 
 import { useMotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/shared/navbar";
 import {
   CustomCursor,
   FeaturedEvents,

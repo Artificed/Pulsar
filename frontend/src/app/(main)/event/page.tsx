@@ -3,7 +3,7 @@
 import { useState, useEffect, memo } from "react";
 import { useMotionValue } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/shared/navbar";
 import { eventService } from "@/features/event/api/event-service";
 import { Event } from "@/features/event/types/event";
 import {

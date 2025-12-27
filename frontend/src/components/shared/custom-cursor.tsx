@@ -2,7 +2,7 @@
 
 import { motion, MotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { memo } from "react";
-import { CursorTrail } from "./constants";
+import { CursorTrail } from "../home/constants";
 
 interface CustomCursorProps {
   cursorX: MotionValue<number>;

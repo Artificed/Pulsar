@@ -4,7 +4,7 @@ import { useState, useEffect, memo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, useMotionValue } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/shared/navbar";
 import { eventService } from "@/features/event/api/event-service";
 import { bookingService } from "@/features/booking/api/booking-service";
 import { formatDate } from "@/components/events/constants";
