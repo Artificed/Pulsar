@@ -92,13 +92,31 @@ export function getLogger(name: string = 'frontend') {
   return provider.getLogger(name);
 }
 
+function formatMessage(message: string, attributes?: AnyValueMap): string {
+  if (!attributes) return message;
+  
+  let formattedMessage = message;
+  const values = Object.values(attributes);
+  let valueIndex = 0;
+  
+  formattedMessage = formattedMessage.replace(/\{\}/g, () => {
+    if (valueIndex < values.length) {
+      const value = values[valueIndex++];
+      return String(value);
+    }
+    return '{}';
+  });
+  
+  return formattedMessage;
+}
+
 export const otelLog = {
   debug: (message: string, attributes?: AnyValueMap) => {
     const logger = getLogger();
     logger.emit({
       severityNumber: SeverityNumber.DEBUG,
       severityText: 'DEBUG',
-      body: message,
+      body: formatMessage(message, attributes),
       attributes,
     });
   },
@@ -108,7 +126,7 @@ export const otelLog = {
     logger.emit({
       severityNumber: SeverityNumber.INFO,
       severityText: 'INFO',
-      body: message,
+      body: formatMessage(message, attributes),
       attributes,
     });
   },
@@ -118,7 +136,7 @@ export const otelLog = {
     logger.emit({
       severityNumber: SeverityNumber.WARN,
       severityText: 'WARN',
-      body: message,
+      body: formatMessage(message, attributes),
       attributes,
     });
   },
@@ -128,7 +146,7 @@ export const otelLog = {
     logger.emit({
       severityNumber: SeverityNumber.ERROR,
       severityText: 'ERROR',
-      body: message,
+      body: formatMessage(message, attributes),
       attributes,
     });
   },

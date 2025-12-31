@@ -1,10 +1,11 @@
 package tpa.network.bookingservice.infrastructure.adapter.in.rest.exception;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import lombok.extern.slf4j.Slf4j;
 import tpa.network.bookingservice.domain.exception.BookingNotFoundException;
 import tpa.network.bookingservice.domain.exception.EventAlreadyPassedException;
 import tpa.network.bookingservice.domain.exception.EventNotFoundException;
