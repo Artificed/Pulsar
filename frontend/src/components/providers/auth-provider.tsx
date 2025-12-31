@@ -50,13 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const decoded = jwtDecode<JwtPayload>(accessToken);
       
       if (decoded.exp * 1000 < Date.now()) {
-        otelLog.info("Token expired for userId: {}", { userId: decoded.sub });
+        otelLog.info("Access token expired", { userId: decoded.sub });
         clearTokens();
         setIsLoading(false);
         return;
       }
 
-      otelLog.info("User authenticated from stored token for userId: {}", { 
+      otelLog.info("User authenticated from stored token", { 
         userId: decoded.sub, 
         username: decoded.username 
       });
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: decoded.email,
       });
     } catch (error) {
-      otelLog.warn("Failed to decode access token: {}", { error: String(error) });
+      otelLog.warn("Failed to decode access token", { error: String(error) });
       clearTokens();
     } finally {
       setIsLoading(false);
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     try {
       const decoded = jwtDecode<JwtPayload>(accessToken);
-      otelLog.info("User logged in successfully for userId: {}", { 
+      otelLog.info("User logged in successfully", { 
         userId: decoded.sub, 
         username: decoded.username 
       });
@@ -99,13 +99,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: decoded.email,
       });
     } catch (error) {
-      otelLog.error("Failed to decode token during login: {}", { error: String(error) });
+      otelLog.error("Failed to decode token during login", { error: String(error) });
       clearTokens();
     }
   };
 
   const logout = () => {
-    otelLog.info("User logged out for userId: {}", { userId: user?.userId });
+    otelLog.info("User logged out", { userId: user?.userId });
     clearTokens();
   };
 

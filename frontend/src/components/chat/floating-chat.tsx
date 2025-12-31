@@ -3,11 +3,13 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat, Message } from '@/components/providers/chat-provider';
+import { useAuth } from '@/components/providers/auth-provider';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 export default function FloatingChat() {
   const { messages, setMessages, isOpen, setIsOpen } = useChat();
+  const { user, isAuthenticated } = useAuth();
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -83,6 +85,11 @@ export default function FloatingChat() {
         body: JSON.stringify({
           message: messageText,
           history,
+          user: isAuthenticated && user ? {
+            userId: user.userId,
+            username: user.username,
+            email: user.email,
+          } : null,
         }),
       });
 

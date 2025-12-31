@@ -10,7 +10,7 @@ const MCP_SERVER_URLS = [
   process.env.NEXT_PUBLIC_BOOKING_MCP_SERVER_URL || 'http://localhost:8083/mcp'
 ].filter(Boolean);
 
-const SYSTEM_PROMPT = `You are Pulsar AI, a friendly and helpful event assistant for the Pulsar planetarium and cosmic event platform.
+const SYSTEM_PROMPT_BASE = `You are Pulsar AI, a friendly and helpful event assistant for the Pulsar planetarium and cosmic event platform.
 
 Your role is to help users with:
 - Finding and recommending events (planetarium shows, space exhibitions, stargazing nights, etc.)
@@ -20,15 +20,26 @@ Your role is to help users with:
 - General customer support for the platform
 
 IMPORTANT: You have access to real-time tools that fetch actual data from our system. You MUST use these tools when users ask about:
-- Events (use getAllEvents to list all events, or getEventById for specific events)
+- Events (use getAllEvents to list all events, or getEventById for specific events by ID)
+- Searching for events by name (use searchEventByTitle - this handles typos and partial matches!)
 - Bookings (use the appropriate booking tools)
 - Any other real data from our database
+
+CRITICAL - SEARCHING FOR EVENTS BY NAME:
+When a user mentions an event by name (e.g., "book Mars: The Next Frontier" or "tell me about the aurora show"):
+1. ALWAYS use searchEventByTitle first to find the event
+2. The tool returns a bestMatch with a similarityScore (0-1):
+   - Score >= 0.7: High confidence match, proceed with the action
+   - Score 0.5-0.7: Likely match, but confirm with the user
+   - Score < 0.5: Low confidence, show alternatives and ask user to clarify
+3. Use the event ID from the bestMatch for booking or other operations
 
 NEVER make up or fabricate event, booking, or user data. ALWAYS call the appropriate tool first to get real information.
 
 If a user asks:
 - "list all events" → ALWAYS call getAllEvents
-- "details for event X" → call getEventById
+- "book [event name]" or "details about [event name]" → call searchEventByTitle first, then use the returned event ID
+- "details for event ID X" → call getEventById
 - "my bookings" → call the booking tools
 
 IMPORTANT RULE ABOUT MISSING DATA:
@@ -41,6 +52,27 @@ Instead, respond in a friendly cosmic-themed way indicating uncertainty, such as
 Final responsibility:
 After receiving real tool data, always format the information clearly and present it in a warm, enthusiastic, cosmic-themed tone.
 Keep responses concise, helpful, and friendly.`;
+
+function buildSystemPrompt(user: { userId: string; username: string; email: string } | null): string {
+  if (!user) {
+    return SYSTEM_PROMPT_BASE + `
+
+CURRENT USER STATUS: Not logged in.
+When the user tries to book an event or access their bookings, politely inform them they need to log in first.
+Do NOT attempt to call createBooking or access user-specific booking data.`;
+  }
+
+  return SYSTEM_PROMPT_BASE + `
+
+CURRENT USER CONTEXT:
+- User ID: ${user.userId}
+- Username: ${user.username}
+- Email: ${user.email}
+
+When creating bookings, use the User ID above (${user.userId}) as the userId parameter.
+When the user asks about "my bookings", you can fetch their bookings using their User ID.
+Address the user by their name (${user.username}) when appropriate to make the interaction more personal.`;
+}
 
 function convertToGeminiType(jsonType: string): SchemaType {
   const typeMap: Record<string, SchemaType> = {
@@ -103,8 +135,12 @@ export async function POST(request: NextRequest) {
   let mcpClients: { client: Client; url: string }[] = [];
   
   try {
-    const { message, history } = await request.json();
-    console.log('[Chat API] Received message:', { messageLength: message?.length, historyLength: history?.length });
+    const { message, history, user } = await request.json();
+    console.log('[Chat API] Received message:', { 
+      messageLength: message?.length, 
+      historyLength: history?.length,
+      userId: user?.userId || 'not logged in'
+    });
 
     if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
       console.error('[Chat API] Gemini API key not configured');
@@ -167,15 +203,20 @@ export async function POST(request: NextRequest) {
       parts: [{ text: msg.content }],
     })) || [];
 
+    const systemPrompt = buildSystemPrompt(user);
+
     const chat = model.startChat({
       history: [
         {
           role: 'user',
-          parts: [{ text: SYSTEM_PROMPT }],
+          parts: [{ text: systemPrompt }],
         },
         {
           role: 'model',
-          parts: [{ text: 'Understood! I am Pulsar AI, your cosmic event assistant. I\'m here to help you discover amazing planetarium shows, space exhibitions, and stargazing events. How can I assist you today?' }],
+          parts: [{ text: user 
+            ? `Understood! I am Pulsar AI, your cosmic event assistant. Welcome back, ${user.username}! I'm here to help you discover amazing planetarium shows, space exhibitions, and stargazing events. How can I assist you today?`
+            : 'Understood! I am Pulsar AI, your cosmic event assistant. I\'m here to help you discover amazing planetarium shows, space exhibitions, and stargazing events. How can I assist you today?' 
+          }],
         },
         ...chatHistory,
       ],
