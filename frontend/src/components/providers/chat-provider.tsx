@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from './auth-provider';
+import { otelLog } from '@/lib/otel/instrumentation';
 
 export interface Message {
   id: string;
@@ -33,10 +34,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
 
   const clearChat = () => {
+    otelLog.info("Clearing chat history for userId: {}", { userId: user?.userId });
     setMessages([createDefaultMessage()]);
   };
 
   useEffect(() => {
+    if (user?.userId) {
+      otelLog.info("User context changed, clearing chat for userId: {}", { userId: user.userId });
+    }
     clearChat();    
   }, [user?.userId]);
 

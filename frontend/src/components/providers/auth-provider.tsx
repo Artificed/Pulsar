@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { jwtDecode } from "jwt-decode";
+import { otelLog } from "@/lib/otel/instrumentation";
 
 interface JwtPayload {
   sub: string;
@@ -39,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const accessToken = localStorage.getItem("accessToken");
     
     if (!accessToken) {
+      otelLog.debug("No access token found in localStorage");
       setIsAuthenticated(false);
       setIsLoading(false);
       return;
@@ -48,18 +50,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const decoded = jwtDecode<JwtPayload>(accessToken);
       
       if (decoded.exp * 1000 < Date.now()) {
+        otelLog.info("Token expired for userId: {}", { userId: decoded.sub });
         clearTokens();
         setIsLoading(false);
         return;
       }
 
+      otelLog.info("User authenticated from stored token for userId: {}", { 
+        userId: decoded.sub, 
+        username: decoded.username 
+      });
       setIsAuthenticated(true);
       setUser({
         userId: decoded.sub,
         username: decoded.username,
         email: decoded.email,
       });
-    } catch {
+    } catch (error) {
+      otelLog.warn("Failed to decode access token: {}", { error: String(error) });
       clearTokens();
     } finally {
       setIsLoading(false);
@@ -67,6 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const clearTokens = () => {
+    otelLog.info("Clearing authentication tokens");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setIsAuthenticated(false);
@@ -79,18 +88,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     try {
       const decoded = jwtDecode<JwtPayload>(accessToken);
+      otelLog.info("User logged in successfully for userId: {}", { 
+        userId: decoded.sub, 
+        username: decoded.username 
+      });
       setIsAuthenticated(true);
       setUser({
         userId: decoded.sub,
         username: decoded.username,
         email: decoded.email,
       });
-    } catch {
+    } catch (error) {
+      otelLog.error("Failed to decode token during login: {}", { error: String(error) });
       clearTokens();
     }
   };
 
   const logout = () => {
+    otelLog.info("User logged out for userId: {}", { userId: user?.userId });
     clearTokens();
   };
 

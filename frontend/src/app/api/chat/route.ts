@@ -104,8 +104,10 @@ export async function POST(request: NextRequest) {
   
   try {
     const { message, history } = await request.json();
+    console.log('[Chat API] Received message:', { messageLength: message?.length, historyLength: history?.length });
 
     if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+      console.error('[Chat API] Gemini API key not configured');
       return NextResponse.json(
         { error: 'Gemini API key not configured' },
         { status: 500 }
@@ -114,18 +116,21 @@ export async function POST(request: NextRequest) {
 
     let tools: { name: string; description: string; parameters: any; serverUrl: string }[] = [];
     try {
+      console.log('[Chat API] Connecting to MCP servers:', MCP_SERVER_URLS);
       mcpClients = await getMcpClients();
+      console.log('[Chat API] Connected to MCP servers:', mcpClients.length);
+      
       const allTools = await Promise.all(
         mcpClients.map(async ({ client, url }) => {
           try {
             const toolsResponse = await client.listTools();
-            console.log(`Tools from ${url}:`, toolsResponse.tools.map(t => t.name));
+            console.log(`[Chat API] Tools from ${url}:`, toolsResponse.tools.map(t => t.name));
             return toolsResponse.tools.map(tool => ({
               ...tool,
               serverUrl: url, 
             }));
           } catch (error) {
-            console.warn(`Failed to list tools from ${url}:`, error);
+            console.warn(`[Chat API] Failed to list tools from ${url}:`, error);
             return [];
           }
         })
@@ -138,9 +143,9 @@ export async function POST(request: NextRequest) {
         serverUrl: tool.serverUrl,
       }));
         
-      console.log('MCP Tools available:', tools.map(t => t.name));
+      console.log('[Chat API] MCP Tools available:', tools.map(t => t.name));
     } catch (mcpError) {
-      console.warn('MCP connection failed, continuing without tools:', mcpError);
+      console.warn('[Chat API] MCP connection failed, continuing without tools:', mcpError);
     }
 
     const modelConfig: any = { model: 'gemini-2.5-flash' };
@@ -155,6 +160,7 @@ export async function POST(request: NextRequest) {
     }
 
     const model = genAI.getGenerativeModel(modelConfig);
+    console.log('[Chat API] Initialized Gemini model with tools:', tools.length > 0 ? 'enabled' : 'disabled');
 
     const chatHistory = history?.map((msg: { role: string; content: string }) => ({
       role: msg.role === 'assistant' ? 'model' : 'user',
@@ -175,6 +181,7 @@ export async function POST(request: NextRequest) {
       ],
     });
 
+    console.log('[Chat API] Sending message to Gemini');
     let result = await chat.sendMessage(message);
     let response = result.response;
 
@@ -182,19 +189,20 @@ export async function POST(request: NextRequest) {
       const functionCalls = response.candidates[0].content.parts.filter(
         (part): part is { functionCall: { name: string; args: Record<string, unknown> } } => 'functionCall' in part
       );
-
+      
+      console.log('[Chat API] Processing function calls:', functionCalls.map(fc => fc.functionCall.name));
       const toolResults = [];
       
       for (const part of functionCalls) {
         const { name, args } = part.functionCall;
-        console.log(`Calling MCP tool: ${name}`, args);
+        console.log(`[Chat API] Calling MCP tool: ${name}`, args);
         
         try {
           const toolInfo = tools.find(t => t.name === name);
           const clientInfo = mcpClients.find(c => c.url === toolInfo?.serverUrl);
           
           if (!clientInfo) {
-            console.error(`No client found for tool ${name}`);
+            console.error(`[Chat API] No client found for tool ${name}`);
             toolResults.push({
               functionResponse: {
                 name,
@@ -211,7 +219,7 @@ export async function POST(request: NextRequest) {
           const toolCallPromise = clientInfo.client.callTool({ name, arguments: args });
           
           const toolResult = await Promise.race([toolCallPromise, timeoutPromise]) as any;
-          console.log(`Tool ${name} result:`, JSON.stringify(toolResult, null, 2));
+          console.log(`[Chat API] Tool ${name} result:`, JSON.stringify(toolResult, null, 2));
           
           toolResults.push({
             functionResponse: {
@@ -220,7 +228,7 @@ export async function POST(request: NextRequest) {
             },
           });
         } catch (toolError) {
-          console.error(`Tool ${name} error:`, toolError);
+          console.error(`[Chat API] Tool ${name} error:`, toolError);
           toolResults.push({
             functionResponse: {
               name,
@@ -230,19 +238,22 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      console.log('[Chat API] Sending tool results back to Gemini');
       result = await chat.sendMessage(toolResults);
       response = result.response;
     }
 
     const text = response.text();
+    console.log('[Chat API] Generated response, length:', text.length);
     return NextResponse.json({ message: text });
   } catch (error) {
-    console.error('Chat API error:', error);
+    console.error('[Chat API] Error:', error);
     return NextResponse.json(
       { error: 'Failed to get response from AI' },
       { status: 500 }
     );
   } finally {
+    console.log('[Chat API] Closing MCP clients');
     await Promise.all(
       mcpClients.map(({ client }) => 
         client.close().catch(() => {})
