@@ -306,7 +306,7 @@ export default function EventDetail() {
                 </motion.button>
 
                 <div className="mt-4 text-center text-sm text-white/30">
-                  {event.seatsAvailable} seats remaining
+                  {event.seatsAvailable}/{event.capacity} seats remaining
                 </div>
               </div>
             </motion.div>

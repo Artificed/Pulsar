@@ -135,12 +135,12 @@ export default function FeaturedEventCard({ event }: FeaturedEventCardProps) {
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  Only {event.seatsAvailable} seats left!
+                  Only {event.seatsAvailable}/{event.capacity} seats left!
                 </motion.span>
               ) : (
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/50 text-green-400 text-sm font-medium backdrop-blur-sm">
                   <span className="w-2 h-2 rounded-full bg-green-500" />
-                  {event.seatsAvailable} seats available
+                  {event.seatsAvailable}/{event.capacity} seats available
                 </span>
               )}
             </div>
