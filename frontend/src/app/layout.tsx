@@ -1,6 +1,7 @@
 import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ChatProvider } from "@/components/providers/chat-provider";
+import { OtelProvider } from "@/components/providers/otel-provider";
 import "./globals.css";
 
 export default function RootLayout({
@@ -11,13 +12,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <QueryProvider>
-          <AuthProvider>
-            <ChatProvider>
-              {children}
-            </ChatProvider>
-          </AuthProvider>
-        </QueryProvider>
+        <OtelProvider>
+          <QueryProvider>
+            <AuthProvider>
+              <ChatProvider>
+                {children}
+              </ChatProvider>
+            </AuthProvider>
+          </QueryProvider>
+        </OtelProvider>
       </body>
     </html>
   );

@@ -13,14 +13,17 @@ services:
         NEXT_PUBLIC_EVENT_MCP_SERVER_URL: http://event-service:8080/mcp
         NEXT_PUBLIC_BOOKING_MCP_SERVER_URL: http://booking-service:8080/mcp
         NEXT_PUBLIC_GEMINI_API_KEY: ${NEXT_PUBLIC_GEMINI_API_KEY}
+        NEXT_PUBLIC_OTEL_COLLECTOR_URL: http://localhost:4318
     environment:
       - NEXT_PUBLIC_EVENT_MCP_SERVER_URL=http://event-service:8080/mcp
       - NEXT_PUBLIC_BOOKING_MCP_SERVER_URL=http://booking-service:8080/mcp
       - NEXT_PUBLIC_GEMINI_API_KEY=${NEXT_PUBLIC_GEMINI_API_KEY}
+      - NEXT_PUBLIC_OTEL_COLLECTOR_URL=http://localhost:4318
     depends_on:
       - user-service
       - event-service
       - booking-service
+      - otel-lgtm
     ports:
       - "3000:3000"
 
