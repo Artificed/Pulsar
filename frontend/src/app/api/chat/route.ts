@@ -2,6 +2,7 @@ import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from '@modelcontextprotocol/sdk/client';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { trace, context, propagation, SpanKind, SpanStatusCode } from '@opentelemetry/api';
 
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || '');
 
@@ -112,31 +113,56 @@ function convertSchema(schema: any): any {
 }
 
 async function getMcpClients() {
+  const tracer = trace.getTracer('frontend');
+  
   const clients = await Promise.all(
     MCP_SERVER_URLS.map(async (url, index) => {
-      try {
-        const client = new Client({
-          name: `pulsar-chat-client-${index}`,
-          version: '1.0.0',
-        });
-        const transport = new StreamableHTTPClientTransport(new URL(url));
-        await client.connect(transport);
-        return { client, url };
-      } catch (error) {
-        console.warn(`Failed to connect to MCP server at ${url}:`, error);
-        return null;
-      }
+      return tracer.startActiveSpan(`mcp.connect.${new URL(url).hostname}`, { kind: SpanKind.CLIENT }, async (span) => {
+        try {
+          span.setAttribute('mcp.server.url', url);
+          
+          const client = new Client({
+            name: `pulsar-chat-client-${index}`,
+            version: '1.0.0',
+          });
+          
+          const headers: Record<string, string> = {};
+          propagation.inject(context.active(), headers);
+          
+          const transport = new StreamableHTTPClientTransport(new URL(url), {
+            requestInit: {
+              headers: headers,
+            },
+          });
+          
+          await client.connect(transport);
+          span.setStatus({ code: SpanStatusCode.OK });
+          return { client, url };
+        } catch (error) {
+          span.setStatus({ code: SpanStatusCode.ERROR, message: String(error) });
+          console.warn(`Failed to connect to MCP server at ${url}:`, error);
+          return null;
+        } finally {
+          span.end();
+        }
+      });
     })
   );
   return clients.filter((c): c is { client: Client; url: string } => c !== null);
 }
 
 export async function POST(request: NextRequest) {
-  let mcpClients: { client: Client; url: string }[] = [];
+  const tracer = trace.getTracer('frontend');
   
-  try {
-    const { message, history, user } = await request.json();
-    console.log('[Chat API] Received message:', { 
+  return tracer.startActiveSpan('chat.request', { kind: SpanKind.SERVER }, async (rootSpan) => {
+    let mcpClients: { client: Client; url: string }[] = [];
+    
+    try {
+      const { message, history, user } = await request.json();
+      rootSpan.setAttribute('user.id', user?.userId || 'anonymous');
+      rootSpan.setAttribute('message.length', message?.length || 0);
+      
+      console.log('[Chat API] Received message:', { 
       messageLength: message?.length, 
       historyLength: history?.length,
       userId: user?.userId || 'not logged in'
@@ -232,51 +258,63 @@ export async function POST(request: NextRequest) {
       );
       
       console.log('[Chat API] Processing function calls:', functionCalls.map(fc => fc.functionCall.name));
-      const toolResults = [];
+      const toolResults: { functionResponse: { name: string; response: Record<string, unknown> } }[] = [];
       
       for (const part of functionCalls) {
         const { name, args } = part.functionCall;
         console.log(`[Chat API] Calling MCP tool: ${name}`, args);
         
-        try {
-          const toolInfo = tools.find(t => t.name === name);
-          const clientInfo = mcpClients.find(c => c.url === toolInfo?.serverUrl);
+        await tracer.startActiveSpan(`mcp.tool.${name}`, { kind: SpanKind.CLIENT }, async (toolSpan) => {
+          toolSpan.setAttribute('mcp.tool.name', name);
+          toolSpan.setAttribute('mcp.tool.args', JSON.stringify(args));
           
-          if (!clientInfo) {
-            console.error(`[Chat API] No client found for tool ${name}`);
+          try {
+            const toolInfo = tools.find(t => t.name === name);
+            const clientInfo = mcpClients.find(c => c.url === toolInfo?.serverUrl);
+            
+            if (!clientInfo) {
+              console.error(`[Chat API] No client found for tool ${name}`);
+              toolSpan.setStatus({ code: SpanStatusCode.ERROR, message: 'No client found' });
+              toolResults.push({
+                functionResponse: {
+                  name,
+                  response: { error: 'MCP server not available for this tool' },
+                },
+              });
+              return;
+            }
+            
+            toolSpan.setAttribute('mcp.server.url', clientInfo.url);
+            
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Tool call timeout after 10 seconds')), 10000)
+            );
+            
+            const toolCallPromise = clientInfo.client.callTool({ name, arguments: args });
+            
+            const toolResult = await Promise.race([toolCallPromise, timeoutPromise]) as any;
+            console.log(`[Chat API] Tool ${name} result:`, JSON.stringify(toolResult, null, 2));
+            
+            toolSpan.setStatus({ code: SpanStatusCode.OK });
             toolResults.push({
               functionResponse: {
                 name,
-                response: { error: 'MCP server not available for this tool' },
+                response: { result: toolResult.content },
               },
             });
-            continue;
+          } catch (toolError) {
+            console.error(`[Chat API] Tool ${name} error:`, toolError);
+            toolSpan.setStatus({ code: SpanStatusCode.ERROR, message: String(toolError) });
+            toolResults.push({
+              functionResponse: {
+                name,
+                response: { error: `Tool execution failed: ${toolError instanceof Error ? toolError.message : String(toolError)}` },
+              },
+            });
+          } finally {
+            toolSpan.end();
           }
-          
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Tool call timeout after 10 seconds')), 10000)
-          );
-          
-          const toolCallPromise = clientInfo.client.callTool({ name, arguments: args });
-          
-          const toolResult = await Promise.race([toolCallPromise, timeoutPromise]) as any;
-          console.log(`[Chat API] Tool ${name} result:`, JSON.stringify(toolResult, null, 2));
-          
-          toolResults.push({
-            functionResponse: {
-              name,
-              response: { result: toolResult.content },
-            },
-          });
-        } catch (toolError) {
-          console.error(`[Chat API] Tool ${name} error:`, toolError);
-          toolResults.push({
-            functionResponse: {
-              name,
-              response: { error: `Tool execution failed: ${toolError instanceof Error ? toolError.message : String(toolError)}` },
-            },
-          });
-        }
+        });
       }
 
       console.log('[Chat API] Sending tool results back to Gemini');
@@ -286,9 +324,11 @@ export async function POST(request: NextRequest) {
 
     const text = response.text();
     console.log('[Chat API] Generated response, length:', text.length);
+    rootSpan.setStatus({ code: SpanStatusCode.OK });
     return NextResponse.json({ message: text });
   } catch (error) {
     console.error('[Chat API] Error:', error);
+    rootSpan.setStatus({ code: SpanStatusCode.ERROR, message: String(error) });
     return NextResponse.json(
       { error: 'Failed to get response from AI' },
       { status: 500 }
@@ -300,5 +340,7 @@ export async function POST(request: NextRequest) {
         client.close().catch(() => {})
       )
     );
+    rootSpan.end();
   }
+  });
 }
