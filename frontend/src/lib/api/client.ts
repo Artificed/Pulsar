@@ -1,6 +1,6 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import { ApiResponse } from "./response";
-import { otelLog } from "../otel/instrumentation";
+import { otelLog, injectTraceContext } from "../otel/instrumentation";
 
 class ApiClient {
   private instance: AxiosInstance;
@@ -12,6 +12,17 @@ class ApiClient {
       baseURL,
       withCredentials: true
     });
+
+    this.instance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        const traceHeaders = injectTraceContext();
+        Object.entries(traceHeaders).forEach(([key, value]) => {
+          config.headers.set(key, value);
+        });
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
   }
 
   private handleError<T>(error: Error): ApiResponse<T> {

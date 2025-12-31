@@ -12,7 +12,8 @@ import { XMLHttpRequestInstrumentation } from '@opentelemetry/instrumentation-xm
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { LoggerProvider, BatchLogRecordProcessor, ConsoleLogRecordExporter } from '@opentelemetry/sdk-logs';
 import { logs, SeverityNumber } from '@opentelemetry/api-logs';
-import { trace } from '@opentelemetry/api';
+import { trace, context, propagation } from '@opentelemetry/api';
+import { W3CTraceContextPropagator } from '@opentelemetry/core';
 import type { AnyValueMap } from '@opentelemetry/api-logs';
 
 let initialized = false;
@@ -30,7 +31,6 @@ export function initializeOtel() {
     [ATTR_SERVICE_VERSION]: '0.1.0',
   });
 
-  // Initialize Trace Provider
   const traceExporter = new OTLPTraceExporter({
     url: `${otelCollectorUrl}/v1/traces`,
   });
@@ -61,23 +61,24 @@ export function initializeOtel() {
 
   logs.setGlobalLoggerProvider(loggerProvider);
 
+  propagation.setGlobalPropagator(new W3CTraceContextPropagator());
+
+  const propagateTraceHeaderCorsUrls = [
+    /localhost/,
+    /127\.0\.0\.1/,
+    /user-service/,
+    /auth-service/,
+    /event-service/,
+    /booking-service/,
+  ];
+
   registerInstrumentations({
     instrumentations: [
       new FetchInstrumentation({
-        propagateTraceHeaderCorsUrls: [
-          /localhost/,
-          /127\.0\.0\.1/,
-          /user-service/,
-          /auth-service/,
-          /event-service/,
-          /booking-service/,
-        ],
+        propagateTraceHeaderCorsUrls,
       }),
       new XMLHttpRequestInstrumentation({
-        propagateTraceHeaderCorsUrls: [
-          /localhost/,
-          /127\.0\.0\.1/,
-        ],
+        propagateTraceHeaderCorsUrls,
       }),
     ],
   });
@@ -135,6 +136,23 @@ export const otelLog = {
 
 export function getTracer(name: string = 'frontend') {
   return trace.getTracer(name);
+}
+
+export function injectTraceContext(headers: Record<string, string> = {}): Record<string, string> {
+  propagation.inject(context.active(), headers);
+  return headers;
+}
+
+export function getCurrentTraceContext(): { traceId: string; spanId: string } | null {
+  const activeSpan = trace.getActiveSpan();
+  if (activeSpan) {
+    const spanContext = activeSpan.spanContext();
+    return {
+      traceId: spanContext.traceId,
+      spanId: spanContext.spanId,
+    };
+  }
+  return null;
 }
 
 export async function shutdownOtel() {
