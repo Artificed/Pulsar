@@ -1,9 +1,11 @@
 package tpa.network.bookingservice.application.command.handler;
 
+import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import tpa.network.bookingservice.domain.exception.EventNotFoundException;
+import tpa.network.bookingservice.domain.exception.InsufficientSeatsException;
 import tpa.network.bookingservice.domain.exception.UserNotFoundException;
 import tpa.network.bookingservice.domain.model.booking.Booking;
 import tpa.network.bookingservice.domain.model.shared.Id;
@@ -22,7 +24,8 @@ public class CreateBookingCommandHandler implements CreateBookingCommand {
 
     @Override
     public Id execute(CreateBookingRequest request) {
-        log.info("Executing CreateBookingCommand for userId: {}, eventId: {}", request.userId(), request.eventId());
+        log.info("Executing CreateBookingCommand for userId: {}, eventId: {}, quantity: {}", 
+                request.userId(), request.eventId(), request.quantity());
         
         if (!userServicePort.existsById(request.userId())) {
             log.warn("Failed to create booking - user not found with id: {}", request.userId());
@@ -33,6 +36,16 @@ public class CreateBookingCommandHandler implements CreateBookingCommand {
             log.warn("Failed to create booking - event not found with id: {}", request.eventId());
             throw new EventNotFoundException(request.eventId());
         }
+
+        var updateResult = eventServicePort.updateSeats(request.eventId(), request.quantity());
+        if (!updateResult.success()) {
+            log.warn("Failed to reserve seats for event {}. Reason: {}", 
+                    request.eventId(), updateResult.errorMessage());
+            throw new InsufficientSeatsException(request.eventId(), request.quantity());
+        }
+        
+        log.info("Successfully reserved {} seats for event {}. Remaining seats: {}", 
+                request.quantity(), request.eventId(), updateResult.seatsAvailable());
 
         Booking booking = Booking.create(
                 request.userId(),

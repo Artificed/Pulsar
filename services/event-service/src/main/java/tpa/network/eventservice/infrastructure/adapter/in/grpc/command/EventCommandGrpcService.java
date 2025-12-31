@@ -8,6 +8,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import tpa.network.eventservice.*;
 import tpa.network.eventservice.domain.port.in.command.CreateEventCommand;
 import tpa.network.eventservice.domain.port.in.command.DeleteEventCommand;
+import tpa.network.eventservice.domain.port.in.command.UpdateSeatsCommand;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class EventCommandGrpcService extends EventCommandServiceGrpc.EventComman
 
     private final CreateEventCommand createEventCommand;
     private final DeleteEventCommand deleteEventCommand;
+    private final UpdateSeatsCommand updateSeatsCommand;
 
     @Override
     public void createEvent(CreateEventRequest request, StreamObserver<CreateEventResponse> responseObserver) {
@@ -66,6 +68,31 @@ public class EventCommandGrpcService extends EventCommandServiceGrpc.EventComman
         log.info("gRPC - Successfully deleted event with id: {}", id.getValue());
         var response = DeleteEventResponse.newBuilder()
                 .setId(id.getValue())
+                .build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void updateSeats(UpdateSeatsRequest request, StreamObserver<UpdateSeatsResponse> responseObserver) {
+        log.info("gRPC - Received updateSeats request for eventId: {}, quantity: {}", 
+                request.getEventId(), request.getQuantity());
+        
+        var dto = new UpdateSeatsCommand.UpdateSeatsRequest(
+                request.getEventId(),
+                request.getQuantity()
+        );
+
+        var result = updateSeatsCommand.execute(dto);
+
+        log.info("gRPC - UpdateSeats result: success={}, seatsAvailable={}", 
+                result.success(), result.seatsAvailable());
+        
+        var response = UpdateSeatsResponse.newBuilder()
+                .setSuccess(result.success())
+                .setSeatsAvailable(result.seatsAvailable())
+                .setErrorMessage(result.errorMessage() != null ? result.errorMessage() : "")
                 .build();
 
         responseObserver.onNext(response);

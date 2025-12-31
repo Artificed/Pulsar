@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tpa.network.bookingservice.domain.exception.BookingNotFoundException;
 import tpa.network.bookingservice.domain.exception.EventNotFoundException;
+import tpa.network.bookingservice.domain.exception.InsufficientSeatsException;
 import tpa.network.bookingservice.domain.exception.InvalidEventIdFormatException;
 import tpa.network.bookingservice.domain.exception.InvalidQuantityException;
 import tpa.network.bookingservice.domain.exception.InvalidUserIdFormatException;
@@ -36,6 +37,13 @@ public class GlobalExceptionHandler {
         log.error("Validation exception: {}", e.getMessage());
         var error = ErrorResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(InsufficientSeatsException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientSeatsException(InsufficientSeatsException e) {
+        log.error("Insufficient seats exception: {}", e.getMessage());
+        var error = ErrorResponse.of(e.getMessage(), HttpStatus.CONFLICT.value());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
     @ExceptionHandler(Exception.class)

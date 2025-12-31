@@ -5,8 +5,10 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
 import tpa.network.bookingservice.domain.port.out.grpc.EventServicePort;
 import tpa.network.bookingservice.domain.readmodel.EventReadModel;
+import tpa.network.eventservice.EventCommandServiceGrpc;
 import tpa.network.eventservice.EventQueryServiceGrpc;
 import tpa.network.eventservice.GetEventByIdRequest;
+import tpa.network.eventservice.UpdateSeatsRequest;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -16,6 +18,9 @@ public class EventServiceGrpcClient implements EventServicePort {
     
     @GrpcClient("event-service")
     private EventQueryServiceGrpc.EventQueryServiceBlockingStub eventQueryStub;
+    
+    @GrpcClient("event-service")
+    private EventCommandServiceGrpc.EventCommandServiceBlockingStub eventCommandStub;
 
     @Override
     public boolean existsById(String eventId) {
@@ -57,6 +62,25 @@ public class EventServiceGrpcClient implements EventServicePort {
             return Optional.empty();
         } catch (StatusRuntimeException e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public UpdateSeatsResult updateSeats(String eventId, int quantity) {
+        try {
+            UpdateSeatsRequest request = UpdateSeatsRequest.newBuilder()
+                    .setEventId(eventId)
+                    .setQuantity(quantity)
+                    .build();
+
+            var response = eventCommandStub.updateSeats(request);
+            return new UpdateSeatsResult(
+                    response.getSuccess(),
+                    response.getSeatsAvailable(),
+                    response.getErrorMessage()
+            );
+        } catch (StatusRuntimeException e) {
+            return new UpdateSeatsResult(false, 0, "gRPC error: " + e.getMessage());
         }
     }
 }

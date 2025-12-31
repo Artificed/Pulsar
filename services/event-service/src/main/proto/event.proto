@@ -30,6 +30,7 @@ service EventQueryService {
 service EventCommandService {
   rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);
   rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse);
+  rpc UpdateSeats (UpdateSeatsRequest) returns (UpdateSeatsResponse);
 }
 
 message GetAllEventsRequest {}
@@ -67,4 +68,15 @@ message DeleteEventRequest {
 
 message DeleteEventResponse {
   string id = 1;
+}
+
+message UpdateSeatsRequest {
+  string event_id = 1;
+  int32 quantity = 2;
+}
+
+message UpdateSeatsResponse {
+  bool success = 1;
+  int32 seats_available = 2;
+  string error_message = 3;
 }
