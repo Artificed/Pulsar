@@ -5,14 +5,16 @@ import org.springframework.stereotype.Component;
 import tpa.network.eventservice.Event;
 import tpa.network.eventservice.domain.readmodel.EventReadModel;
 
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
 @Component
 public class EventGrpcMapper {
 
+    private static final ZoneId JAKARTA_ZONE = ZoneId.of("Asia/Jakarta");
+
     public Event toProto(EventReadModel model) {
         var timestamp = Timestamp.newBuilder()
-                .setSeconds(model.getDatetime().toEpochSecond(ZoneOffset.UTC))
+                .setSeconds(model.getDatetime().atZone(JAKARTA_ZONE).toEpochSecond())
                 .setNanos(model.getDatetime().getNano())
                 .build();
 
