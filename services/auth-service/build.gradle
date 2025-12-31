@@ -22,6 +22,7 @@ repositories {
 ext {
     set('springGrpcVersion', "0.12.0")
     set('opentelemetryLogbackAppenderVersion', "2.22.0-alpha")
+    set('opentelemetryGrpcVersion', "2.22.0-alpha")
 }
 
 dependencies {
@@ -35,6 +36,8 @@ dependencies {
     implementation 'net.devh:grpc-client-spring-boot-starter:3.0.0.RELEASE'
 
     implementation 'io.grpc:grpc-services'
+
+    implementation "io.opentelemetry.instrumentation:opentelemetry-grpc-1.6:${opentelemetryGrpcVersion}"
 
     implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
