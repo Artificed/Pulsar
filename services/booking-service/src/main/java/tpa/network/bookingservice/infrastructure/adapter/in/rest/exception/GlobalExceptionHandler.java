@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tpa.network.bookingservice.domain.exception.BookingNotFoundException;
+import tpa.network.bookingservice.domain.exception.EventAlreadyPassedException;
 import tpa.network.bookingservice.domain.exception.EventNotFoundException;
 import tpa.network.bookingservice.domain.exception.InsufficientSeatsException;
 import tpa.network.bookingservice.domain.exception.InvalidEventIdFormatException;
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
         log.error("Insufficient seats exception: {}", e.getMessage());
         var error = ErrorResponse.of(e.getMessage(), HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(EventAlreadyPassedException.class)
+    public ResponseEntity<ErrorResponse> handleEventAlreadyPassedException(EventAlreadyPassedException e) {
+        log.error("Event already passed exception: {}", e.getMessage());
+        var error = ErrorResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(Exception.class)

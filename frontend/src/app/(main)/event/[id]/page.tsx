@@ -86,6 +86,8 @@ export default function EventDetail() {
     },
   });
 
+  const isPastEvent = event ? new Date(event.datetime) < new Date() : false;
+
   const createBookingMutation = useMutation({
     mutationFn: async ({ userId, eventId, quantity }: { userId: string; eventId: string; quantity: number }) => {
       const response = await bookingService.createBooking({ userId, eventId, quantity });
@@ -273,14 +275,16 @@ export default function EventDetail() {
                   className={`w-full py-4 rounded-xl font-semibold cursor-none flex items-center justify-center gap-2 ${
                     bookingSuccess
                       ? 'bg-green-600'
+                      : isPastEvent
+                      ? 'bg-gray-600 cursor-not-allowed'
                       : createBookingMutation.isPending
                       ? 'bg-purple-600/50 cursor-not-allowed'
                       : 'bg-gradient-to-r from-purple-600 to-fuchsia-600'
                   } text-white`}
-                  whileHover={!createBookingMutation.isPending && !bookingSuccess ? { scale: 1.02 } : {}}
-                  whileTap={!createBookingMutation.isPending && !bookingSuccess ? { scale: 0.98 } : {}}
+                  whileHover={!createBookingMutation.isPending && !bookingSuccess && !isPastEvent ? { scale: 1.02 } : {}}
+                  whileTap={!createBookingMutation.isPending && !bookingSuccess && !isPastEvent ? { scale: 0.98 } : {}}
                   onClick={handleBookNow}
-                  disabled={createBookingMutation.isPending || bookingSuccess}
+                  disabled={createBookingMutation.isPending || bookingSuccess || isPastEvent}
                 >
                   {createBookingMutation.isPending ? (
                     <>
@@ -298,6 +302,8 @@ export default function EventDetail() {
                       </svg>
                       Booked!
                     </>
+                  ) : isPastEvent ? (
+                    'Event Has Ended'
                   ) : !isAuthenticated ? (
                     'Sign In to Book'
                   ) : (

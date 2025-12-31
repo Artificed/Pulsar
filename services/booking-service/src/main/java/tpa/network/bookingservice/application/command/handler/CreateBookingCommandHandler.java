@@ -1,9 +1,12 @@
 package tpa.network.bookingservice.application.command.handler;
 
+import java.time.Instant;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tpa.network.bookingservice.domain.exception.EventAlreadyPassedException;
 import tpa.network.bookingservice.domain.exception.EventNotFoundException;
 import tpa.network.bookingservice.domain.exception.InsufficientSeatsException;
 import tpa.network.bookingservice.domain.exception.UserNotFoundException;
@@ -32,9 +35,16 @@ public class CreateBookingCommandHandler implements CreateBookingCommand {
             throw new UserNotFoundException(request.userId());
         }
 
-        if (!eventServicePort.existsById(request.eventId())) {
+        var eventOpt = eventServicePort.getEventById(request.eventId());
+        if (eventOpt.isEmpty()) {
             log.warn("Failed to create booking - event not found with id: {}", request.eventId());
             throw new EventNotFoundException(request.eventId());
+        }
+        
+        var event = eventOpt.get();
+        if (event.datetime().isBefore(Instant.now())) {
+            log.warn("Failed to create booking - event {} has already passed", request.eventId());
+            throw new EventAlreadyPassedException(request.eventId());
         }
 
         var updateResult = eventServicePort.updateSeats(request.eventId(), request.quantity());
