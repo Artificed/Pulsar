@@ -1,0 +1,33 @@
+services:
+
+  configsvr2:
+    container_name: configsvr2
+    image: mongo:latest
+    command: mongod --configsvr --replSet config_rs --dbpath /data/db --port 27017 --bind_ip_all
+    ports:
+      - 10002:27017
+    volumes:
+      - configsvr2:/data/db
+
+  shardsvr1_2:
+    container_name: shardsvr1_2
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard1_rs --dbpath /data/db --port 27017 --bind_ip_all
+    ports:
+      - 20002:27017
+    volumes:
+      - shardsvr1_2:/data/db
+
+  shardsvr2_2:
+    container_name: shardsvr2_2
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard2_rs --dbpath /data/db --port 27017 --bind_ip_all
+    ports:
+      - 20005:27017
+    volumes:
+      - shardsvr2_2:/data/db
+
+volumes:
+  configsvr2:
+  shardsvr1_2:
+  shardsvr2_2:
