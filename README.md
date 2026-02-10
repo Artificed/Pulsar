@@ -1,5 +1,7 @@
 # Pulsar
 
+![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=for-the-badge&logo=next.js) ![React](https://img.shields.io/badge/React-19.1.0-61DAFB?style=for-the-badge&logo=react&logoColor=white) ![Java](https://img.shields.io/badge/Java-25-orange?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.0-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white) ![gRPC](https://img.shields.io/badge/gRPC-1.59.0-244c5a?style=for-the-badge&logo=grpc&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-Latest-13AA52?style=for-the-badge&logo=mongodb&logoColor=white) ![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-Latest-419EDA?style=for-the-badge&logo=opentelemetry&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-Latest-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![Gradle](https://img.shields.io/badge/Gradle-8.x-02303A?style=for-the-badge&logo=gradle&logoColor=white)
+
 A distributed event booking and management platform built with microservices architecture, featuring AI-powered chat assistance and observability.
 
 ## Overview
@@ -214,3 +216,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
   Made with ❤️ by <a href="https://github.com/Artificed">Artificed</a>
 
 </p>
+
