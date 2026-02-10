@@ -188,29 +188,13 @@ The AI chat feature uses:
 - **Model Context Protocol (MCP)**: For structured communication with backend services
 - **MCP Servers**: Event and Booking services expose MCP endpoints for AI queries
 
-## Troubleshooting
+## Screenshots
 
-### Services not starting
-```bash
-docker-compose logs <service-name>
-
-docker-compose restart <service-name>
-```
-
-### MongoDB connection issues
-```bash
-docker-compose ps mongodb
-
-docker-compose logs mongodb
-```
-
-### Frontend build issues
-```bash
-cd frontend
-rm -rf node_modules .next
-npm install
-npm run build
-```
+<img width="1893" height="1066" alt="Screenshot 2026-02-10 085211" src="https://github.com/user-attachments/assets/0bda1612-95b6-4b95-9a83-e131f96b015b" />
+<img width="1906" height="1069" alt="Screenshot 2026-02-10 084500" src="https://github.com/user-attachments/assets/b5e2af7d-e3d3-4d94-bd2a-5904d8b5973d" />
+<img width="1903" height="1067" alt="Screenshot 2026-02-10 084610" src="https://github.com/user-attachments/assets/7b6dc3d1-18a0-46ff-925f-d2900de04ca7" />
+<img width="1908" height="1066" alt="Screenshot 2026-02-10 084713" src="https://github.com/user-attachments/assets/301b7871-75c4-438b-aebd-c8c6d454d746" />
+<img width="1899" height="1065" alt="Screenshot 2026-02-10 085020" src="https://github.com/user-attachments/assets/79e620e9-e73b-4297-bedd-3caceb4ebf46" />
 
 ## Contributing
 
@@ -228,4 +212,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 <p align="center">
   Made with ❤️ by <a href="https://github.com/Artificed">Artificed</a>
+
 </p>
